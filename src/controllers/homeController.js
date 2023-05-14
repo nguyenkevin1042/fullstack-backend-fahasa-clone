@@ -5,7 +5,6 @@ let getHomePage = async (req, res) => {
         let data = await db.User.findOne({
             where: { id: 1 }
         });
-        console.log(data)
 
         return res.render("homepage.ejs", {
             data: data
