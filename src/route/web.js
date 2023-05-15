@@ -24,7 +24,7 @@ let initWebRoutes = (app) => {
 
     //CATEGORY
     router.post('/api/add-new-category', categoryController.addNewCategory);
-    router.get('/api/get-all-category', categoryController.getAllSubCategory);
+    router.get('/api/get-all-sub-category', categoryController.getAllSubCategory);
     // router.post('/api/add-new-code', categoryCOntroller.addNewCode);
     // router.delete('/api/delete-code', categoryCOntroller.deleteCode);
     // router.put('/api/edit-code', categoryCOntroller.editCode);
