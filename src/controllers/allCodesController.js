@@ -36,9 +36,19 @@ let editCode = async (req, res) => {
     }
 }
 
+let getCodeByType = async (req, res) => {
+    try {
+        let data = await allCodesService.handleGetCodeByType(req.query.type);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     addNewCode: addNewCode,
     getAllCodes: getAllCodes,
     deleteCode: deleteCode,
-    editCode: editCode
+    editCode: editCode,
+    getCodeByType: getCodeByType
 }

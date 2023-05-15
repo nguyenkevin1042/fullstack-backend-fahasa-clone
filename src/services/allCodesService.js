@@ -1,6 +1,4 @@
 import db from '../models/index';
-import bcrypt from 'bcryptjs';
-var salt = bcrypt.genSaltSync(10);
 
 //1. ADD NEW CODE
 let handleAddNewCode = (inputData) => {
@@ -171,10 +169,48 @@ let handleEditCode = (inputData) => {
     });
 }
 
+//5. GET CODE BY ID
+let handleGetCodeByType = (inputType) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputType) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing category type parameter!"
+                })
+            } else {
+                let data = await db.AllCodes.findAll({
+                    where: { type: inputType },
+                    attributes: ['id', 'valueVI', 'valueEN']
+                })
+
+                if (data.length > 0) {
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        message: "This categpry type does not existed!"
+                    })
+                }
+
+            }
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 
 module.exports = {
     handleAddNewCode: handleAddNewCode,
     handleGetAllCodes: handleGetAllCodes,
     handleDeleteCode: handleDeleteCode,
-    handleEditCode: handleEditCode
+    handleEditCode: handleEditCode,
+    handleGetCodeByType: handleGetCodeByType
 }
