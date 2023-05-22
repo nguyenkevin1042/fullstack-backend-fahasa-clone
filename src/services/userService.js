@@ -28,6 +28,7 @@ let handleGetAllUsers = () => {
 let handleCreateNewUser = (dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(dataInput)
             let checkParams = checkRequiredSignUpParams(dataInput);
             if (checkParams.isValid === false) {
                 resolve({
@@ -45,21 +46,32 @@ let handleCreateNewUser = (dataInput) => {
                 } else {
                     let hashedPassword = await hashPasswordFromInput(dataInput.password);
 
-                    await db.User.create({
-                        firstName: dataInput.firstName,
-                        lastName: dataInput.lastName,
-                        address: dataInput.address,
-                        email: dataInput.email,
-                        password: hashedPassword,
-                        phoneNumber: dataInput.phoneNumber,
-                        roleId: 'R1'
-                    })
-                }
+                    if (dataInput.isAdmin === true) {
+                        await db.User.create({
+                            firstName: dataInput.firstName,
+                            lastName: dataInput.lastName,
+                            email: dataInput.email,
+                            password: hashedPassword,
+                            phoneNumber: dataInput.phoneNumber,
+                            roleId: 'R1'
+                        })
+                    } else {
+                        await db.User.create({
+                            firstName: dataInput.firstName,
+                            lastName: dataInput.lastName,
+                            email: dataInput.email,
+                            password: hashedPassword,
+                            phoneNumber: dataInput.phoneNumber,
+                            roleId: 'R3'
+                        })
+                    }
 
-                resolve({
-                    errCode: 0,
-                    message: "Save new user successful"
-                })
+                    resolve({
+                        errCode: 0,
+                        message: "Save new user successful"
+                    })
+
+                }
             }
 
         } catch (error) {
@@ -69,8 +81,8 @@ let handleCreateNewUser = (dataInput) => {
 }
 
 let checkRequiredSignUpParams = (dataInput) => {
-    let arr = ['firstName', 'lastName', 'address', 'email',
-        'password', 'phoneNumber']
+    let arr = ['firstName', 'lastName', 'email', 'phoneNumber',
+        'password']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {

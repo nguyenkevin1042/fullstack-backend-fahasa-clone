@@ -14,9 +14,6 @@ module.exports = {
             lastName: {
                 type: Sequelize.STRING
             },
-            address: {
-                type: Sequelize.STRING
-            },
             email: {
                 type: Sequelize.STRING
             },
@@ -24,6 +21,21 @@ module.exports = {
                 type: Sequelize.STRING
             },
             phoneNumber: {
+                type: Sequelize.STRING
+            },
+            country: {
+                type: Sequelize.STRING
+            },
+            province: {
+                type: Sequelize.STRING
+            },
+            district: {
+                type: Sequelize.STRING
+            },
+            ward: {
+                type: Sequelize.STRING
+            },
+            deliveryAddress: {
                 type: Sequelize.STRING
             },
             roleId: {
