@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Category extends Model {
+    class ChildCategory extends Model {
 
         static associate(models) {
 
@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
         }
     };
 
-    Category.init({
-        categoryId: DataTypes.INTEGER,
+    ChildCategory.init({
         subCategoryId: DataTypes.INTEGER,
-        childCategoryId: DataTypes.INTEGER,
+        valueVI: DataTypes.STRING,
+        valueEN: DataTypes.STRING,
     }, {
         sequelize,
-        modelName: 'Category',
+        modelName: 'ChildCategory',
     });
 
-    return Category;
+    return ChildCategory;
 };

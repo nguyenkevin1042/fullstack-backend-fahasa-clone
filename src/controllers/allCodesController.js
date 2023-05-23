@@ -45,10 +45,20 @@ let getCodeByType = async (req, res) => {
     }
 }
 
+let getCodeById = async (req, res) => {
+    try {
+        let data = await allCodesService.handleGetCodeById(req.query.id);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     addNewCode: addNewCode,
     getAllCodes: getAllCodes,
     deleteCode: deleteCode,
     editCode: editCode,
-    getCodeByType: getCodeByType
+    getCodeByType: getCodeByType,
+    getCodeById: getCodeById
 }

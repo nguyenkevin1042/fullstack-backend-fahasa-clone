@@ -31,7 +31,7 @@ let handleAddNewCode = (inputData) => {
                     })
                     resolve({
                         errCode: 0,
-                        message: "Add New Code successful"
+                        message: "Add New Sub Category successful"
                     })
                 }
             }
@@ -169,19 +169,30 @@ let handleEditCode = (inputData) => {
     });
 }
 
-//5. GET CODE BY ID
+//5. GET CODE BY TYPE
 let handleGetCodeByType = (inputType) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!inputType) {
                 resolve({
                     errCode: 1,
-                    message: "Missing category type parameter!"
+                    message: "Missing type parameter!"
                 })
             } else {
                 let data = await db.AllCodes.findAll({
                     where: { type: inputType },
-                    attributes: ['id', 'valueVI', 'valueEN']
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.SubCategory,
+                            as: 'subCategoryData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        },
+                    ]
                 })
 
                 if (data.length > 0) {
@@ -206,11 +217,59 @@ let handleGetCodeByType = (inputType) => {
     });
 }
 
+//6. GET CODE BY ID
+let handleGetCodeById = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing id parameter!"
+                })
+            } else {
+                let data = await db.AllCodes.findAll({
+                    where: { id: inputId },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.SubCategory,
+                            as: 'subCategoryData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        },
+                    ]
+                })
+
+                if (data.length > 0) {
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        message: "This id does not existed!"
+                    })
+                }
+
+            }
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 module.exports = {
     handleAddNewCode: handleAddNewCode,
     handleGetAllCodes: handleGetAllCodes,
     handleDeleteCode: handleDeleteCode,
     handleEditCode: handleEditCode,
-    handleGetCodeByType: handleGetCodeByType
+    handleGetCodeByType: handleGetCodeByType,
+    handleGetCodeById: handleGetCodeById
 }

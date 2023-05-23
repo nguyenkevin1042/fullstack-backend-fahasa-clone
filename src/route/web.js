@@ -3,6 +3,7 @@ import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
 import allCodesController from "../controllers/allCodesController";
 import categoryController from "../controllers/categoryController";
+import subCategoryController from "../controllers/subCategoryController";
 
 let router = express.Router();
 
@@ -18,13 +19,16 @@ let initWebRoutes = (app) => {
     //ALL CODES
     router.get('/api/get-all-codes', allCodesController.getAllCodes);
     router.get('/api/get-code-by-type', allCodesController.getCodeByType);
+    router.get('/api/get-code-by-id', allCodesController.getCodeById);
     router.post('/api/add-new-code', allCodesController.addNewCode);
     router.delete('/api/delete-code', allCodesController.deleteCode);
     router.put('/api/edit-code', allCodesController.editCode);
 
     //CATEGORY
-    router.post('/api/add-new-category', categoryController.addNewCategory);
-    router.get('/api/get-all-sub-category', categoryController.getAllSubCategory);
+    // router.post('/api/add-new-category', categoryController.addNewCategory);
+    router.post('/api/add-new-sub-category', subCategoryController.addNewSubCategory);
+    router.get('/api/get-all-sub-category', subCategoryController.getAllSubCategory);
+    router.get('/api/get-all-sub-category-by-category-id', subCategoryController.getAllSubCategoryByCategoryId);
     // router.post('/api/add-new-code', categoryCOntroller.addNewCode);
     // router.delete('/api/delete-code', categoryCOntroller.deleteCode);
     // router.put('/api/edit-code', categoryCOntroller.editCode);
