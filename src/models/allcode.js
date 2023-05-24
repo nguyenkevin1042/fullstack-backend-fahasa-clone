@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             AllCodes.hasMany(models.SubCategory,
                 {
-                    foreignKey: 'categoryId',
+                    foreignKey: 'categoryType',
                     as: 'subCategoryData'
                 })
 

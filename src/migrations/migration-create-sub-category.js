@@ -8,8 +8,8 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            categoryId: {
-                type: Sequelize.INTEGER
+            categoryType: {
+                type: Sequelize.STRING
             },
             valueVI: {
                 type: Sequelize.STRING

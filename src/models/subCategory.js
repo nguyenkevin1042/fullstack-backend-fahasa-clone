@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 
         static associate(models) {
             SubCategory.belongsTo(models.AllCodes, {
-                foreignKey: 'categoryId',
+                foreignKey: 'categoryType',
                 targetKey: 'keyMap',
                 as: 'subCategoryData'
             })
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     SubCategory.init({
-        categoryId: DataTypes.INTEGER,
+        categoryType: DataTypes.STRING,
         valueVI: DataTypes.STRING,
         valueEN: DataTypes.STRING,
     }, {

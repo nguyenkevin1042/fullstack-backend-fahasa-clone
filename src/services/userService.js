@@ -28,7 +28,6 @@ let handleGetAllUsers = () => {
 let handleCreateNewUser = (dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(dataInput)
             let checkParams = checkRequiredSignUpParams(dataInput);
             if (checkParams.isValid === false) {
                 resolve({

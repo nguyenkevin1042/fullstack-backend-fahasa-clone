@@ -12,7 +12,7 @@ let handleAddNewSubCategory = (inputData) => {
                 })
             } else {
                 await db.SubCategory.create({
-                    categoryId: inputData.categoryId,
+                    categoryType: inputData.categoryType,
                     valueVI: inputData.valueVI,
                     valueEN: inputData.valueEN,
                 })
@@ -21,13 +21,6 @@ let handleAddNewSubCategory = (inputData) => {
                     message: "Add New Code successful"
                 })
             }
-            // let data = await db.SubCategory.findAll({
-            //     where: { categoryId: inputCategoryId }
-            // });
-            // resolve({
-            //     errCode: 0,
-            //     data
-            // })
 
         } catch (error) {
             reject(error);
@@ -37,7 +30,7 @@ let handleAddNewSubCategory = (inputData) => {
 
 
 let checkRequiredSubCategoryParams = (dataInput) => {
-    let arr = ['categoryId', 'valueVI', 'valueEN']
+    let arr = ['categoryType', 'valueVI', 'valueEN']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
@@ -55,12 +48,12 @@ let checkRequiredSubCategoryParams = (dataInput) => {
 }
 
 
-let handleGetAllSubCategoryByCategoryId = (inputCategoryId) => {
+let handleGetAllSubCategoryByType = (inputCategoryType) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(inputCategoryId)
+
             let data = await db.SubCategory.findAll({
-                where: { categoryId: inputCategoryId },
+                where: { categoryType: inputCategoryType },
                 raw: true
             });
             resolve({
@@ -74,10 +67,9 @@ let handleGetAllSubCategoryByCategoryId = (inputCategoryId) => {
     });
 }
 
-let handleGetAllSubCategory = (inputCategoryId) => {
+let handleGetAllSubCategory = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(inputCategoryId)
             let data = await db.SubCategory.findAll({
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
@@ -97,5 +89,5 @@ let handleGetAllSubCategory = (inputCategoryId) => {
 module.exports = {
     handleGetAllSubCategory: handleGetAllSubCategory,
     handleAddNewSubCategory: handleAddNewSubCategory,
-    handleGetAllSubCategoryByCategoryId: handleGetAllSubCategoryByCategoryId
+    handleGetAllSubCategoryByType: handleGetAllSubCategoryByType
 }
