@@ -4,6 +4,7 @@ import userController from "../controllers/userController";
 import allCodesController from "../controllers/allCodesController";
 import categoryController from "../controllers/categoryController";
 import subCategoryController from "../controllers/subCategoryController";
+import childCategoryController from "../controllers/childCategoryController";
 
 let router = express.Router();
 
@@ -24,7 +25,7 @@ let initWebRoutes = (app) => {
     router.delete('/api/delete-code', allCodesController.deleteCode);
     router.put('/api/edit-code', allCodesController.editCode);
 
-    //CATEGORY
+    //SUB CATEGORY
     // router.post('/api/add-new-category', categoryController.addNewCategory);
     router.post('/api/add-new-sub-category', subCategoryController.addNewSubCategory);
     router.get('/api/get-all-sub-category', subCategoryController.getAllSubCategory);
@@ -33,6 +34,9 @@ let initWebRoutes = (app) => {
     // router.delete('/api/delete-code', categoryCOntroller.deleteCode);
     // router.put('/api/edit-code', categoryCOntroller.editCode);
 
+    //CHILD CATEGORY
+    router.get('/api/get-all-child-category', childCategoryController.getAllChildCategory);
+    router.get('/api/get-all-child-category-by-id', childCategoryController.getAllChildCategoryBySubCatId);
     return app.use("/", router);
 
 }

@@ -8,7 +8,10 @@ module.exports = {
     "host": process.env.DB_HOST,
     "dialect": process.env.DB_DIALECT,
     "logging": false,
-    "raw": true
+    "query": {
+      "raw": true
+    },
+    "timezone": "+07:00"
   },
   "test": {
     "username": "root",

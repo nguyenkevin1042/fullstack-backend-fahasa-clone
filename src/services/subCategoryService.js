@@ -54,7 +54,9 @@ let handleGetAllSubCategoryByType = (inputCategoryType) => {
 
             let data = await db.SubCategory.findAll({
                 where: { categoryType: inputCategoryType },
-                raw: true
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                }
             });
             resolve({
                 errCode: 0,

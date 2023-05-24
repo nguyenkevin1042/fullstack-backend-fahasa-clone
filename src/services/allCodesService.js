@@ -187,13 +187,13 @@ let handleGetCodeByType = (inputType) => {
                     include: [
                         {
                             model: db.SubCategory,
-                            as: 'subCategoryData',
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            },
+                            as: 'subCategoryData'
                         },
-                    ]
+                    ],
+                    nested: true,
+                    raw: true
                 })
+                console.log(data)
 
                 if (data.length > 0) {
                     resolve({

@@ -3,19 +3,18 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class AllCodes extends Model {
+    class AllCode extends Model {
 
         static associate(models) {
-            AllCodes.hasMany(models.SubCategory,
+            AllCode.hasMany(models.SubCategory,
                 {
                     foreignKey: 'categoryType',
                     as: 'subCategoryData'
                 })
-
         }
     };
 
-    AllCodes.init({
+    AllCode.init({
         type: DataTypes.STRING,
         keyMap: DataTypes.STRING,
         valueVI: DataTypes.STRING,
@@ -25,5 +24,5 @@ module.exports = (sequelize, DataTypes) => {
         modelName: 'AllCodes',
     });
 
-    return AllCodes;
+    return AllCode;
 };
