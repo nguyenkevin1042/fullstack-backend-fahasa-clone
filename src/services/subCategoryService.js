@@ -56,7 +56,19 @@ let handleGetAllSubCategoryByType = (inputCategoryType) => {
                 where: { categoryType: inputCategoryType },
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
-                }
+                },
+                include: [
+                    {
+                        model: db.ChildCategory,
+                        as: 'childCategoryData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                        limit: 4,
+                    },
+                ],
+                nested: true,
+                raw: false
             });
             resolve({
                 errCode: 0,

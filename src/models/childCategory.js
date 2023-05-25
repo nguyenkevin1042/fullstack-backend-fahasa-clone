@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes) => {
     class ChildCategory extends Model {
 
         static associate(models) {
-            // ChildCategory.belongsTo(models.SubCategory, {
-            //     foreignKey: 'subCategoryId',
-            //     targetKey: 'id',
-            //     as: 'childCategoryData'
-            // })
+            ChildCategory.belongsTo(models.SubCategory, {
+                foreignKey: 'subCategoryId',
+                targetKey: 'id',
+                as: 'childCategoryData'
+            })
 
         }
     };

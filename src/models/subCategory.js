@@ -11,11 +11,10 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: 'keyMap',
                 as: 'subCategoryData'
             })
-            // SubCategory.hasOne(models.AllCodes, {
-            //     foreignKey: 'categoryType',
-            //     targetKey: 'keyMap',
-            //     as: 'subCategoryData1'
-            // })
+            SubCategory.hasMany(models.ChildCategory, {
+                foreignKey: 'subCategoryId',
+                as: 'childCategoryData'
+            })
 
 
         }
