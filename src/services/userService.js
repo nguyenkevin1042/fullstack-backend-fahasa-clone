@@ -130,7 +130,7 @@ let hashPasswordFromInput = (passwordInput) => {
 }
 
 //3. LOGIN
-let handleLogin = (inputEmail, inputPassword) => {
+let handleAdminLogin = (inputEmail, inputPassword) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!inputEmail) {
@@ -145,35 +145,85 @@ let handleLogin = (inputEmail, inputPassword) => {
                 })
             } else {
                 let userData = {};
-                let isExisted = await checkEmail(inputEmail);
 
-                if (isExisted) {
-                    let user = await db.User.findOne({
-                        where: { email: inputEmail },
-                        raw: true
-                    });
+                let user = await db.User.findOne({
+                    where: { email: inputEmail },
+                    raw: true
+                });
 
-                    if (user) {
+                //Check user existed or not
+                if (user) {
+                    let checkPassword = await bcrypt.compareSync(inputPassword, user.password);
+
+                    //Check input password vs password form DB
+                    if (checkPassword) {
+                        //check role R1
                         if (user.roleId === 'R1') {
-                            let checkPassword = await bcrypt.compareSync(inputPassword, user.password);
-                            if (checkPassword) {
-                                userData.errCode = 0;
-                                delete user.password;
-                                userData.user = user;
-                            } else {
-                                userData.errCode = 2;
-                                userData.message = "Password is not correct";
-                            }
+                            let admin = await db.User.findOne({
+                                where: { email: inputEmail, roleId: 'R1' },
+                                raw: true
+                            });
+                            userData.errCode = 0;
+                            delete user.password;
+                            userData.user = admin;
                         } else {
                             userData.errCode = 4;
                             userData.message = "You are not an admin. You are not allowed to access";
                         }
+                    } else {
+                        userData.errCode = 2;
+                        userData.message = "Password is not correct";
                     }
                 } else {
                     userData.errCode = 3;
                     userData.message = "Email does not exist";
                 }
+                resolve(userData)
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
+let handleCustomerLogin = (inputEmail, inputPassword) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputEmail) {
+                resolve({
+                    errCode: 1,
+                    message: "Email can not be left empty!"
+                })
+            } else if (!inputPassword) {
+                resolve({
+                    errCode: 1,
+                    message: "Password can not be left empty!"
+                })
+            } else {
+                let userData = {};
+
+                let user = await db.User.findOne({
+                    where: { email: inputEmail },
+                    raw: true
+                });
+
+                //Check user existed or not
+                if (user) {
+                    let checkPassword = await bcrypt.compareSync(inputPassword, user.password);
+
+                    //Check input password vs password form DB
+                    if (checkPassword) {
+                        userData.errCode = 0;
+                        delete user.password;
+                        userData.user = admin;
+                    } else {
+                        userData.errCode = 2;
+                        userData.message = "Password is not correct";
+                    }
+                } else {
+                    userData.errCode = 3;
+                    userData.message = "Email does not exist";
+                }
                 resolve(userData)
             }
         } catch (error) {
@@ -185,6 +235,7 @@ let handleLogin = (inputEmail, inputPassword) => {
 module.exports = {
     handleGetAllUsers: handleGetAllUsers,
     handleCreateNewUser: handleCreateNewUser,
-    handleLogin: handleLogin
+    handleAdminLogin: handleAdminLogin,
+    handleCustomerLogin: handleCustomerLogin
 
 }

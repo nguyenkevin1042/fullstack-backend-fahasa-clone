@@ -19,9 +19,18 @@ let createNewUser = async (req, res) => {
     }
 }
 
-let login = async (req, res) => {
+let adminLogin = async (req, res) => {
     try {
-        let data = await userService.handleLogin(req.body.email, req.body.password);
+        let data = await userService.handleAdminLogin(req.body.email, req.body.password);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+let customerLogin = async (req, res) => {
+    try {
+        let data = await userService.handleCustomerLogin(req.body.email, req.body.password);
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -41,5 +50,6 @@ let login = async (req, res) => {
 module.exports = {
     getAllUsers: getAllUsers,
     createNewUser: createNewUser,
-    login: login
+    adminLogin: adminLogin,
+    customerLogin: customerLogin
 }

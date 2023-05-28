@@ -15,7 +15,8 @@ let initWebRoutes = (app) => {
     //USER
     router.get('/api/get-all-users', userController.getAllUsers);
     router.post('/api/create-new-user', userController.createNewUser);
-    router.post('/api/login', userController.login);
+    router.post('/api/admin/login', userController.adminLogin);
+    router.post('/api/customer/login', userController.customerLogin);
 
     //ALL CODES
     router.get('/api/get-all-codes', allCodesController.getAllCodes);
