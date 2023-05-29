@@ -18,7 +18,7 @@ let handleAddNewSubCategory = (inputData) => {
                 })
                 resolve({
                     errCode: 0,
-                    message: "Add New Code successful"
+                    message: "Add New SubCategory successful"
                 })
             }
 
@@ -87,7 +87,16 @@ let handleGetAllSubCategory = () => {
             let data = await db.SubCategory.findAll({
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
-                }
+                },
+                // include: [
+                //     {
+                //         model: db.Allcodes,
+                //         as: 'mainCategoryData'
+                //     },
+                // ],
+                // nested: true,
+                // raw: true
+
             });
             resolve({
                 errCode: 0,
@@ -100,8 +109,40 @@ let handleGetAllSubCategory = () => {
     });
 }
 
+let handleDeleteSubCategory = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing id parameter!"
+                })
+            } else {
+                let data = await db.SubCategory.findOne({
+                    where: { id: inputId }
+                });
+                if (data) {
+                    await db.SubCategory.destroy(
+                        {
+                            where: { id: inputId }
+                        }
+                    );
+                    resolve({
+                        errCode: 0,
+                        message: 'Delete successful!'
+                    })
+                }
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleGetAllSubCategory: handleGetAllSubCategory,
     handleAddNewSubCategory: handleAddNewSubCategory,
-    handleGetAllSubCategoryByType: handleGetAllSubCategoryByType
+    handleGetAllSubCategoryByType: handleGetAllSubCategoryByType,
+    handleDeleteSubCategory: handleDeleteSubCategory
 }

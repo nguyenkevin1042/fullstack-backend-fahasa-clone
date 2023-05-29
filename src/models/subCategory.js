@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: 'keyMap',
                 as: 'subCategoryData'
             })
+
             SubCategory.hasMany(models.ChildCategory, {
                 foreignKey: 'subCategoryId',
                 as: 'childCategoryData'

@@ -31,13 +31,15 @@ let initWebRoutes = (app) => {
     router.post('/api/add-new-sub-category', subCategoryController.addNewSubCategory);
     router.get('/api/get-all-sub-category', subCategoryController.getAllSubCategory);
     router.get('/api/get-all-sub-category-by-category-type', subCategoryController.getAllSubCategoryByCategoryType);
-    // router.post('/api/add-new-code', categoryCOntroller.addNewCode);
-    // router.delete('/api/delete-code', categoryCOntroller.deleteCode);
-    // router.put('/api/edit-code', categoryCOntroller.editCode);
+    router.delete('/api/delete-sub-category', subCategoryController.deleteSubCategory);
 
     //CHILD CATEGORY
     router.get('/api/get-all-child-category', childCategoryController.getAllChildCategory);
     router.get('/api/get-all-child-category-by-id', childCategoryController.getAllChildCategoryBySubCatId);
+    router.post('/api/add-new-child-category', childCategoryController.addNewChildCategory);
+    router.delete('/api/delete-child-category', childCategoryController.deleteChildCategory);
+
+
     return app.use("/", router);
 
 }

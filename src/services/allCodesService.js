@@ -131,6 +131,7 @@ let handleDeleteCode = (inputId) => {
 let handleEditCode = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
+
             let checkParams = checkRequiredCodesParams(inputData)
 
             if (checkParams.isValid === false) {
@@ -142,7 +143,8 @@ let handleEditCode = (inputData) => {
                 let code = await db.AllCodes.findOne({
                     where: {
                         id: inputData.id
-                    }
+                    },
+                    raw: false
                 })
 
                 if (code) {

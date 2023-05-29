@@ -58,8 +58,6 @@ let handleGetAllSubCategory = () => {
     });
 }
 
-
-
 let checkRequiredCategoryParams = (dataInput) => {
     let arr = ['name', 'type', 'categoryId', 'valueVI', 'valueEN']
     let isValid = true;
