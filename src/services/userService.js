@@ -215,7 +215,7 @@ let handleCustomerLogin = (inputEmail, inputPassword) => {
                     if (checkPassword) {
                         userData.errCode = 0;
                         delete user.password;
-                        userData.user = admin;
+                        userData.user = user;
                     } else {
                         userData.errCode = 2;
                         userData.message = "Password is not correct";
