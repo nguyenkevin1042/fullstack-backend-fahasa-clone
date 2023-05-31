@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         madeBy: DataTypes.STRING,
     }, {
         sequelize,
-        modelName: 'StationaryDescriptions',
+        modelName: 'StationaryDescription',
     });
 
     return StationaryDescription;

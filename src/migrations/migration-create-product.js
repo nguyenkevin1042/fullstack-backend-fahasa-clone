@@ -21,6 +21,18 @@ module.exports = {
             weight: {
                 type: Sequelize.INTEGER
             },
+            length: {
+                type: Sequelize.DECIMAL(10, 2)
+            },
+            width: {
+                type: Sequelize.DECIMAL(10, 2)
+            },
+            height: {
+                type: Sequelize.DECIMAL(10, 2)
+            },
+            image: {
+                type: Sequelize.BLOB('long')
+            },
             childCategoryId: {
                 type: Sequelize.INTEGER
             },

@@ -2,7 +2,7 @@ import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
 import allCodesController from "../controllers/allCodesController";
-import categoryController from "../controllers/categoryController";
+import productController from "../controllers/productController";
 import subCategoryController from "../controllers/subCategoryController";
 import childCategoryController from "../controllers/childCategoryController";
 
@@ -39,6 +39,8 @@ let initWebRoutes = (app) => {
     router.post('/api/add-new-child-category', childCategoryController.addNewChildCategory);
     router.delete('/api/delete-child-category', childCategoryController.deleteChildCategory);
 
+    //PRODUCT
+    router.post('/api/add-new-product', productController.addNewProduct);
 
     return app.use("/", router);
 

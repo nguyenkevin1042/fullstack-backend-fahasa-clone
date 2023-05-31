@@ -15,13 +15,17 @@ module.exports = (sequelize, DataTypes) => {
         price: DataTypes.DECIMAL(10, 2),
         discount: DataTypes.INTEGER,
         weight: DataTypes.INTEGER,
+        length: DataTypes.DECIMAL(10, 2),
+        width: DataTypes.DECIMAL(10, 2),
+        height: DataTypes.DECIMAL(10, 2),
+        image: DataTypes.STRING,
         childCategoryId: DataTypes.INTEGER,
         bookDescriptionId: DataTypes.INTEGER,
         stationaryDescriptionId: DataTypes.INTEGER,
         toyDescriptionId: DataTypes.INTEGER,
     }, {
         sequelize,
-        modelName: 'Products',
+        modelName: 'Product',
     });
 
     return Product;

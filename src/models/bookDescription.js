@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         pages: DataTypes.INTEGER,
     }, {
         sequelize,
-        modelName: 'BookDescriptions',
+        modelName: 'BookDescription',
     });
 
     return BookDescription;
