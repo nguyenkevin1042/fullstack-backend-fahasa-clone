@@ -55,14 +55,24 @@ let handleAddNewProduct = (inputData) => {
 }
 
 //2. GET ALL PRODUCTS
-let handleGetAllProduct = (inputData) => {
+let handleGetAllProduct = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let allProducts = await db.Product.findAll({
                 attributes: {
-                    exclude: ['createdAt', 'updatedAt'],
-                    raw: true
-                }
+                    exclude: ['createdAt', 'updatedAt']
+                },
+                // include: [
+                //     {
+                //         model: db.BookDescription,
+                //         as: 'bookDescriptionData',
+                //         attributes: {
+                //             exclude: ['createdAt', 'updatedAt']
+                //         },
+                //     },
+                // ],
+                // nested: true,
+                // raw: false
             })
 
             resolve({
