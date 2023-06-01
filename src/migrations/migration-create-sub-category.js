@@ -11,6 +11,9 @@ module.exports = {
             categoryType: {
                 type: Sequelize.STRING
             },
+            keyName: {
+                type: Sequelize.STRING
+            },
             valueVI: {
                 type: Sequelize.STRING
             },

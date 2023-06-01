@@ -9,9 +9,9 @@ let addNewCategory = async (req, res) => {
     }
 }
 
-let getAllSubCategory = async (req, res) => {
+let getAllCategory = async (req, res) => {
     try {
-        let data = await categoryService.handleGetAllSubCategory();
+        let data = await categoryService.handleGetAllCategory();
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -20,5 +20,5 @@ let getAllSubCategory = async (req, res) => {
 
 module.exports = {
     addNewCategory: addNewCategory,
-    getAllSubCategory: getAllSubCategory
+    getAllCategory: getAllCategory
 }

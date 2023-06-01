@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
     SubCategory.init({
         categoryType: DataTypes.STRING,
+        keyName: DataTypes.STRING,
         valueVI: DataTypes.STRING,
         valueEN: DataTypes.STRING,
     }, {

@@ -12,7 +12,6 @@ let addNewSubCategory = async (req, res) => {
 let getAllSubCategoryByCategoryType = async (req, res) => {
     try {
         let data = await subCategoryService.handleGetAllSubCategoryByType(req.query.categoryType);
-        console.log(data)
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)

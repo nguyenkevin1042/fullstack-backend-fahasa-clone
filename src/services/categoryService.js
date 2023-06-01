@@ -42,8 +42,8 @@ let handleAddNewCategory = (inputData) => {
     });
 }
 
-//2. GET ALL SUB CATEGORIES
-let handleGetAllSubCategory = () => {
+//2. GET ALL CATEGORIES
+let handleGetAllCategory = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let data = await db.SubCategory.findAll();
@@ -59,7 +59,7 @@ let handleGetAllSubCategory = () => {
 }
 
 let checkRequiredCategoryParams = (dataInput) => {
-    let arr = ['name', 'type', 'categoryId', 'valueVI', 'valueEN']
+    let arr = ['type', 'valueVI', 'valueEN']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
@@ -79,5 +79,5 @@ let checkRequiredCategoryParams = (dataInput) => {
 
 module.exports = {
     handleAddNewCategory: handleAddNewCategory,
-    handleGetAllSubCategory: handleGetAllSubCategory
+    handleGetAllCategory: handleGetAllCategory
 }

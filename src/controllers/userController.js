@@ -38,15 +38,6 @@ let customerLogin = async (req, res) => {
 }
 
 
-// let getAllUsers = async (req, res) => {
-//     try {
-
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-
 module.exports = {
     getAllUsers: getAllUsers,
     createNewUser: createNewUser,
