@@ -1,4 +1,5 @@
 import db from '../models/index';
+import productDescriptionService from './productDescriptionService'
 
 //1. ADD NEW PRODUCT
 let handleAddNewProduct = (inputData) => {
@@ -11,7 +12,9 @@ let handleAddNewProduct = (inputData) => {
                     message: "Missing " + checkParams.element + " parameter!"
                 })
             } else {
-                console.log(inputData)
+                let resultId = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
+                let insertedProductId
+
                 await db.Product.create({
                     name: inputData.name,
                     price: inputData.price,
@@ -22,7 +25,23 @@ let handleAddNewProduct = (inputData) => {
                     length: inputData.length,
                     childCategoryId: inputData.childCategoryId,
                     image: inputData.image,
+                }).then(result => insertedProductId = result.id);
+
+                let insertedProduct = await db.Product.findOne({
+                    where: { id: insertedProductId },
+                    raw: false
                 })
+
+                if (insertedProduct && inputData.productType === 'book') {
+                    insertedProduct.bookDescriptionId = resultId;
+                } else if (inputData.productType === 'toy') {
+                    insertedProduct.toyDescriptionId = resultId;
+                } else {
+                    insertedProduct.stationaryDescriptionId = resultId;
+                }
+
+                await insertedProduct.save();
+
                 resolve({
                     errCode: 0,
                     message: "Add New Product successful"
@@ -35,10 +54,31 @@ let handleAddNewProduct = (inputData) => {
     });
 }
 
+//2. GET ALL PRODUCTS
+let handleGetAllProduct = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let allProducts = await db.Product.findAll({
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt'],
+                    raw: true
+                }
+            })
+
+            resolve({
+                errCode: 0,
+                allProducts
+            })
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price', 'discount', 'weight', 'length', 'width', 'height',
-        'image', 'childCategoryId']
+        'image', 'childCategoryId', 'productType']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
@@ -56,5 +96,6 @@ let checkRequiredProductParams = (dataInput) => {
 }
 
 module.exports = {
-    handleAddNewProduct: handleAddNewProduct
+    handleAddNewProduct: handleAddNewProduct,
+    handleGetAllProduct: handleGetAllProduct
 }

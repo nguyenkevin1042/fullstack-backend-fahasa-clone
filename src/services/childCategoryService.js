@@ -20,7 +20,6 @@ let handleGetAllChildCategory = () => {
 let handleGetAllChildCategoryBySubCatId = (subCategoryId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // console.log(subCategoryId);return;
             let data = await db.ChildCategory.findAll({
                 where: { subCategoryId: subCategoryId },
                 attributes: {

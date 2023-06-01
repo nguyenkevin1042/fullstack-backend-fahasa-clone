@@ -41,6 +41,7 @@ let initWebRoutes = (app) => {
 
     //PRODUCT
     router.post('/api/add-new-product', productController.addNewProduct);
+    router.get('/api/get-all-product', productController.getAllProduct);
 
     return app.use("/", router);
 

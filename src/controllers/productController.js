@@ -9,6 +9,16 @@ let addNewProduct = async (req, res) => {
     }
 }
 
+let getAllProduct = async (req, res) => {
+    try {
+        let data = await productService.handleGetAllProduct();
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
-    addNewProduct: addNewProduct
+    addNewProduct: addNewProduct,
+    getAllProduct: getAllProduct
 }
