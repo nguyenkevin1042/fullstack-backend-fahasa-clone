@@ -73,18 +73,7 @@ let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
                 },
-                // include: [
-                //     {
-                //         model: db.ChildCategory,
-                //         as: 'childCategoryData',
-                //         attributes: {
-                //             exclude: ['createdAt', 'updatedAt']
-                //         },
-                //         limit: 4,
-                //     },
-                // ],
-                // nested: true,
-                // raw: false
+
             });
             resolve({
                 errCode: 0,
@@ -148,14 +137,7 @@ let handleGetAllSubCategory = () => {
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
                 },
-                // include: [
-                //     {
-                //         model: db.Allcodes,
-                //         as: 'mainCategoryData'
-                //     },
-                // ],
-                // nested: true,
-                // raw: true
+
 
             });
             resolve({

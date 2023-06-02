@@ -105,17 +105,7 @@ let handleGetAllProduct = () => {
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
                 },
-                // include: [
-                //     {
-                //         model: db.BookDescription,
-                //         as: 'bookDescriptionData',
-                //         attributes: {
-                //             exclude: ['createdAt', 'updatedAt']
-                //         },
-                //     },
-                // ],
-                // nested: true,
-                // raw: false
+
             })
 
             resolve({

@@ -191,6 +191,7 @@ let handleGetCodeByType = (inputType) => {
                         exclude: ['createdAt', 'updatedAt']
                     },
                 })
+                console.log(data)
 
                 if (data.length > 0) {
                     // switch (inputType) {
@@ -215,7 +216,7 @@ let handleGetCodeByType = (inputType) => {
                 } else {
                     resolve({
                         errCode: 2,
-                        message: "This categpry type does not existed!"
+                        message: "This category type does not existed!"
                     })
                 }
 
@@ -243,16 +244,8 @@ let handleGetCodeById = (inputId) => {
                     where: { id: inputId },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
-                    },
-                    include: [
-                        {
-                            model: db.SubCategory,
-                            as: 'subCategoryData',
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            },
-                        },
-                    ]
+                    }
+
                 })
 
                 if (data.length > 0) {
@@ -292,17 +285,7 @@ let handleGetCodeByKeyMap = (inputKeymap) => {
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
-                    include: [
-                        {
-                            model: db.SubCategory,
-                            as: 'subCategoryData',
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            },
-                        },
-                    ],
-                    nested: true,
-                    raw: false
+
                 })
                 resolve({
                     errCode: 0,
