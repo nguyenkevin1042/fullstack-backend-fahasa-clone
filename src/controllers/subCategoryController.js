@@ -9,9 +9,18 @@ let addNewSubCategory = async (req, res) => {
     }
 }
 
-let getAllSubCategoryByCategoryType = async (req, res) => {
+let getAllSubCategoryByCategory = async (req, res) => {
     try {
-        let data = await subCategoryService.handleGetAllSubCategoryByType(req.query.categoryType);
+        let data = await subCategoryService.handleGetAllSubCategoryByCategory(req.query.category);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+let getAllSubCategoryByKeyName = async (req, res) => {
+    try {
+        let data = await subCategoryService.handleGetAllSubCategoryByKeyName(req.query.keyName);
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -48,7 +57,8 @@ let editSubCategory = async (req, res) => {
 module.exports = {
     addNewSubCategory: addNewSubCategory,
     getAllSubCategory: getAllSubCategory,
-    getAllSubCategoryByCategoryType: getAllSubCategoryByCategoryType,
+    getAllSubCategoryByCategory: getAllSubCategoryByCategory,
+    getAllSubCategoryByKeyName: getAllSubCategoryByKeyName,
     deleteSubCategory: deleteSubCategory,
     editSubCategory: editSubCategory
 }

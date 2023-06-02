@@ -31,12 +31,13 @@ let initWebRoutes = (app) => {
     // router.post('/api/add-new-category', categoryController.addNewCategory);
     router.post('/api/add-new-sub-category', subCategoryController.addNewSubCategory);
     router.get('/api/get-all-sub-category', subCategoryController.getAllSubCategory);
-    router.get('/api/get-all-sub-category-by-category-type', subCategoryController.getAllSubCategoryByCategoryType);
+    router.get('/api/get-all-sub-category-by-category', subCategoryController.getAllSubCategoryByCategory);
+    router.get('/api/get-all-sub-category-by-key-name', subCategoryController.getAllSubCategoryByKeyName);
     router.delete('/api/delete-sub-category', subCategoryController.deleteSubCategory);
     router.put('/api/edit-sub-category', subCategoryController.editSubCategory);
     //CHILD CATEGORY
     router.get('/api/get-all-child-category', childCategoryController.getAllChildCategory);
-    router.get('/api/get-all-child-category-by-id', childCategoryController.getAllChildCategoryBySubCatId);
+    router.get('/api/get-all-child-category-by-sub-category', childCategoryController.getAllChildCategoryBySubCat);
     router.post('/api/add-new-child-category', childCategoryController.addNewChildCategory);
     router.delete('/api/delete-child-category', childCategoryController.deleteChildCategory);
 

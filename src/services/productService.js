@@ -5,6 +5,8 @@ import productDescriptionService from './productDescriptionService'
 let handleAddNewProduct = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
+            // console.log(inputProductType, dataInput)
+            // return;
             let checkParams = checkRequiredProductParams(inputData);
             if (checkParams.isValid === false) {
                 resolve({
@@ -12,18 +14,60 @@ let handleAddNewProduct = (inputData) => {
                     message: "Missing " + checkParams.element + " parameter!"
                 })
             } else {
-                let resultId = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
+                let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
                 let insertedProductId
+
+                if (result.errCode === 0) {
+                    await db.Product.create({
+                        name: inputData.name,
+                        keyName: inputData.keyName,
+                        price: inputData.price,
+                        discount: inputData.discount,
+                        weight: inputData.weight,
+                        height: inputData.height,
+                        width: inputData.width,
+                        length: inputData.length,
+                        publishYear: inputData.publishYear,
+                        categoryKeyName: inputData.categoryKeyName,
+                        image: inputData.image,
+                    }).then(result => insertedProductId = result.id);
+
+                    let insertedProduct = await db.Product.findOne({
+                        where: { id: insertedProductId },
+                        raw: false
+                    })
+
+                    if (insertedProduct && inputData.productType === 'book') {
+                        insertedProduct.bookDescriptionId = result.resultId;
+                    } else if (inputData.productType === 'toy') {
+                        insertedProduct.toyDescriptionId = result.resultId;
+                    } else {
+                        insertedProduct.stationaryDescriptionId = result.resultId;
+                    }
+
+                    await insertedProduct.save();
+
+                    resolve({
+                        errCode: 0,
+                        message: "Add New Product successful"
+                    })
+                } else {
+                    resolve(result)
+                }
+
+                return;
 
                 await db.Product.create({
                     name: inputData.name,
+                    keyName: inputData.keyName,
                     price: inputData.price,
                     discount: inputData.discount,
                     weight: inputData.weight,
                     height: inputData.height,
                     width: inputData.width,
                     length: inputData.length,
-                    childCategoryId: inputData.childCategoryId,
+                    publishYear: inputData.publishYear,
+                    categoryKeyName: inputData.categoryKeyName,
                     image: inputData.image,
                 }).then(result => insertedProductId = result.id);
 
@@ -88,7 +132,7 @@ let handleGetAllProduct = () => {
 
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price', 'discount', 'weight', 'length', 'width', 'height',
-        'image', 'childCategoryId', 'productType']
+        'image', 'keyName', 'categoryKeyName', 'productType', 'publishYear']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {

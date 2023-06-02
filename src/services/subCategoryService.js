@@ -64,7 +64,7 @@ let checkRequiredSubCategoryParams = (dataInput) => {
 }
 
 //2. GET ALL SUB CATEGORY BY CATEGORY TYPE
-let handleGetAllSubCategoryByType = (inputCategoryType) => {
+let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -73,22 +73,22 @@ let handleGetAllSubCategoryByType = (inputCategoryType) => {
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
                 },
-                include: [
-                    {
-                        model: db.ChildCategory,
-                        as: 'childCategoryData',
-                        attributes: {
-                            exclude: ['createdAt', 'updatedAt']
-                        },
-                        limit: 4,
-                    },
-                ],
-                nested: true,
-                raw: false
+                // include: [
+                //     {
+                //         model: db.ChildCategory,
+                //         as: 'childCategoryData',
+                //         attributes: {
+                //             exclude: ['createdAt', 'updatedAt']
+                //         },
+                //         limit: 4,
+                //     },
+                // ],
+                // nested: true,
+                // raw: false
             });
             resolve({
                 errCode: 0,
-                data
+                subCategories: data
             })
 
         } catch (error) {
@@ -97,7 +97,50 @@ let handleGetAllSubCategoryByType = (inputCategoryType) => {
     });
 }
 
-//3. GET ALL SUB CATEGORY
+//3. GET ALL SUB CATEGORY BY KeyName
+let handleGetAllSubCategoryByKeyName = (inputKeyName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputKeyName) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing keyName parameter!"
+                })
+            } else {
+
+                let data = await db.SubCategory.findAll({
+                    where: {
+                        keyName: inputKeyName,
+
+                    },
+                    attributes: {
+                        exclude: ['category', 'createdAt', 'updatedAt']
+                    },
+                });
+
+                if (data.length > 0) {
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        message: 'This keyName is not existed'
+                    })
+                }
+
+            }
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+//4. GET ALL SUB CATEGORY
 let handleGetAllSubCategory = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -126,7 +169,7 @@ let handleGetAllSubCategory = () => {
     });
 }
 
-//4. DELETE SUB CATEGORY
+//5. DELETE SUB CATEGORY
 let handleDeleteSubCategory = (inputId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -158,7 +201,7 @@ let handleDeleteSubCategory = (inputId) => {
     });
 }
 
-//5. EDIT SUB CATEGORY
+//6. EDIT SUB CATEGORY
 let handleEditSubCategory = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -216,7 +259,8 @@ let handleEditSubCategory = (inputData) => {
 module.exports = {
     handleGetAllSubCategory: handleGetAllSubCategory,
     handleAddNewSubCategory: handleAddNewSubCategory,
-    handleGetAllSubCategoryByType: handleGetAllSubCategoryByType,
+    handleGetAllSubCategoryByCategory: handleGetAllSubCategoryByCategory,
+    handleGetAllSubCategoryByKeyName: handleGetAllSubCategoryByKeyName,
     handleDeleteSubCategory: handleDeleteSubCategory,
     handleEditSubCategory: handleEditSubCategory
 }

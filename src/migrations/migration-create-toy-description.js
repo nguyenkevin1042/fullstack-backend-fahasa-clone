@@ -14,9 +14,6 @@ module.exports = {
             supplier: {
                 type: Sequelize.STRING
             },
-            publishYear: {
-                type: Sequelize.INTEGER
-            },
             brand: {
                 type: Sequelize.STRING
             },

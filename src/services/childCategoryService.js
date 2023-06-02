@@ -17,19 +17,36 @@ let handleGetAllChildCategory = () => {
 }
 
 //2. GET ALL CHILD CATEGORY BY SUBCATEGORY ID
-let handleGetAllChildCategoryBySubCatId = (subCategoryId) => {
+let handleGetAllChildCategoryBySubCat = (subCategory) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let data = await db.ChildCategory.findAll({
-                where: { subCategoryId: subCategoryId },
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt']
+            if (!subCategory) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing subCategory parameter!"
+                })
+            } else {
+                let data = await db.ChildCategory.findAll({
+                    where: { subCategory: subCategory },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    }
+                });
+
+                if (data.length > 0) {
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        message: 'This subCategory is not existed'
+                    })
                 }
-            });
-            resolve({
-                errCode: 0,
-                data
-            })
+
+            }
+            // 
 
         } catch (error) {
             reject(error);
@@ -49,15 +66,29 @@ let handleAddNewChildCategory = (inputData) => {
                     message: "Missing " + checkParams.element + " parameter!"
                 })
             } else {
-                await db.ChildCategory.create({
-                    subCategoryId: inputData.subCategoryId,
-                    valueVI: inputData.valueVI,
-                    valueEN: inputData.valueEN,
+                let existed = await db.ChildCategory.findOne({
+                    where: { keyName: inputData.keyName }
                 })
-                resolve({
-                    errCode: 0,
-                    message: "Add New Child Category successful"
-                })
+
+
+                if (existed) {
+                    resolve({
+                        errCode: 1,
+                        message: "This Child Category is already existed"
+                    })
+                } else {
+                    await db.ChildCategory.create({
+                        subCategory: inputData.subCategory,
+                        keyName: inputData.keyName,
+                        valueVI: inputData.valueVI,
+                        valueEN: inputData.valueEN,
+                    })
+                    resolve({
+                        errCode: 0,
+                        message: "Add New Child Category successful"
+                    })
+                }
+
             }
         } catch (error) {
             reject(error);
@@ -67,7 +98,7 @@ let handleAddNewChildCategory = (inputData) => {
 
 
 let checkRequiredChildCategoryParams = (dataInput) => {
-    let arr = ['subCategoryId', 'valueVI', 'valueEN']
+    let arr = ['subCategory', 'keyName', 'valueVI', 'valueEN']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
@@ -124,7 +155,7 @@ let handleDeleteChildCategory = (inputId) => {
 
 module.exports = {
     handleGetAllChildCategory: handleGetAllChildCategory,
-    handleGetAllChildCategoryBySubCatId: handleGetAllChildCategoryBySubCatId,
+    handleGetAllChildCategoryBySubCat: handleGetAllChildCategoryBySubCat,
     handleAddNewChildCategory: handleAddNewChildCategory,
     handleDeleteChildCategory: handleDeleteChildCategory
 }

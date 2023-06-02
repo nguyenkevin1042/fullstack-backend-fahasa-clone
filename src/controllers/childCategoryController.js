@@ -18,9 +18,9 @@ let getAllChildCategory = async (req, res) => {
     }
 }
 
-let getAllChildCategoryBySubCatId = async (req, res) => {
+let getAllChildCategoryBySubCat = async (req, res) => {
     try {
-        let data = await childCategoryService.handleGetAllChildCategoryBySubCatId(req.query.subCategoryId);
+        let data = await childCategoryService.handleGetAllChildCategoryBySubCat(req.query.subCategory);
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -38,7 +38,7 @@ let deleteChildCategory = async (req, res) => {
 
 module.exports = {
     getAllChildCategory: getAllChildCategory,
-    getAllChildCategoryBySubCatId: getAllChildCategoryBySubCatId,
+    getAllChildCategoryBySubCat: getAllChildCategoryBySubCat,
     addNewChildCategory: addNewChildCategory,
     deleteChildCategory: deleteChildCategory
 }

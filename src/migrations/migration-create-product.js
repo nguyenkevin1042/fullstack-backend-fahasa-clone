@@ -12,6 +12,9 @@ module.exports = {
             name: {
                 type: Sequelize.STRING
             },
+            keyName: {
+                type: Sequelize.STRING
+            },
             price: {
                 type: Sequelize.DECIMAL(10, 2)
             },
@@ -33,8 +36,11 @@ module.exports = {
             image: {
                 type: Sequelize.BLOB('long')
             },
-            childCategoryId: {
+            publishYear: {
                 type: Sequelize.INTEGER
+            },
+            categoryKeyName: {
+                type: Sequelize.STRING
             },
             bookDescriptionId: {
                 type: Sequelize.INTEGER

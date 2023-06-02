@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
     ToyDescription.init({
         age: DataTypes.INTEGER,
         supplier: DataTypes.STRING,
-        publishYear: DataTypes.INTEGER,
         brand: DataTypes.STRING,
         origin: DataTypes.STRING,
         madeBy: DataTypes.STRING,

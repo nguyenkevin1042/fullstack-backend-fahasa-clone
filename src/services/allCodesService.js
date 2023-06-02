@@ -178,6 +178,7 @@ let handleEditCode = (inputData) => {
 let handleGetCodeByType = (inputType) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(inputType)
             if (!inputType) {
                 resolve({
                     errCode: 1,
@@ -189,15 +190,15 @@ let handleGetCodeByType = (inputType) => {
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
-                    include: [
-                        {
-                            model: db.SubCategory,
-                            as: 'subCategoryData',
-                        },
+                    // include: [
+                    //     {
+                    //         model: db.SubCategory,
+                    //         // as: 'subCategoryData',
+                    //     },
 
-                    ],
+                    // ],
                     // nested: true,
-                    raw: true
+                    // raw: false
                 })
 
                 if (data.length > 0) {

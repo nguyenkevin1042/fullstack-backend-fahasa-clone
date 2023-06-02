@@ -9,10 +9,10 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             subCategory: {
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             keyName: {
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             valueVI: {
                 type: Sequelize.STRING

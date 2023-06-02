@@ -3,6 +3,7 @@ import db from '../models/index';
 let handleAddProductDescription = (inputProductType, dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
+
             let checkParams;
             let resultId;
 
@@ -69,7 +70,10 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
 
             }
 
-            resolve(resultId)
+            resolve({
+                errCode: 0,
+                resultId
+            })
 
         } catch (error) {
             reject(error);
@@ -97,7 +101,7 @@ let checkRequiredBookDescriptionParams = (dataInput) => {
 }
 
 let checkRequiredToyDescriptionParams = (dataInput) => {
-    let arr = ['age', 'supplier', 'publishYear', 'brand', 'origin',
+    let arr = ['age', 'supplier', 'brand', 'origin',
         'madeBy', 'color', 'specification', 'warning', 'usage']
     let isValid = true;
     let element = '';
