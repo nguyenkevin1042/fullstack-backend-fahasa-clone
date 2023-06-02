@@ -83,7 +83,8 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
 
 
 let checkRequiredBookDescriptionParams = (dataInput) => {
-    let arr = ['supplier', 'author', 'translator', 'publisher', 'language', 'pages']
+    let arr = ['supplier', 'author', 'translator', 'publisher',
+        'language', 'pages',]
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {

@@ -27,6 +27,9 @@ module.exports = {
             pages: {
                 type: Sequelize.INTEGER
             },
+            bookLayout: {
+                type: Sequelize.STRING
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE

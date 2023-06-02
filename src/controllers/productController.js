@@ -18,7 +18,17 @@ let getAllProduct = async (req, res) => {
     }
 }
 
+let deleteProduct = async (req, res) => {
+    try {
+        let data = await productService.handleDeleteProduct(req.query.id);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     addNewProduct: addNewProduct,
-    getAllProduct: getAllProduct
+    getAllProduct: getAllProduct,
+    deleteProduct: deleteProduct
 }

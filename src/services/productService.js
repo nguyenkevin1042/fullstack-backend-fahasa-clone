@@ -5,8 +5,7 @@ import productDescriptionService from './productDescriptionService'
 let handleAddNewProduct = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // console.log(inputProductType, dataInput)
-            // return;
+
             let checkParams = checkRequiredProductParams(inputData);
             if (checkParams.isValid === false) {
                 resolve({
@@ -130,6 +129,44 @@ let handleGetAllProduct = () => {
     });
 }
 
+//23. DELETE PRODUCT
+let handleDeleteProduct = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId) {
+                resolve({
+                    errCode: 1,
+                    message: 'Missing id parameter!'
+                })
+            } else {
+                let data = await db.Product.findOne({
+                    where: { id: inputId }
+                })
+
+                if (data) {
+                    await db.Product.destroy(
+                        {
+                            where: { id: inputId }
+                        }
+                    );
+                    resolve({
+                        errCode: 0,
+                        message: 'Delete product successful!'
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        message: 'Product id is not existed'
+                    })
+                }
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price', 'discount', 'weight', 'length', 'width', 'height',
         'image', 'keyName', 'categoryKeyName', 'productType', 'publishYear']
@@ -151,5 +188,6 @@ let checkRequiredProductParams = (dataInput) => {
 
 module.exports = {
     handleAddNewProduct: handleAddNewProduct,
-    handleGetAllProduct: handleGetAllProduct
+    handleGetAllProduct: handleGetAllProduct,
+    handleDeleteProduct: handleDeleteProduct
 }
