@@ -13,7 +13,7 @@ let handleAddNewCode = (inputData) => {
                 })
             } else {
                 //check if keyMap is existed
-                let existed = await db.AllCodes.findOne({
+                let existed = await db.AllCode.findOne({
                     where: { keyMap: inputData.keyMap }
                 })
 
@@ -23,7 +23,7 @@ let handleAddNewCode = (inputData) => {
                         message: "This code is already existed!"
                     })
                 } else {
-                    await db.AllCodes.create({
+                    await db.AllCode.create({
                         type: inputData.type,
                         keyMap: inputData.keyMap,
                         valueVI: inputData.valueVI,
@@ -60,10 +60,10 @@ let checkRequiredCodesParams = (dataInput) => {
 }
 
 //2. GET ALL CODES
-let handleGetAllCodes = (inputData) => {
+let handleGetAllCodes = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let allCodes = await db.AllCodes.findAll({
+            let allCodes = await db.AllCode.findAll({
                 attributes: {
                     exclude: ['createdAt', 'updatedAt'],
                     raw: true
@@ -91,12 +91,12 @@ let handleDeleteCode = (inputId) => {
                     message: 'Missing id parameter!'
                 })
             } else {
-                let code = await db.AllCodes.findOne({
+                let code = await db.AllCode.findOne({
                     where: { id: inputId }
                 })
 
                 if (code) {
-                    await db.AllCodes.destroy(
+                    await db.AllCode.destroy(
                         {
                             where: { id: inputId }
                         }
@@ -132,7 +132,7 @@ let handleEditCode = (inputData) => {
                     message: "Missing " + checkParams.element + " parameter!"
                 })
             } else {
-                let existed = await db.AllCodes.findOne({
+                let existed = await db.AllCode.findOne({
                     where: { keyMap: inputData.keyMap }
                 })
                 if (existed) {
@@ -141,7 +141,7 @@ let handleEditCode = (inputData) => {
                         message: "This code is already existed!"
                     })
                 } else {
-                    let code = await db.AllCodes.findOne({
+                    let code = await db.AllCode.findOne({
                         where: {
                             id: inputData.id
                         },
@@ -184,7 +184,7 @@ let handleGetCodeByType = (inputType) => {
                     message: "Missing type parameter!"
                 })
             } else {
-                let data = await db.AllCodes.findAll({
+                let data = await db.AllCode.findAll({
                     where: { type: inputType },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
@@ -192,10 +192,11 @@ let handleGetCodeByType = (inputType) => {
                     include: [
                         {
                             model: db.SubCategory,
-                            as: 'subCategoryData'
+                            as: 'subCategoryData',
                         },
+
                     ],
-                    nested: true,
+                    // nested: true,
                     raw: true
                 })
 
@@ -231,7 +232,7 @@ let handleGetCodeById = (inputId) => {
                     message: "Missing id parameter!"
                 })
             } else {
-                let data = await db.AllCodes.findAll({
+                let data = await db.AllCode.findAll({
                     where: { id: inputId },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
@@ -269,11 +270,65 @@ let handleGetCodeById = (inputId) => {
     });
 }
 
+//6. GET CODE BY KEY MAP
+let handleGetCodeByKeyMap = (inputKeymap) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputKeymap) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing keyMap parameter!"
+                })
+            } else {
+                let data = await db.AllCode.findAll({
+                    where: { keyMap: inputKeymap },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.SubCategory,
+                            as: 'subCategoryData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        },
+                    ],
+                    nested: true,
+                    raw: false
+                })
+                resolve({
+                    errCode: 0,
+                    data
+                })
+                // if (data.length > 0) {
+                //     resolve({
+                //         errCode: 0,
+                //         data
+                //     })
+                // } else {
+                //     resolve({
+                //         errCode: 2,
+                //         message: "This keyMap does not existed!"
+                //     })
+                // }
+
+            }
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleAddNewCode: handleAddNewCode,
     handleGetAllCodes: handleGetAllCodes,
     handleDeleteCode: handleDeleteCode,
     handleEditCode: handleEditCode,
     handleGetCodeByType: handleGetCodeByType,
-    handleGetCodeById: handleGetCodeById
+    handleGetCodeById: handleGetCodeById,
+    handleGetCodeByKeyMap: handleGetCodeByKeyMap
 }

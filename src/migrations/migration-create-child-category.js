@@ -8,7 +8,10 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            subCategoryId: {
+            subCategory: {
+                type: Sequelize.INTEGER
+            },
+            keyName: {
                 type: Sequelize.INTEGER
             },
             valueVI: {

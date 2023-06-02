@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             AllCode.hasMany(models.SubCategory,
                 {
-                    foreignKey: 'categoryType',
+                    foreignKey: 'category',
                     as: 'subCategoryData'
                 })
         }
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         valueEN: DataTypes.STRING,
     }, {
         sequelize,
-        modelName: 'AllCodes',
+        modelName: 'AllCode',
     });
 
     return AllCode;

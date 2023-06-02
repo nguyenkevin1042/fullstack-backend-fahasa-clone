@@ -12,7 +12,10 @@ let handleAddNewSubCategory = (inputData) => {
                 })
             } else {
                 let existed = await db.SubCategory.findOne({
-                    where: { keyName: inputData.keyName }
+                    where: {
+                        category: inputData.category,
+                        keyName: inputData.keyName
+                    }
                 })
 
                 if (existed) {
@@ -22,7 +25,7 @@ let handleAddNewSubCategory = (inputData) => {
                     })
                 } else {
                     await db.SubCategory.create({
-                        categoryType: inputData.categoryType,
+                        category: inputData.category,
                         keyName: inputData.keyName,
                         valueVI: inputData.valueVI,
                         valueEN: inputData.valueEN,
@@ -43,7 +46,7 @@ let handleAddNewSubCategory = (inputData) => {
 
 
 let checkRequiredSubCategoryParams = (dataInput) => {
-    let arr = ['categoryType', 'keyName', 'valueVI', 'valueEN']
+    let arr = ['category', 'keyName', 'valueVI', 'valueEN']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
@@ -60,13 +63,13 @@ let checkRequiredSubCategoryParams = (dataInput) => {
     }
 }
 
-
+//2. GET ALL SUB CATEGORY BY CATEGORY TYPE
 let handleGetAllSubCategoryByType = (inputCategoryType) => {
     return new Promise(async (resolve, reject) => {
         try {
 
             let data = await db.SubCategory.findAll({
-                where: { categoryType: inputCategoryType },
+                where: { category: inputCategoryType },
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
                 },
@@ -94,6 +97,7 @@ let handleGetAllSubCategoryByType = (inputCategoryType) => {
     });
 }
 
+//3. GET ALL SUB CATEGORY
 let handleGetAllSubCategory = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -122,6 +126,7 @@ let handleGetAllSubCategory = () => {
     });
 }
 
+//4. DELETE SUB CATEGORY
 let handleDeleteSubCategory = (inputId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -153,9 +158,65 @@ let handleDeleteSubCategory = (inputId) => {
     });
 }
 
+//5. EDIT SUB CATEGORY
+let handleEditSubCategory = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let checkParams = checkRequiredSubCategoryParams(inputData)
+
+            if (checkParams.isValid === false) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing " + checkParams.element + " parameter!"
+                })
+            } else {
+                // let existed = await db.AllCode.findOne({
+                //     where: { keyMap: inputData.keyMap }
+                // })
+                // if (existed) {
+                //     resolve({
+                //         errCode: 1,
+                //         message: "This code is already existed!"
+                //     })
+                // } else {
+                //     let code = await db.AllCode.findOne({
+                //         where: {
+                //             id: inputData.id
+                //         },
+                //         raw: false
+                //     })
+
+                //     if (code) {
+                //         code.type = inputData.type;
+                //         code.keyMap = inputData.keyMap;
+                //         code.valueVI = inputData.valueVI;
+                //         code.valueEN = inputData.valueEN;
+                //         await code.save()
+
+                //         resolve({
+                //             errCode: 0,
+                //             message: "Updated successful!"
+                //         })
+                //     } else {
+                //         resolve({
+                //             errCode: 2,
+                //             message: "Updated fail!"
+                //         })
+                //     }
+                // }
+
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleGetAllSubCategory: handleGetAllSubCategory,
     handleAddNewSubCategory: handleAddNewSubCategory,
     handleGetAllSubCategoryByType: handleGetAllSubCategoryByType,
-    handleDeleteSubCategory: handleDeleteSubCategory
+    handleDeleteSubCategory: handleDeleteSubCategory,
+    handleEditSubCategory: handleEditSubCategory
 }

@@ -36,9 +36,19 @@ let deleteSubCategory = async (req, res) => {
     }
 }
 
+let editSubCategory = async (req, res) => {
+    try {
+        let data = await subCategoryService.handleEditSubCategory(req.body);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     addNewSubCategory: addNewSubCategory,
     getAllSubCategory: getAllSubCategory,
     getAllSubCategoryByCategoryType: getAllSubCategoryByCategoryType,
-    deleteSubCategory: deleteSubCategory
+    deleteSubCategory: deleteSubCategory,
+    editSubCategory: editSubCategory
 }

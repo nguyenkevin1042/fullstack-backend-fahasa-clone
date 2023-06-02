@@ -54,11 +54,21 @@ let getCodeById = async (req, res) => {
     }
 }
 
+let getCodeByKeyMap = async (req, res) => {
+    try {
+        let data = await allCodesService.handleGetCodeByKeyMap(req.query.keyMap);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     addNewCode: addNewCode,
     getAllCodes: getAllCodes,
     deleteCode: deleteCode,
     editCode: editCode,
     getCodeByType: getCodeByType,
-    getCodeById: getCodeById
+    getCodeById: getCodeById,
+    getCodeByKeyMap: getCodeByKeyMap
 }

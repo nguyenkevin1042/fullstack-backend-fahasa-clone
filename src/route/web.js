@@ -21,6 +21,7 @@ let initWebRoutes = (app) => {
     //ALL CODES
     router.get('/api/get-all-codes', allCodesController.getAllCodes);
     router.get('/api/get-code-by-type', allCodesController.getCodeByType);
+    router.get('/api/get-code-by-key-map', allCodesController.getCodeByKeyMap);
     router.get('/api/get-code-by-id', allCodesController.getCodeById);
     router.post('/api/add-new-code', allCodesController.addNewCode);
     router.delete('/api/delete-code', allCodesController.deleteCode);
@@ -32,7 +33,7 @@ let initWebRoutes = (app) => {
     router.get('/api/get-all-sub-category', subCategoryController.getAllSubCategory);
     router.get('/api/get-all-sub-category-by-category-type', subCategoryController.getAllSubCategoryByCategoryType);
     router.delete('/api/delete-sub-category', subCategoryController.deleteSubCategory);
-
+    router.put('/api/edit-sub-category', subCategoryController.editSubCategory);
     //CHILD CATEGORY
     router.get('/api/get-all-child-category', childCategoryController.getAllChildCategory);
     router.get('/api/get-all-child-category-by-id', childCategoryController.getAllChildCategoryBySubCatId);
