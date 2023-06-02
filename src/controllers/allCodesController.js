@@ -20,7 +20,7 @@ let getAllCodes = async (req, res) => {
 
 let deleteCode = async (req, res) => {
     try {
-        let data = await allCodesService.handleDeleteCode(req.body.id);
+        let data = await allCodesService.handleDeleteCode(req.query.id);
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)

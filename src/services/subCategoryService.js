@@ -11,15 +11,28 @@ let handleAddNewSubCategory = (inputData) => {
                     message: "Missing " + checkParams.element + " parameter!"
                 })
             } else {
-                await db.SubCategory.create({
-                    categoryType: inputData.categoryType,
-                    valueVI: inputData.valueVI,
-                    valueEN: inputData.valueEN,
+                let existed = await db.SubCategory.findOne({
+                    where: { keyName: inputData.keyName }
                 })
-                resolve({
-                    errCode: 0,
-                    message: "Add New SubCategory successful"
-                })
+
+                if (existed) {
+                    resolve({
+                        errCode: 1,
+                        message: "This sub category is already existed"
+                    })
+                } else {
+                    await db.SubCategory.create({
+                        categoryType: inputData.categoryType,
+                        keyName: inputData.keyName,
+                        valueVI: inputData.valueVI,
+                        valueEN: inputData.valueEN,
+                    })
+                    resolve({
+                        errCode: 0,
+                        message: "Add New SubCategory successful"
+                    })
+                }
+
             }
 
         } catch (error) {
@@ -30,7 +43,7 @@ let handleAddNewSubCategory = (inputData) => {
 
 
 let checkRequiredSubCategoryParams = (dataInput) => {
-    let arr = ['categoryType', 'valueVI', 'valueEN']
+    let arr = ['categoryType', 'keyName', 'valueVI', 'valueEN']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
