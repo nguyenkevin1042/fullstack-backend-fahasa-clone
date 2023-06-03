@@ -31,6 +31,12 @@ let handleAddNewProduct = (inputData) => {
                         image: inputData.image,
                     }).then(result => insertedProductId = result.id);
 
+                    await db.ProductMarkdown.create({
+                        productId: insertedProductId,
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                    })
+
                     let insertedProduct = await db.Product.findOne({
                         where: { id: insertedProductId },
                         raw: false
@@ -53,42 +59,6 @@ let handleAddNewProduct = (inputData) => {
                 } else {
                     resolve(result)
                 }
-
-                return;
-
-                await db.Product.create({
-                    name: inputData.name,
-                    keyName: inputData.keyName,
-                    price: inputData.price,
-                    discount: inputData.discount,
-                    weight: inputData.weight,
-                    height: inputData.height,
-                    width: inputData.width,
-                    length: inputData.length,
-                    publishYear: inputData.publishYear,
-                    categoryKeyName: inputData.categoryKeyName,
-                    image: inputData.image,
-                }).then(result => insertedProductId = result.id);
-
-                let insertedProduct = await db.Product.findOne({
-                    where: { id: insertedProductId },
-                    raw: false
-                })
-
-                if (insertedProduct && inputData.productType === 'book') {
-                    insertedProduct.bookDescriptionId = resultId;
-                } else if (inputData.productType === 'toy') {
-                    insertedProduct.toyDescriptionId = resultId;
-                } else {
-                    insertedProduct.stationaryDescriptionId = resultId;
-                }
-
-                await insertedProduct.save();
-
-                resolve({
-                    errCode: 0,
-                    message: "Add New Product successful"
-                })
             }
 
         } catch (error) {
@@ -134,13 +104,22 @@ let handleGetProductByKeyName = (inputKeyName) => {
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
-                    include: {
-                        model: db.BookDescription,
-                        as: 'bookDescriptionData',
-                        attributes: {
-                            exclude: ['createdAt', 'updatedAt']
+                    include: [
+                        {
+                            model: db.BookDescription,
+                            as: 'bookDescriptionData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
                         },
-                    },
+                        {
+                            model: db.ProductMarkdown,
+                            as: 'markdownData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+                    ],
                     nested: true,
                     raw: false
                 })
