@@ -63,7 +63,7 @@ let checkRequiredSubCategoryParams = (dataInput) => {
     }
 }
 
-//2. GET ALL SUB CATEGORY BY CATEGORY TYPE
+//2. GET ALL SUB CATEGORY BY CATEGORY
 let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -73,7 +73,15 @@ let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
                 },
-
+                include: {
+                    model: db.ChildCategory,
+                    attributes: {
+                        exclude: ['subCategory', 'createdAt', 'updatedAt']
+                    },
+                    limit: 4
+                },
+                nested: true,
+                raw: false
             });
             resolve({
                 errCode: 0,
@@ -86,7 +94,7 @@ let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
     });
 }
 
-//3. GET ALL SUB CATEGORY BY KeyName
+//3. GET ALL SUB CATEGORY BY KEYNAME
 let handleGetAllSubCategoryByKeyName = (inputKeyName) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -103,8 +111,16 @@ let handleGetAllSubCategoryByKeyName = (inputKeyName) => {
 
                     },
                     attributes: {
-                        exclude: ['category', 'createdAt', 'updatedAt']
+                        exclude: ['createdAt', 'updatedAt']
                     },
+                    include: {
+                        model: db.ChildCategory,
+                        attributes: {
+                            exclude: ['subCategory', 'createdAt', 'updatedAt']
+                        },
+                    },
+                    nested: true,
+                    raw: false
                 });
 
                 if (data.length > 0) {

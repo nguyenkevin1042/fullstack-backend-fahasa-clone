@@ -7,7 +7,12 @@ module.exports = (sequelize, DataTypes) => {
 
         static associate(models) {
 
-
+            ChildCategory.belongsTo(models.SubCategory,
+                {
+                    foreignKey: 'subCategory',
+                    targetKey: 'keyName',
+                    // as: 'childCategoryData'
+                })
         }
     };
 

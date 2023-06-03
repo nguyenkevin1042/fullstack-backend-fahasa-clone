@@ -6,6 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     class SubCategory extends Model {
 
         static associate(models) {
+            SubCategory.hasMany(models.ChildCategory,
+                {
+                    foreignKey: 'subCategory',
+                    sourceKey: "keyName",
+                    // as: 'childCategoryData'
+                })
 
 
 

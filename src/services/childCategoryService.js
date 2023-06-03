@@ -16,7 +16,7 @@ let handleGetAllChildCategory = () => {
     });
 }
 
-//2. GET ALL CHILD CATEGORY BY SUBCATEGORY ID
+//2. GET ALL CHILD CATEGORY BY SUBCATEGORY 
 let handleGetAllChildCategoryBySubCat = (subCategory) => {
     return new Promise(async (resolve, reject) => {
         try {
