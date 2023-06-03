@@ -54,7 +54,62 @@ let handleGetAllChildCategoryBySubCat = (subCategory) => {
     });
 }
 
-//3. ADD NEW CHILD CATEGORY
+//3. GET CHILD CATEGORY BY KEY NAME
+let handleGetChildCategoryByKeyName = (keyName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!keyName) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing keyName parameter!"
+                })
+            } else {
+                let data = await db.ChildCategory.findAll({
+                    where: { keyName: keyName },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.SubCategory,
+                            include: [
+                                {
+                                    model: db.AllCode,
+                                    attributes: {
+                                        exclude: ['createdAt', 'updatedAt']
+                                    },
+                                }
+                            ],
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+                    ],
+                    nested: true,
+                    raw: false
+                });
+
+                if (data.length > 0) {
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        message: 'This childCategory is not existed'
+                    })
+                }
+
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+//4. ADD NEW CHILD CATEGORY
 let handleAddNewChildCategory = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -115,7 +170,7 @@ let checkRequiredChildCategoryParams = (dataInput) => {
     }
 }
 
-//4. DELETE CHILD CATEGORY
+//5. DELETE CHILD CATEGORY
 let handleDeleteChildCategory = (inputId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -156,6 +211,7 @@ let handleDeleteChildCategory = (inputId) => {
 module.exports = {
     handleGetAllChildCategory: handleGetAllChildCategory,
     handleGetAllChildCategoryBySubCat: handleGetAllChildCategoryBySubCat,
+    handleGetChildCategoryByKeyName: handleGetChildCategoryByKeyName,
     handleAddNewChildCategory: handleAddNewChildCategory,
     handleDeleteChildCategory: handleDeleteChildCategory
 }

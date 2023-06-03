@@ -38,6 +38,7 @@ let initWebRoutes = (app) => {
     //CHILD CATEGORY
     router.get('/api/get-all-child-category', childCategoryController.getAllChildCategory);
     router.get('/api/get-all-child-category-by-sub-category', childCategoryController.getAllChildCategoryBySubCat);
+    router.get('/api/get-child-category-by-key-name', childCategoryController.getChildCategoryByKeyName);
     router.post('/api/add-new-child-category', childCategoryController.addNewChildCategory);
     router.delete('/api/delete-child-category', childCategoryController.deleteChildCategory);
 

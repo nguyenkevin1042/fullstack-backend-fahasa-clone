@@ -6,7 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     class AllCode extends Model {
 
         static associate(models) {
-
+            AllCode.hasMany(models.SubCategory,
+                {
+                    foreignKey: 'category',
+                    sourceKey: "keyMap",
+                    // as: 'childCategoryData'
+                })
         }
     };
 

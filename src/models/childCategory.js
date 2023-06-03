@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
                     targetKey: 'keyName',
                     // as: 'childCategoryData'
                 })
+
+            ChildCategory.hasMany(models.Product,
+                {
+                    foreignKey: 'categoryKeyName',
+                    sourceKey: 'keyName',
+                })
         }
     };
 
