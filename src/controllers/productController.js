@@ -9,6 +9,15 @@ let addNewProduct = async (req, res) => {
     }
 }
 
+let updateProduct = async (req, res) => {
+    try {
+        let data = await productService.handleUpdateProduct(req.body);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 let getAllProduct = async (req, res) => {
     try {
         let data = await productService.handleGetAllProduct();
@@ -40,5 +49,6 @@ module.exports = {
     addNewProduct: addNewProduct,
     getAllProduct: getAllProduct,
     getProductByKeyName: getProductByKeyName,
-    deleteProduct: deleteProduct
+    deleteProduct: deleteProduct,
+    updateProduct: updateProduct
 }

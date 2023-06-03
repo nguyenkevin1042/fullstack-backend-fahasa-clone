@@ -78,7 +78,7 @@ let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
                     attributes: {
                         exclude: ['subCategory', 'createdAt', 'updatedAt']
                     },
-                    limit: 4
+                    // limit: 4
                 },
                 nested: true,
                 raw: false

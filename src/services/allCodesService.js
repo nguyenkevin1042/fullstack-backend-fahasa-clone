@@ -285,27 +285,31 @@ let handleGetCodeByKeyMap = (inputKeymap) => {
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
+                    include: [
+                        {
+                            model: db.SubCategory,
+                            include: [
+                                {
+                                    model: db.ChildCategory,
+                                    attributes: {
+                                        exclude: ['createdAt', 'updatedAt']
+                                    },
+                                }
+                            ],
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+                    ],
+                    nested: true,
+                    raw: false
 
                 })
                 resolve({
                     errCode: 0,
                     data
                 })
-                // if (data.length > 0) {
-                //     resolve({
-                //         errCode: 0,
-                //         data
-                //     })
-                // } else {
-                //     resolve({
-                //         errCode: 2,
-                //         message: "This keyMap does not existed!"
-                //     })
-                // }
-
             }
-
-
 
         } catch (error) {
             reject(error);

@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
                 {
                     foreignKey: 'category',
                     sourceKey: "keyMap",
-                    // as: 'childCategoryData'
                 })
         }
     };

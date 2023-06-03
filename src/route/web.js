@@ -44,6 +44,7 @@ let initWebRoutes = (app) => {
 
     //PRODUCT
     router.post('/api/add-new-product', productController.addNewProduct);
+    router.post('/api/update-product', productController.updateProduct)
     router.get('/api/get-all-product', productController.getAllProduct);
     router.get('/api/get-product-by-key-name', productController.getProductByKeyName);
     router.delete('/api/delete-product', productController.deleteProduct);

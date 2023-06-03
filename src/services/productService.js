@@ -220,6 +220,72 @@ let handleDeleteProduct = (inputId) => {
     });
 }
 
+//5. UPDATE PRODUCT
+let handleUpdateProduct = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let checkParams = checkRequiredProductParams(inputData);
+            if (checkParams.isValid === false) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing " + checkParams.element + " parameter!"
+                })
+            } else {
+                let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
+                let insertedProductId
+
+                if (result.errCode === 0) {
+                    await db.Product.create({
+                        name: inputData.name,
+                        keyName: inputData.keyName,
+                        price: inputData.price,
+                        discount: inputData.discount,
+                        weight: inputData.weight,
+                        height: inputData.height,
+                        width: inputData.width,
+                        length: inputData.length,
+                        publishYear: inputData.publishYear,
+                        categoryKeyName: inputData.categoryKeyName,
+                        image: inputData.image,
+                    }).then(result => insertedProductId = result.id);
+
+                    await db.ProductMarkdown.create({
+                        productId: insertedProductId,
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                    })
+
+                    let insertedProduct = await db.Product.findOne({
+                        where: { id: insertedProductId },
+                        raw: false
+                    })
+
+                    if (insertedProduct && inputData.productType === 'book') {
+                        insertedProduct.bookDescriptionId = result.resultId;
+                    } else if (inputData.productType === 'toy') {
+                        insertedProduct.toyDescriptionId = result.resultId;
+                    } else {
+                        insertedProduct.stationaryDescriptionId = result.resultId;
+                    }
+
+                    await insertedProduct.save();
+
+                    resolve({
+                        errCode: 0,
+                        message: "Add New Product successful"
+                    })
+                } else {
+                    resolve(result)
+                }
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price', 'discount', 'weight', 'length', 'width', 'height',
         'image', 'keyName', 'categoryKeyName', 'productType', 'publishYear']
@@ -243,5 +309,6 @@ module.exports = {
     handleAddNewProduct: handleAddNewProduct,
     handleGetAllProduct: handleGetAllProduct,
     handleGetProductByKeyName: handleGetProductByKeyName,
-    handleDeleteProduct: handleDeleteProduct
+    handleDeleteProduct: handleDeleteProduct,
+    handleUpdateProduct: handleUpdateProduct
 }
