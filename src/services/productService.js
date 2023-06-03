@@ -119,7 +119,52 @@ let handleGetAllProduct = () => {
     });
 }
 
-//23. DELETE PRODUCT
+//3. GET PRODUCT BY KEYNAME
+let handleGetProductByKeyName = (inputKeyName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputKeyName) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing keyName parameter!"
+                })
+            } else {
+                let product = await db.Product.findOne({
+                    where: { keyName: inputKeyName },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: {
+                        model: db.BookDescription,
+                        as: 'bookDescriptionData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                    nested: true,
+                    raw: false
+                })
+
+                if (product) {
+                    resolve({
+                        errCode: 0,
+                        product
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        message: "Product with this keyName is not existed"
+                    })
+                }
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+//4. DELETE PRODUCT
 let handleDeleteProduct = (inputId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -179,5 +224,6 @@ let checkRequiredProductParams = (dataInput) => {
 module.exports = {
     handleAddNewProduct: handleAddNewProduct,
     handleGetAllProduct: handleGetAllProduct,
+    handleGetProductByKeyName: handleGetProductByKeyName,
     handleDeleteProduct: handleDeleteProduct
 }

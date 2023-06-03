@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             Product.hasOne(models.BookDescription,
                 {
                     foreignKey: 'id',
+                    sourceKey: 'bookDescriptionId',
                     as: 'bookDescriptionData'
                 })
         }
