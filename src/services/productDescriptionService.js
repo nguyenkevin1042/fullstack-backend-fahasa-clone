@@ -42,6 +42,7 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
                         origin: dataInput.origin,
                         madeBy: dataInput.madeBy,
                         color: dataInput.color,
+                        material: dataInput.material,
                         specification: dataInput.specification,
                         warning: dataInput.warning,
                         usage: dataInput.usage,
@@ -103,7 +104,7 @@ let checkRequiredBookDescriptionParams = (dataInput) => {
 
 let checkRequiredToyDescriptionParams = (dataInput) => {
     let arr = ['age', 'supplier', 'brand', 'origin',
-        'madeBy', 'color', 'specification', 'warning', 'usage']
+        'madeBy', 'color', 'material', 'specification', 'warning', 'usage']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {

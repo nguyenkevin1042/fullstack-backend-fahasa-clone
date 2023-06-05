@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         origin: DataTypes.STRING,
         madeBy: DataTypes.STRING,
         color: DataTypes.STRING,
+        material: DataTypes.STRING,
         specification: DataTypes.STRING,
         warning: DataTypes.STRING,
         usage: DataTypes.STRING,

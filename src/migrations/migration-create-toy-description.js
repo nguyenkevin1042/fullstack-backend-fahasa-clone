@@ -26,6 +26,9 @@ module.exports = {
             color: {
                 type: Sequelize.STRING
             },
+            material: {
+                type: Sequelize.STRING
+            },
             specification: {
                 type: Sequelize.STRING
             },
