@@ -82,6 +82,107 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
     });
 }
 
+let handleUpdateProductDescription = (inputProductType, dataInput,
+    bookDescriptionId, stationaryDescriptionId, toyDescriptionId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let checkParams;
+
+            if (inputProductType === 'book') {
+                checkParams = checkRequiredBookDescriptionParams(dataInput)
+                if (checkParams.isValid === false) {
+                    resolve({
+                        errCode: 1,
+                        message: "Missing " + checkParams.element + " parameter!"
+                    })
+                } else {
+
+                    let existed = await db.BookDescription.findOne({
+                        where: { id: bookDescriptionId },
+                        raw: false
+                    })
+
+                    if (existed) {
+                        existed.supplier = dataInput.supplier
+                        existed.author = dataInput.author
+                        existed.translator = dataInput.translator
+                        existed.publisher = dataInput.publisher
+                        existed.language = dataInput.language
+                        existed.pages = dataInput.pages
+                        await existed.save();
+                    }
+
+                    resolve({
+                        errCode: 0,
+                        message: "Update Book Description Successful"
+                    })
+                }
+            }
+            if (inputProductType === 'toy') {
+                checkParams = checkRequiredToyDescriptionParams(dataInput)
+                if (checkParams.isValid === false) {
+                    resolve({
+                        errCode: 1,
+                        message: "Missing " + checkParams.element + " parameter!"
+                    })
+                } else {
+                    let existed = await db.ToyDescription.findOne({
+                        where: { id: toyDescriptionId },
+                        raw: false
+                    })
+
+                    if (existed) {
+                        existed.age = dataInput.age
+                        existed.supplier = dataInput.supplier
+                        existed.brand = dataInput.brand
+                        existed.origin = dataInput.origin
+                        existed.madeBy = dataInput.madeBy
+                        existed.color = dataInput.color
+                        existed.material = dataInput.material
+                        existed.specification = dataInput.specification
+                        existed.warning = dataInput.warning
+                        existed.usage = dataInput.usage
+
+                        await existed.save();
+                    }
+
+                    resolve({
+                        errCode: 0,
+                        message: "Update Toy Description Successful"
+                    })
+
+                }
+
+            }
+            if (inputProductType === 'stationary') {
+                checkParams = checkRequiredStationaryDescriptionParams(dataInput)
+                if (checkParams.isValid === false) {
+                    resolve({
+                        errCode: 1,
+                        message: "Missing " + checkParams.element + " parameter!"
+                    })
+                } else {
+                    await db.StationaryDescription.create({
+                        supplier: dataInput.supplier,
+                        brand: dataInput.brand,
+                        origin: dataInput.origin,
+                        color: dataInput.color,
+                        material: dataInput.material,
+                        quantity: dataInput.quantity,
+                        madeBy: dataInput.madeBy,
+                    }).then(result => resultId = result.id);
+                }
+
+            }
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 
 let checkRequiredBookDescriptionParams = (dataInput) => {
     let arr = ['supplier', 'author', 'translator', 'publisher',
@@ -142,5 +243,6 @@ let checkRequiredStationaryDescriptionParams = (dataInput) => {
 
 module.exports = {
 
-    handleAddProductDescription: handleAddProductDescription
+    handleAddProductDescription: handleAddProductDescription,
+    handleUpdateProductDescription: handleUpdateProductDescription
 }

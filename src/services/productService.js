@@ -1,3 +1,4 @@
+import { result } from 'lodash';
 import db from '../models/index';
 import productDescriptionService from './productDescriptionService'
 
@@ -79,6 +80,20 @@ let handleGetAllProduct = () => {
                     {
                         model: db.BookDescription,
                         as: 'bookDescriptionData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                    {
+                        model: db.StationaryDescription,
+                        as: 'stationaryDescriptionData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                    {
+                        model: db.ToyDescription,
+                        as: 'toyDescriptionData',
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
                         },
@@ -238,6 +253,11 @@ let handleDeleteProduct = (inputId) => {
 let handleUpdateProduct = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(inputData.bookDescriptionId)
+            console.log(
+                inputData.stationaryDescriptionId)
+            console.log(
+                inputData.toyDescriptionId)
 
             let checkParams = checkRequiredProductParams(inputData);
             if (checkParams.isValid === false) {
@@ -247,9 +267,8 @@ let handleUpdateProduct = (inputData) => {
                 })
             } else {
 
-
-                let existed = await db.Product.findOne({
-                    where: { keyName: inputData.keyName },
+                let existedProduct = await db.Product.findOne({
+                    where: { id: inputData.id },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
@@ -270,37 +289,54 @@ let handleUpdateProduct = (inputData) => {
                         }
                     ],
                     nested: true,
-                    raw: true
+                    raw: false
                 })
 
-                if (existed) {
+                if (existedProduct) {
                     // First, updated product table
-                    existed.name = inputData.name
-                    existed.keyName = inputData.keyName
-                    existed.price = inputData.price
-                    existed.discount = inputData.discount
-                    existed.weight = inputData.weight
-                    existed.height = inputData.height
-                    existed.width = inputData.width
-                    existed.length = inputData.length
-                    existed.publishYear = inputData.publishYear
-                    existed.categoryKeyName = inputData.categoryKeyName
-                    existed.image = inputData.image
+                    existedProduct.name = inputData.name
+                    existedProduct.keyName = inputData.keyName
+                    existedProduct.price = inputData.price
+                    existedProduct.discount = inputData.discount
+                    existedProduct.weight = inputData.weight
+                    existedProduct.height = inputData.height
+                    existedProduct.width = inputData.width
+                    existedProduct.length = inputData.length
+                    existedProduct.publishYear = inputData.publishYear
+                    existedProduct.categoryKeyName = inputData.categoryKeyName
+                    existedProduct.image = inputData.image
+
 
                     //second, updated product description
+                    let result = await productDescriptionService.handleUpdateProductDescription
+                        (inputData.productType, inputData.descriptionData, inputData.bookDescriptionId,
+                            inputData.stationaryDescriptionId, inputData.toyDescriptionId);
+
+                    console.log()
+                    if (result.errCode === 0) {
+                        await existedProduct.save()
+                        resolve({
+                            errCode: 0,
+                            message: 'Update successful'
+                        })
+                    } else {
+                        resolve({
+                            errCode: 1,
+                            message: 'Update Fail'
+                        })
+                    }
 
 
-                    resolve({
-                        errCode: 0,
-                        message: 'Update successful'
-                    })
+
                 } else {
                     resolve({
                         errCode: 1,
                         message: "This product is not existed"
                     })
                 }
+
                 // let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
+                // console.log(result)
                 // let insertedProductId
 
                 // if (result.errCode === 0) {
