@@ -12,6 +12,18 @@ module.exports = (sequelize, DataTypes) => {
                     sourceKey: 'bookDescriptionId',
                     as: 'bookDescriptionData'
                 })
+            Product.hasOne(models.StationaryDescription,
+                {
+                    foreignKey: 'id',
+                    sourceKey: 'stationaryDescriptionId',
+                    as: 'stationaryDescriptionData'
+                })
+            Product.hasOne(models.ToyDescription,
+                {
+                    foreignKey: 'id',
+                    sourceKey: 'toyDescriptionId',
+                    as: 'toyDescriptionData'
+                })
 
             Product.hasOne(models.ProductMarkdown,
                 {

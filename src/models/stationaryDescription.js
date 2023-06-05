@@ -6,7 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     class StationaryDescription extends Model {
 
         static associate(models) {
-
+            StationaryDescription.belongsTo(models.Product,
+                {
+                    foreignKey: 'id',
+                    targetKey: 'stationaryDescriptionId',
+                    as: 'stationaryDescriptionData'
+                })
         }
     };
 

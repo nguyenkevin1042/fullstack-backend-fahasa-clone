@@ -191,7 +191,6 @@ let handleGetCodeByType = (inputType) => {
                         exclude: ['createdAt', 'updatedAt']
                     },
                 })
-                console.log(data)
 
                 if (data.length > 0) {
                     // switch (inputType) {
