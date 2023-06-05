@@ -86,7 +86,6 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
     bookDescriptionId, stationaryDescriptionId, toyDescriptionId) => {
     return new Promise(async (resolve, reject) => {
         try {
-
             let checkParams;
 
             if (inputProductType === 'book') {
@@ -97,7 +96,6 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         message: "Missing " + checkParams.element + " parameter!"
                     })
                 } else {
-
                     let existed = await db.BookDescription.findOne({
                         where: { id: bookDescriptionId },
                         raw: false
@@ -119,6 +117,7 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                     })
                 }
             }
+
             if (inputProductType === 'toy') {
                 checkParams = checkRequiredToyDescriptionParams(dataInput)
                 if (checkParams.isValid === false) {
@@ -151,10 +150,9 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         errCode: 0,
                         message: "Update Toy Description Successful"
                     })
-
                 }
-
             }
+
             if (inputProductType === 'stationary') {
                 checkParams = checkRequiredStationaryDescriptionParams(dataInput)
                 if (checkParams.isValid === false) {
@@ -163,19 +161,28 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         message: "Missing " + checkParams.element + " parameter!"
                     })
                 } else {
-                    await db.StationaryDescription.create({
-                        supplier: dataInput.supplier,
-                        brand: dataInput.brand,
-                        origin: dataInput.origin,
-                        color: dataInput.color,
-                        material: dataInput.material,
-                        quantity: dataInput.quantity,
-                        madeBy: dataInput.madeBy,
-                    }).then(result => resultId = result.id);
+                    let existed = await db.ToyDescription.findOne({
+                        where: { id: toyDescriptionId },
+                        raw: false
+                    })
+
+                    if (existed) {
+                        existed.supplier = dataInput.supplier
+                        existed.brand = dataInput.brand
+                        existed.origin = dataInput.origin
+                        existed.color = dataInput.color
+                        existed.material = dataInput.material
+                        existed.quantity = dataInput.quantity
+                        existed.madeBy = dataInput.madeBy
+                        await existed.save();
+                    }
+
+                    resolve({
+                        errCode: 0,
+                        message: "Update Stationary Description Successful"
+                    })
                 }
-
             }
-
 
         } catch (error) {
             reject(error);

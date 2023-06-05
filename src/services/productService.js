@@ -6,7 +6,6 @@ import productDescriptionService from './productDescriptionService'
 let handleAddNewProduct = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
-
             let checkParams = checkRequiredProductParams(inputData);
             if (checkParams.isValid === false) {
                 resolve({
@@ -231,6 +230,11 @@ let handleDeleteProduct = (inputId) => {
                             where: { id: inputId }
                         }
                     );
+                    await db.ProductMarkdown.destroy(
+                        {
+                            where: { productId: inputId }
+                        }
+                    );
                     resolve({
                         errCode: 0,
                         message: 'Delete product successful!'
@@ -253,13 +257,8 @@ let handleDeleteProduct = (inputId) => {
 let handleUpdateProduct = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(inputData.bookDescriptionId)
-            console.log(
-                inputData.stationaryDescriptionId)
-            console.log(
-                inputData.toyDescriptionId)
-
             let checkParams = checkRequiredProductParams(inputData);
+
             if (checkParams.isValid === false) {
                 resolve({
                     errCode: 1,
@@ -293,7 +292,7 @@ let handleUpdateProduct = (inputData) => {
                 })
 
                 if (existedProduct) {
-                    // First, updated product table
+                    // Firstly, updated product table
                     existedProduct.name = inputData.name
                     existedProduct.keyName = inputData.keyName
                     existedProduct.price = inputData.price
@@ -306,13 +305,29 @@ let handleUpdateProduct = (inputData) => {
                     existedProduct.categoryKeyName = inputData.categoryKeyName
                     existedProduct.image = inputData.image
 
+                    //Secondly, update Markdown
+                    let existedMarkdown = await db.ProductMarkdown.findOne({
+                        where: { productId: inputData.id },
+                        raw: false
+                    })
 
-                    //second, updated product description
+                    if (existedMarkdown) {
+                        existedMarkdown.contentHTML = inputData.contentHTML
+                        existedMarkdown.contentMarkdown = inputData.contentMarkdown
+                        await existedMarkdown.save()
+                    } else {
+                        await db.ProductMarkdown.create({
+                            productId: inputData.id,
+                            contentHTML: inputData.contentHTML,
+                            contentMarkdown: inputData.contentMarkdown,
+                        })
+                    }
+
+                    //finally, updated product description
                     let result = await productDescriptionService.handleUpdateProductDescription
                         (inputData.productType, inputData.descriptionData, inputData.bookDescriptionId,
                             inputData.stationaryDescriptionId, inputData.toyDescriptionId);
 
-                    console.log()
                     if (result.errCode === 0) {
                         await existedProduct.save()
                         resolve({
@@ -325,65 +340,13 @@ let handleUpdateProduct = (inputData) => {
                             message: 'Update Fail'
                         })
                     }
-
-
-
                 } else {
                     resolve({
                         errCode: 1,
                         message: "This product is not existed"
                     })
                 }
-
-                // let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
-                // console.log(result)
-                // let insertedProductId
-
-                // if (result.errCode === 0) {
-                //     await db.Product.create({
-                //         name: inputData.name,
-                //         keyName: inputData.keyName,
-                //         price: inputData.price,
-                //         discount: inputData.discount,
-                //         weight: inputData.weight,
-                //         height: inputData.height,
-                //         width: inputData.width,
-                //         length: inputData.length,
-                //         publishYear: inputData.publishYear,
-                //         categoryKeyName: inputData.categoryKeyName,
-                //         image: inputData.image,
-                //     }).then(result => insertedProductId = result.id);
-
-                //     await db.ProductMarkdown.create({
-                //         productId: insertedProductId,
-                //         contentHTML: inputData.contentHTML,
-                //         contentMarkdown: inputData.contentMarkdown,
-                //     })
-
-                //     let insertedProduct = await db.Product.findOne({
-                //         where: { id: insertedProductId },
-                //         raw: false
-                //     })
-
-                //     if (insertedProduct && inputData.productType === 'book') {
-                //         insertedProduct.bookDescriptionId = result.resultId;
-                //     } else if (inputData.productType === 'toy') {
-                //         insertedProduct.toyDescriptionId = result.resultId;
-                //     } else {
-                //         insertedProduct.stationaryDescriptionId = result.resultId;
-                //     }
-
-                //     await insertedProduct.save();
-
-                // resolve({
-                //     errCode: 0,
-                //     message: "Add New Product successful"
-                // })
-                // } else {
-                //     resolve(result)
-                // }
             }
-
         } catch (error) {
             reject(error);
         }
