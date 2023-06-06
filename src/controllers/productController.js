@@ -20,8 +20,10 @@ let updateProduct = async (req, res) => {
 
 let getAllProduct = async (req, res) => {
     try {
+        // setTimeout(async () => {
         let data = await productService.handleGetAllProduct();
         return res.status(200).json(data);
+        // }, 5000)
     } catch (error) {
         console.log(error)
     }
