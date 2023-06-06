@@ -86,7 +86,7 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
     bookDescriptionId, stationaryDescriptionId, toyDescriptionId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let checkParams;
+            let checkParams, resultId;
 
             if (inputProductType === 'book') {
                 checkParams = checkRequiredBookDescriptionParams(dataInput)
@@ -109,11 +109,21 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         existed.language = dataInput.language
                         existed.pages = dataInput.pages
                         await existed.save();
+                    } else {
+                        await db.BookDescription.create({
+                            supplier: dataInput.supplier,
+                            author: dataInput.author,
+                            translator: dataInput.translator,
+                            publisher: dataInput.publisher,
+                            language: dataInput.language,
+                            pages: dataInput.pages,
+                        }).then(result => resultId = result.id);
                     }
 
                     resolve({
                         errCode: 0,
-                        message: "Update Book Description Successful"
+                        message: "Update Book Description Successful",
+                        resultId
                     })
                 }
             }
@@ -144,11 +154,26 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         existed.usage = dataInput.usage
 
                         await existed.save();
+                    } else {
+                        await db.ToyDescription.create({
+                            age: dataInput.age,
+                            supplier: dataInput.supplier,
+                            publishYear: dataInput.publishYear,
+                            brand: dataInput.brand,
+                            origin: dataInput.origin,
+                            madeBy: dataInput.madeBy,
+                            color: dataInput.color,
+                            material: dataInput.material,
+                            specification: dataInput.specification,
+                            warning: dataInput.warning,
+                            usage: dataInput.usage,
+                        }).then(result => resultId = result.id);
                     }
 
                     resolve({
                         errCode: 0,
-                        message: "Update Toy Description Successful"
+                        message: "Update Toy Description Successful",
+                        resultId
                     })
                 }
             }
@@ -175,11 +200,22 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         existed.quantity = dataInput.quantity
                         existed.madeBy = dataInput.madeBy
                         await existed.save();
+                    } else {
+                        await db.StationaryDescription.create({
+                            supplier: dataInput.supplier,
+                            brand: dataInput.brand,
+                            origin: dataInput.origin,
+                            color: dataInput.color,
+                            material: dataInput.material,
+                            quantity: dataInput.quantity,
+                            madeBy: dataInput.madeBy,
+                        }).then(result => resultId = result.id);
                     }
 
                     resolve({
                         errCode: 0,
-                        message: "Update Stationary Description Successful"
+                        message: "Update Stationary Description Successful",
+                        resultId
                     })
                 }
             }

@@ -328,6 +328,10 @@ let handleUpdateProduct = (inputData) => {
                         (inputData.productType, inputData.descriptionData, inputData.bookDescriptionId,
                             inputData.stationaryDescriptionId, inputData.toyDescriptionId);
 
+                    existedProduct.bookDescriptionId = result.resultId;
+
+
+
                     if (result.errCode === 0) {
                         await existedProduct.save()
                         resolve({
