@@ -190,6 +190,24 @@ let handleGetCodeByType = (inputType) => {
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
+                    include: [
+                        {
+                            model: db.SubCategory,
+                            include: [
+                                {
+                                    model: db.ChildCategory,
+                                    attributes: {
+                                        exclude: ['subCategory', 'createdAt', 'updatedAt']
+                                    },
+                                }
+                            ],
+                            attributes: {
+                                exclude: ['category', 'createdAt', 'updatedAt']
+                            },
+                        }
+                    ],
+                    nested: true,
+                    raw: false
                 })
 
                 if (data.length > 0) {
@@ -220,9 +238,6 @@ let handleGetCodeByType = (inputType) => {
                 }
 
             }
-
-
-
         } catch (error) {
             reject(error);
         }
