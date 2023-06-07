@@ -39,6 +39,9 @@ module.exports = {
             publishYear: {
                 type: Sequelize.INTEGER
             },
+            formId: {
+                type: Sequelize.INTEGER
+            },
             categoryKeyName: {
                 type: Sequelize.STRING
             },

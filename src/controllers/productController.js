@@ -29,6 +29,17 @@ let getAllProduct = async (req, res) => {
     }
 }
 
+let getAllProductByCategory = async (req, res) => {
+    try {
+        // setTimeout(async () => {
+        let data = await productService.handleGetAllProductByCategory(req.query.category);
+        return res.status(200).json(data);
+        // }, 5000)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 let getProductByKeyName = async (req, res) => {
     try {
         let data = await productService.handleGetProductByKeyName(req.query.keyName);
@@ -52,5 +63,6 @@ module.exports = {
     getAllProduct: getAllProduct,
     getProductByKeyName: getProductByKeyName,
     deleteProduct: deleteProduct,
-    updateProduct: updateProduct
+    updateProduct: updateProduct,
+    getAllProductByCategory: getAllProductByCategory
 }

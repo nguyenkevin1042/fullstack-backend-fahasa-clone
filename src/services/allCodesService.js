@@ -308,6 +308,14 @@ let handleGetCodeByKeyMap = (inputKeymap) => {
                                     attributes: {
                                         exclude: ['createdAt', 'updatedAt']
                                     },
+                                    include: [
+                                        {
+                                            model: db.Product,
+                                            attributes: {
+                                                exclude: ['image', 'createdAt', 'updatedAt']
+                                            },
+                                        }
+                                    ],
                                 }
                             ],
                             attributes: {

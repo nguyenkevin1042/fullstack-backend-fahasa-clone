@@ -1,4 +1,4 @@
-import { result } from 'lodash';
+import { forEach, result } from 'lodash';
 import db from '../models/index';
 import productDescriptionService from './productDescriptionService'
 
@@ -364,6 +364,80 @@ let handleUpdateProduct = (inputData) => {
     });
 }
 
+//6. GET ALL PRODUCTS BY CATEGORY
+let handleGetAllProductByCategory = (inputCategory) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputCategory) {
+                resolve({
+                    errCode: 1,
+                    message: 'Missing category parameter!'
+                })
+            } else {
+                let data = await db.AllCode.findAll({
+                    where: { keyMap: inputCategory },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.SubCategory,
+                            include: [
+                                {
+                                    model: db.ChildCategory,
+                                    attributes: {
+                                        exclude: ['createdAt', 'updatedAt']
+                                    },
+                                    include: [
+                                        {
+                                            model: db.Product,
+                                            attributes: {
+                                                exclude: ['image', 'createdAt', 'updatedAt']
+                                            },
+                                        }
+                                    ],
+                                }
+                            ],
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+                    ],
+                    nested: true,
+                    raw: false
+
+                })
+
+                let allProducts = []
+
+                let subCategories = data[0].SubCategories
+                let childCategories
+                for (let i = 0; i < subCategories.length; i++) {
+                    childCategories = subCategories[i]
+                    console.log(i + " " + subCategories)
+
+                }
+
+                // let allProducts = data[0].SubCategories.length
+                // .SubCategories[0].ChildCategories[0].Products
+
+                resolve({
+                    errCode: 0,
+                    // allProducts
+                })
+            }
+
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+
+
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price', 'discount', 'weight', 'length', 'width', 'height',
         'image', 'keyName', 'categoryKeyName', 'productType', 'publishYear']
@@ -388,5 +462,6 @@ module.exports = {
     handleGetAllProduct: handleGetAllProduct,
     handleGetProductByKeyName: handleGetProductByKeyName,
     handleDeleteProduct: handleDeleteProduct,
-    handleUpdateProduct: handleUpdateProduct
+    handleUpdateProduct: handleUpdateProduct,
+    handleGetAllProductByCategory: handleGetAllProductByCategory
 }

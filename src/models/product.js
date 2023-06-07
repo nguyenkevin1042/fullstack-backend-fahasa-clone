@@ -52,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         height: DataTypes.DECIMAL(10, 2),
         image: DataTypes.STRING,
         publishYear: DataTypes.INTEGER,
+        formId: DataTypes.INTEGER,
         categoryKeyName: DataTypes.STRING,
         bookDescriptionId: DataTypes.INTEGER,
         stationaryDescriptionId: DataTypes.INTEGER,
