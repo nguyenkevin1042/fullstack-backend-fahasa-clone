@@ -186,8 +186,8 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         message: "Missing " + checkParams.element + " parameter!"
                     })
                 } else {
-                    let existed = await db.ToyDescription.findOne({
-                        where: { id: toyDescriptionId },
+                    let existed = await db.StationaryDescription.findOne({
+                        where: { id: stationaryDescriptionId },
                         raw: false
                     })
 

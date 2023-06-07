@@ -328,8 +328,15 @@ let handleUpdateProduct = (inputData) => {
                         (inputData.productType, inputData.descriptionData, inputData.bookDescriptionId,
                             inputData.stationaryDescriptionId, inputData.toyDescriptionId);
 
-                    existedProduct.bookDescriptionId = result.resultId;
-
+                    if (inputData.productType === 'book') {
+                        existedProduct.bookDescriptionId = result.resultId;
+                    }
+                    if (inputData.productType === 'stationary') {
+                        existedProduct.stationaryDescriptionId = result.resultId;
+                    }
+                    if (inputData.productType === 'toy') {
+                        existedProduct.toyDescriptionId = result.resultId;
+                    }
 
 
                     if (result.errCode === 0) {
