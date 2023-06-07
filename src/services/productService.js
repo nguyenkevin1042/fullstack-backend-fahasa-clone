@@ -374,6 +374,7 @@ let handleGetAllProductByCategory = (inputCategory) => {
                     message: 'Missing category parameter!'
                 })
             } else {
+                console.log('*************START*************')
                 let data = await db.AllCode.findAll({
                     where: { keyMap: inputCategory },
                     attributes: {
@@ -391,9 +392,7 @@ let handleGetAllProductByCategory = (inputCategory) => {
                                     include: [
                                         {
                                             model: db.Product,
-                                            attributes: {
-                                                exclude: ['image', 'createdAt', 'updatedAt']
-                                            },
+                                            attributes: ['name', 'keyName', 'price', 'discount', 'image']
                                         }
                                     ],
                                 }
@@ -411,25 +410,25 @@ let handleGetAllProductByCategory = (inputCategory) => {
                 let allProducts = []
 
                 let subCategories = data[0].SubCategories
-                let childCategories
+
                 for (let i = 0; i < subCategories.length; i++) {
-                    childCategories = subCategories[i]
-                    console.log(i + " " + subCategories)
+                    let childCategory = subCategories[i].ChildCategories
 
+                    for (let j = 0; j < childCategory.length; j++) {
+                        let products = childCategory[j].Products
+
+                        for (let k = 0; k < products.length; k++) {
+                            allProducts.push(products[k])
+                        }
+                    }
                 }
-
-                // let allProducts = data[0].SubCategories.length
-                // .SubCategories[0].ChildCategories[0].Products
 
                 resolve({
                     errCode: 0,
-                    // allProducts
+                    message: "Success",
+                    allProducts
                 })
             }
-
-
-
-
         } catch (error) {
             reject(error);
         }
