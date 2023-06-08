@@ -64,5 +64,6 @@ module.exports = {
     getProductByKeyName: getProductByKeyName,
     deleteProduct: deleteProduct,
     updateProduct: updateProduct,
-    getAllProductByCategory: getAllProductByCategory
+    getAllProductByCategory: getAllProductByCategory,
+    // getAllProductBySubCategory, getAllProductBySubCategory
 }
