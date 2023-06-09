@@ -40,6 +40,29 @@ let getAllProductByCategory = async (req, res) => {
     }
 }
 
+let getAllProductBySubCategory = async (req, res) => {
+    try {
+        // setTimeout(async () => {
+        let data = await productService.handleGetAllProductBySubCategory(req.query.category, req.query.subCategory);
+        return res.status(200).json(data);
+        // }, 5000)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+let getAllProductByChildCategory = async (req, res) => {
+    try {
+        // setTimeout(async () => {
+        let data = await productService.handleGetAllProductByChildCategory(
+            req.query.subCategory, req.query.childCategory);
+        return res.status(200).json(data);
+        // }, 5000)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 let getProductByKeyName = async (req, res) => {
     try {
         let data = await productService.handleGetProductByKeyName(req.query.keyName);
@@ -65,5 +88,6 @@ module.exports = {
     deleteProduct: deleteProduct,
     updateProduct: updateProduct,
     getAllProductByCategory: getAllProductByCategory,
-    // getAllProductBySubCategory, getAllProductBySubCategory
+    getAllProductBySubCategory, getAllProductBySubCategory,
+    getAllProductByChildCategory: getAllProductByChildCategory
 }

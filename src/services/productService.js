@@ -374,7 +374,6 @@ let handleGetAllProductByCategory = (inputCategory) => {
                     message: 'Missing category parameter!'
                 })
             } else {
-                console.log('*************START*************')
                 let data = await db.AllCode.findAll({
                     where: { keyMap: inputCategory },
                     attributes: {
@@ -407,33 +406,186 @@ let handleGetAllProductByCategory = (inputCategory) => {
 
                 })
 
-                let allProducts = []
+                if (data && data.length > 0) {
+                    let allProducts = []
+                    let subCategories = data[0].SubCategories
 
-                let subCategories = data[0].SubCategories
+                    for (let i = 0; i < subCategories.length; i++) {
+                        let childCategory = subCategories[i].ChildCategories
 
-                for (let i = 0; i < subCategories.length; i++) {
-                    let childCategory = subCategories[i].ChildCategories
+                        for (let j = 0; j < childCategory.length; j++) {
+                            let products = childCategory[j].Products
 
-                    for (let j = 0; j < childCategory.length; j++) {
-                        let products = childCategory[j].Products
-
-                        for (let k = 0; k < products.length; k++) {
-                            allProducts.push(products[k])
+                            for (let k = 0; k < products.length; k++) {
+                                allProducts.push(products[k])
+                            }
                         }
                     }
+
+                    resolve({
+                        errCode: 0,
+                        message: "Success",
+                        allProducts
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        message: "This category does not exist"
+                    })
                 }
 
-                resolve({
-                    errCode: 0,
-                    message: "Success",
-                    allProducts
-                })
+
             }
         } catch (error) {
             reject(error);
         }
     });
 }
+
+//7. GET ALL PRODUCTS BY SUB CATEGORY
+let handleGetAllProductBySubCategory = (inputCategory, inputSubCategory) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputCategory) {
+                resolve({
+                    errCode: 1,
+                    message: 'Missing category parameter!'
+                })
+            }
+            else if (!inputSubCategory) {
+                resolve({
+                    errCode: 1,
+                    message: 'Missing sub category parameter!'
+                })
+            } else {
+
+                let data = await db.SubCategory.findAll({
+                    where: {
+                        category: inputCategory,
+                        keyName: inputSubCategory
+                    },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.ChildCategory,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                            include: [
+                                {
+                                    model: db.Product,
+                                    attributes: ['name', 'keyName', 'price', 'discount', 'image']
+                                }
+                            ],
+                        }
+                    ],
+                    nested: true,
+                    raw: false
+
+                })
+
+                let allProducts = []
+                if (data && data.length > 0) {
+                    let childCategory = data[0].ChildCategories
+
+                    for (let i = 0; i < childCategory.length; i++) {
+                        let products = childCategory[i].Products
+
+                        for (let j = 0; j < products.length; j++) {
+                            allProducts.push(products[j])
+
+                        }
+                    }
+
+                    resolve({
+                        errCode: 0,
+                        message: "Success",
+                        allProducts
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        message: 'These categories are not existed'
+                    })
+                }
+
+
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+//7. GET ALL PRODUCTS BY CHILD CATEGORY
+let handleGetAllProductByChildCategory = (inputSubCategory, inputChildCategory) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputSubCategory) {
+                resolve({
+                    errCode: 1,
+                    message: 'Missing sub category parameter!'
+                })
+            }
+            else if (!inputChildCategory) {
+                resolve({
+                    errCode: 1,
+                    message: 'Missing child category parameter!'
+                })
+            } else {
+
+                let data = await db.ChildCategory.findAll({
+                    where: {
+                        subCategory: inputSubCategory,
+                        keyName: inputChildCategory
+                    },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.Product,
+                            attributes: ['name', 'keyName', 'price', 'discount', 'image']
+
+                        }
+                    ],
+                    nested: true,
+                    raw: false
+
+                })
+
+                let allProducts = []
+                if (data && data.length > 0) {
+                    let products = data[0].Products
+
+                    for (let i = 0; i < products.length; i++) {
+                        allProducts.push(products[i])
+                    }
+
+                    resolve({
+                        errCode: 0,
+                        message: "Success",
+                        allProducts
+                    })
+                } else {
+                    allProducts = []
+                    resolve({
+                        errCode: 1,
+                        // message: 'These categories are not existed',
+                        allProducts
+                    })
+                }
+
+
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 
 
 
@@ -462,5 +614,7 @@ module.exports = {
     handleGetProductByKeyName: handleGetProductByKeyName,
     handleDeleteProduct: handleDeleteProduct,
     handleUpdateProduct: handleUpdateProduct,
-    handleGetAllProductByCategory: handleGetAllProductByCategory
+    handleGetAllProductByCategory: handleGetAllProductByCategory,
+    handleGetAllProductBySubCategory: handleGetAllProductBySubCategory,
+    handleGetAllProductByChildCategory: handleGetAllProductByChildCategory
 }
