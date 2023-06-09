@@ -40,34 +40,34 @@ let handleCreateNewUser = (dataInput) => {
                 if (isEmailExisted) {
                     resolve({
                         errCode: 2,
-                        message: "Email is already existed"
+                        messageVI: "Email đã tồn tại",
+                        messageEN: "Email is already existed!"
                     })
                 } else {
                     let hashedPassword = await hashPasswordFromInput(dataInput.password);
 
                     if (dataInput.isAdmin === true) {
+
                         await db.User.create({
-                            firstName: dataInput.firstName,
-                            lastName: dataInput.lastName,
+                            firstName: '',
                             email: dataInput.email,
                             password: hashedPassword,
-                            phoneNumber: dataInput.phoneNumber,
                             roleId: 'R1'
                         })
                     } else {
+                        let randomName = "Customer_" + (Math.random() + 1).toString(36).substring(2)
                         await db.User.create({
-                            firstName: dataInput.firstName,
-                            lastName: dataInput.lastName,
+                            firstName: randomName,
                             email: dataInput.email,
                             password: hashedPassword,
-                            phoneNumber: dataInput.phoneNumber,
                             roleId: 'R3'
                         })
                     }
 
                     resolve({
                         errCode: 0,
-                        message: "Save new user successful"
+                        messageVI: "Tạo tài khoản thành công!",
+                        messageEN: "Create account successful!"
                     })
 
                 }
@@ -80,8 +80,7 @@ let handleCreateNewUser = (dataInput) => {
 }
 
 let checkRequiredSignUpParams = (dataInput) => {
-    let arr = ['firstName', 'lastName', 'email', 'phoneNumber',
-        'password']
+    let arr = ['email', 'password']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
@@ -136,12 +135,14 @@ let handleAdminLogin = (inputEmail, inputPassword) => {
             if (!inputEmail) {
                 resolve({
                     errCode: 1,
-                    message: "Email can not be left empty!"
+                    messageVI: "Email không được để trống!",
+                    messageEN: "Email can not be left empty!"
                 })
             } else if (!inputPassword) {
                 resolve({
                     errCode: 1,
-                    message: "Password can not be left empty!"
+                    messageVI: "Mật khẩu không được để trống!",
+                    messageEN: "Password can not be left empty!"
                 })
             } else {
                 let userData = {};
@@ -168,15 +169,18 @@ let handleAdminLogin = (inputEmail, inputPassword) => {
                             userData.user = admin;
                         } else {
                             userData.errCode = 4;
-                            userData.message = "You are not an admin. You are not allowed to access";
+                            userData.messageVI = "Bạn không phải Admin. Bạn không có quyền truy cập";
+                            userData.messageEN = "You are not an admin. You are not allowed to access";
                         }
                     } else {
                         userData.errCode = 2;
-                        userData.message = "Password is not correct";
+                        userData.messageVI = "Email/Mật khẩu sai. Vui lòng kiểm tra lại!";
+                        userData.messageEN = "Email/Password is not correct. Please check again!";
                     }
                 } else {
                     userData.errCode = 3;
-                    userData.message = "Email does not exist";
+                    userData.messageVI = "Email này không tồn tại trong hệ thống. Vui lòng đăng ký một tài khoản mới";
+                    userData.messageEN = "Email does not exist. Please sign up a new account";
                 }
                 resolve(userData)
             }
@@ -192,12 +196,14 @@ let handleCustomerLogin = (inputEmail, inputPassword) => {
             if (!inputEmail) {
                 resolve({
                     errCode: 1,
-                    message: "Email can not be left empty!"
+                    messageVI: "Email không được để trống!",
+                    messageEN: "Email can not be left empty!"
                 })
             } else if (!inputPassword) {
                 resolve({
                     errCode: 1,
-                    message: "Password can not be left empty!"
+                    messageVI: "Mật khẩu không được để trống!",
+                    messageEN: "Password can not be left empty!"
                 })
             } else {
                 let userData = {};
@@ -218,11 +224,13 @@ let handleCustomerLogin = (inputEmail, inputPassword) => {
                         userData.user = user;
                     } else {
                         userData.errCode = 2;
-                        userData.message = "Password is not correct";
+                        userData.messageVI = "Email/Mật khẩu sai. Vui lòng kiểm tra lại!";
+                        userData.messageEN = "Email/Password is not correct. Please check again!";
                     }
                 } else {
                     userData.errCode = 3;
-                    userData.message = "Email does not exist";
+                    userData.messageVI = "Email này không tồn tại trong hệ thống. Vui lòng đăng ký một tài khoản mới";
+                    userData.messageEN = "Email does not exist. Please sign up a new account";
                 }
                 resolve(userData)
             }

@@ -27,6 +27,9 @@ module.exports = {
             pages: {
                 type: Sequelize.INTEGER
             },
+            chapter: {
+                type: Sequelize.INTEGER
+            },
             bookLayout: {
                 type: Sequelize.STRING
             },
