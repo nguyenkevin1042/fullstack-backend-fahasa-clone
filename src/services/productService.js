@@ -162,6 +162,18 @@ let handleGetProductByKeyName = (inputKeyName) => {
                     },
                     include: [
                         {
+                            model: db.ChildCategory,
+                            attributes: ['keyName'],
+                            include: [{
+                                model: db.SubCategory,
+                                attributes: ['keyName'],
+                                include: [{
+                                    model: db.AllCode,
+                                    attributes: ['keyMap'],
+                                }]
+                            }]
+                        },
+                        {
                             model: db.BookDescription,
                             as: 'bookDescriptionData',
                             attributes: {
