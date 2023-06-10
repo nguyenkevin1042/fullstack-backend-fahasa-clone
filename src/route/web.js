@@ -50,6 +50,7 @@ let initWebRoutes = (app) => {
     router.get('/api/get-all-product-by-sub-category', productController.getAllProductBySubCategory);
     router.get('/api/get-all-product-by-child-category', productController.getAllProductByChildCategory);
     router.get('/api/get-product-by-key-name', productController.getProductByKeyName);
+    router.get('/api/get-product-by-name', productController.getProductByName);
     router.delete('/api/delete-product', productController.deleteProduct);
 
     return app.use("/", router);

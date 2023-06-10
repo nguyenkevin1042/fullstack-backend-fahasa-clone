@@ -519,7 +519,7 @@ let handleGetAllProductBySubCategory = (inputCategory, inputSubCategory) => {
     });
 }
 
-//7. GET ALL PRODUCTS BY CHILD CATEGORY
+//8. GET ALL PRODUCTS BY CHILD CATEGORY
 let handleGetAllProductByChildCategory = (inputSubCategory, inputChildCategory) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -586,6 +586,77 @@ let handleGetAllProductByChildCategory = (inputSubCategory, inputChildCategory) 
     });
 }
 
+//9. GET PRODUCT BY NAME
+let handleGetProductByName = (inputName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputName) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing name parameter!"
+                })
+            } else {
+                resolve({
+                    errCode: 0,
+                    inputName
+                })
+                // let product = await db.Product.findOne({
+                //     where: { keyName: inputKeyName },
+                //     attributes: {
+                //         exclude: ['createdAt', 'updatedAt']
+                //     },
+                //     include: [
+                //         {
+                //             model: db.BookDescription,
+                //             as: 'bookDescriptionData',
+                //             attributes: {
+                //                 exclude: ['createdAt', 'updatedAt']
+                //             },
+                //         },
+                //         {
+                //             model: db.StationaryDescription,
+                //             as: 'stationaryDescriptionData',
+                //             attributes: {
+                //                 exclude: ['createdAt', 'updatedAt']
+                //             },
+                //         },
+                //         {
+                //             model: db.ToyDescription,
+                //             as: 'toyDescriptionData',
+                //             attributes: {
+                //                 exclude: ['createdAt', 'updatedAt']
+                //             },
+                //         },
+                //         {
+                //             model: db.ProductMarkdown,
+                //             as: 'markdownData',
+                //             attributes: {
+                //                 exclude: ['createdAt', 'updatedAt']
+                //             },
+                //         }
+                //     ],
+                //     nested: true,
+                //     raw: false
+                // })
+
+                // if (product) {
+                //     resolve({
+                //         errCode: 0,
+                //         product
+                //     })
+                // } else {
+                //     resolve({
+                //         errCode: 1,
+                //         message: "Product with this keyName is not existed"
+                //     })
+                // }
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 
 
@@ -612,6 +683,7 @@ module.exports = {
     handleAddNewProduct: handleAddNewProduct,
     handleGetAllProduct: handleGetAllProduct,
     handleGetProductByKeyName: handleGetProductByKeyName,
+    handleGetProductByName: handleGetProductByName,
     handleDeleteProduct: handleDeleteProduct,
     handleUpdateProduct: handleUpdateProduct,
     handleGetAllProductByCategory: handleGetAllProductByCategory,
