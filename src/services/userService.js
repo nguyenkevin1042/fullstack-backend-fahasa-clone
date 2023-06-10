@@ -72,7 +72,6 @@ let handleCreateNewUser = (dataInput) => {
 
                 }
             }
-
         } catch (error) {
             reject(error);
         }
@@ -240,10 +239,100 @@ let handleCustomerLogin = (inputEmail, inputPassword) => {
     });
 }
 
+//4. UPDATE USER
+let handleUpdateUser = (dataInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkParams = checkRequiredUpdateParams(dataInput);
+            if (checkParams.isValid === false) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing " + checkParams.element + " parameter!"
+                })
+            } else {
+                let user = await db.User.findOne({
+                    where: { email: dataInput.email }
+                })
+
+                if (user) {
+                    user.firstName = dataInput.firstName
+                    user.lastName = dataInput.lastName
+                    user.phoneNumber = dataInput.phoneNumber
+                    user.email = dataInput.email
+                    user.gender = dataInput.gender
+
+                    await user.save();
+
+                    resolve({
+                        errCode: 2,
+                        messageVI: "Lưu thay đổi thành công!",
+                        messageEN: "Save changes successful!"
+                    })
+                }
+
+                // if (isEmailExisted) {
+                // resolve({
+                //     errCode: 2,
+                //     messageVI: "Email đã tồn tại",
+                //     messageEN: "Email is already existed!"
+                // })
+                // } else {
+                //     let hashedPassword = await hashPasswordFromInput(dataInput.password);
+
+                //     if (dataInput.isAdmin === true) {
+
+                //         await db.User.create({
+                //             firstName: '',
+                //             email: dataInput.email,
+                //             password: hashedPassword,
+                //             roleId: 'R1'
+                //         })
+                //     } else {
+                //         let randomName = "Customer_" + (Math.random() + 1).toString(36).substring(2)
+                //         await db.User.create({
+                //             firstName: randomName,
+                //             email: dataInput.email,
+                //             password: hashedPassword,
+                //             roleId: 'R3'
+                //         })
+                //     }
+
+                //     resolve({
+                //         errCode: 0,
+                //         messageVI: "Tạo tài khoản thành công!",
+                //         messageEN: "Create account successful!"
+                //     })
+
+                // }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+let checkRequiredUpdateParams = (dataInput) => {
+    let arr = ['firstName', 'lastName', 'email', 'phoneNumber']
+    let isValid = true;
+    let element = '';
+    for (let index = 0; index < arr.length; index++) {
+        if (!dataInput[arr[index]]) {
+            isValid = false;
+            element = arr[index]
+            break;
+        }
+
+    }
+    return {
+        isValid: isValid,
+        element: element
+    }
+}
+
 module.exports = {
     handleGetAllUsers: handleGetAllUsers,
     handleCreateNewUser: handleCreateNewUser,
     handleAdminLogin: handleAdminLogin,
-    handleCustomerLogin: handleCustomerLogin
-
+    handleCustomerLogin: handleCustomerLogin,
+    handleUpdateUser: handleUpdateUser
 }
