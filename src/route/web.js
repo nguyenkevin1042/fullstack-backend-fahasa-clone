@@ -9,8 +9,8 @@ import childCategoryController from "../controllers/childCategoryController";
 let router = express.Router();
 
 let initWebRoutes = (app) => {
-    router.get('/', homeController.getHomePage);
-    router.get('/about', homeController.getAboutPage);
+    // router.get('/', homeController.getHomePage);
+    // router.get('/about', homeController.getAboutPage);
 
     //USER
     router.get('/api/get-all-users', userController.getAllUsers);
@@ -28,7 +28,6 @@ let initWebRoutes = (app) => {
     router.put('/api/edit-code', allCodesController.editCode);
 
     //SUB CATEGORY
-    // router.post('/api/add-new-category', categoryController.addNewCategory);
     router.post('/api/add-new-sub-category', subCategoryController.addNewSubCategory);
     router.get('/api/get-all-sub-category', subCategoryController.getAllSubCategory);
     router.get('/api/get-all-sub-category-by-category', subCategoryController.getAllSubCategoryByCategory);

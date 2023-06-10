@@ -94,7 +94,7 @@ module.exports = {
     addNewProduct: addNewProduct,
     getAllProduct: getAllProduct,
     getProductByKeyName: getProductByKeyName,
-    getProductBName: getProductByName,
+    getProductByName: getProductByName,
     deleteProduct: deleteProduct,
     updateProduct: updateProduct,
     getAllProductByCategory: getAllProductByCategory,

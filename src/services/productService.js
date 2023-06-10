@@ -1,6 +1,9 @@
 import { forEach, result } from 'lodash';
 import db from '../models/index';
 import productDescriptionService from './productDescriptionService'
+import { Sequelize } from 'sequelize';
+
+const Op = Sequelize.Op;
 
 //1. ADD NEW PRODUCT
 let handleAddNewProduct = (inputData) => {
@@ -596,60 +599,27 @@ let handleGetProductByName = (inputName) => {
                     message: "Missing name parameter!"
                 })
             } else {
-                resolve({
-                    errCode: 0,
-                    inputName
+                let data = await db.Product.findAll({
+                    where: {
+                        name: {
+                            [Op.like]: `%${inputName}%`
+                        },
+                    },
+                    attributes: ['name', 'keyName', 'price', 'discount', 'image'],
                 })
-                // let product = await db.Product.findOne({
-                //     where: { keyName: inputKeyName },
-                //     attributes: {
-                //         exclude: ['createdAt', 'updatedAt']
-                //     },
-                //     include: [
-                //         {
-                //             model: db.BookDescription,
-                //             as: 'bookDescriptionData',
-                //             attributes: {
-                //                 exclude: ['createdAt', 'updatedAt']
-                //             },
-                //         },
-                //         {
-                //             model: db.StationaryDescription,
-                //             as: 'stationaryDescriptionData',
-                //             attributes: {
-                //                 exclude: ['createdAt', 'updatedAt']
-                //             },
-                //         },
-                //         {
-                //             model: db.ToyDescription,
-                //             as: 'toyDescriptionData',
-                //             attributes: {
-                //                 exclude: ['createdAt', 'updatedAt']
-                //             },
-                //         },
-                //         {
-                //             model: db.ProductMarkdown,
-                //             as: 'markdownData',
-                //             attributes: {
-                //                 exclude: ['createdAt', 'updatedAt']
-                //             },
-                //         }
-                //     ],
-                //     nested: true,
-                //     raw: false
-                // })
 
-                // if (product) {
-                //     resolve({
-                //         errCode: 0,
-                //         product
-                //     })
-                // } else {
-                //     resolve({
-                //         errCode: 1,
-                //         message: "Product with this keyName is not existed"
-                //     })
-                // }
+                if (data && data.length > 0) {
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        messageVI: "Không có sản phẩm phù hợp với từ khóa tìm kiếm của bạn.",
+                        messageEN: "There is no product matching with your keyword"
+                    })
+                }
             }
 
         } catch (error) {
