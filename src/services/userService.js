@@ -214,7 +214,11 @@ let handleCustomerLogin = (inputEmail, inputPassword) => {
 
                 let user = await db.User.findOne({
                     where: { email: inputEmail },
-                    raw: true
+                    include: [{
+                        model: db.Cart,
+                    }],
+                    nested: true,
+                    raw: false
                 });
 
                 //Check user existed or not

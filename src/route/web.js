@@ -5,6 +5,7 @@ import allCodesController from "../controllers/allCodesController";
 import productController from "../controllers/productController";
 import subCategoryController from "../controllers/subCategoryController";
 import childCategoryController from "../controllers/childCategoryController";
+import cartProductController from "../controllers/cartProductController";
 
 let router = express.Router();
 
@@ -52,6 +53,9 @@ let initWebRoutes = (app) => {
     router.get('/api/get-product-by-key-name', productController.getProductByKeyName);
     router.get('/api/get-product-by-name', productController.getProductByName);
     router.delete('/api/delete-product', productController.deleteProduct);
+
+    //CART PRODUCT
+    router.post('/api/add-to-cart', cartProductController.addToCart);
 
     return app.use("/", router);
 
