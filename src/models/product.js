@@ -38,6 +38,12 @@ module.exports = (sequelize, DataTypes) => {
                     targetKey: 'keyName',
                 })
 
+            Product.hasMany(models.CartProduct,
+                {
+                    foreignKey: 'productId',
+                    sourceKey: 'id',
+                })
+
         }
     };
 

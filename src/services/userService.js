@@ -216,6 +216,15 @@ let handleCustomerLogin = (inputEmail, inputPassword) => {
                     where: { email: inputEmail },
                     include: [{
                         model: db.Cart,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                        include: [{
+                            model: db.CartProduct,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }],
                     }],
                     nested: true,
                     raw: false
