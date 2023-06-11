@@ -24,7 +24,8 @@ let handleAddToCart = (inputData) => {
 
                     resolve({
                         errCode: 0,
-                        message: 'Updated'
+                        messageVI: 'Sản phẩm đã được thêm thành công vào giỏ hàng của bạn',
+                        messageEN: 'This product has been added to your cart'
                     })
                 } else {
                     await db.CartProduct.create({
@@ -35,7 +36,8 @@ let handleAddToCart = (inputData) => {
 
                     resolve({
                         errCode: 0,
-                        message: 'Added'
+                        messageVI: 'Sản phẩm đã được thêm thành công vào giỏ hàng của bạn',
+                        messageEN: 'This product has been added to your cart'
                     })
                 }
 
