@@ -15,11 +15,17 @@ let handleAddToCart = (inputData) => {
                     where: {
                         cartId: inputData.cartId,
                         productId: inputData.productId
-                    }
+                    },
+                    raw: false,
+                    force: true
                 })
 
+                let calTotalPrice
                 if (data) {
                     data.quantity += inputData.quantity
+                    calTotalPrice = inputData.productPrice * data.quantity
+                    data.totalPrice = Number(calTotalPrice.toFixed(2))
+
                     await data.save();
 
                     resolve({
@@ -28,10 +34,13 @@ let handleAddToCart = (inputData) => {
                         messageEN: 'This product has been added to your cart'
                     })
                 } else {
+                    calTotalPrice = inputData.productPrice * inputData.quantity
+
                     await db.CartProduct.create({
                         cartId: inputData.cartId,
                         productId: inputData.productId,
-                        quantity: inputData.quantity
+                        quantity: inputData.quantity,
+                        totalPrice: calTotalPrice.toFixed(2)
                     })
 
                     resolve({

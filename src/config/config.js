@@ -11,6 +11,7 @@ module.exports = {
     "query": {
       "raw": false
     },
+    "dialectOptions": { decimalNumbers: true },
     "timezone": "+07:00"
   },
   "test": {

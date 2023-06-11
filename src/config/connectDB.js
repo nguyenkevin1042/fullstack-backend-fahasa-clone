@@ -12,6 +12,7 @@ const sequelize = new Sequelize(
         query: {
             raw: false
         },
+        dialectOptions: { decimalNumbers: true },
         timezone: "+07:00"
     });
 
