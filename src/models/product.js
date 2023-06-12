@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
                     as: 'markdownData'
                 })
 
+            Product.belongsTo(models.AllCode,
+                {
+                    foreignKey: 'formId',
+                    targetKey: 'keyMap'
+                })
+
             Product.belongsTo(models.ChildCategory,
                 {
                     foreignKey: 'categoryKeyName',
@@ -58,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         height: DataTypes.DECIMAL(10, 2),
         image: DataTypes.STRING,
         publishYear: DataTypes.INTEGER,
-        formId: DataTypes.INTEGER,
+        formId: DataTypes.STRING,
         categoryKeyName: DataTypes.STRING,
         bookDescriptionId: DataTypes.INTEGER,
         stationaryDescriptionId: DataTypes.INTEGER,

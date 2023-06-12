@@ -32,6 +32,7 @@ let handleAddNewProduct = (inputData) => {
                         publishYear: inputData.publishYear,
                         categoryKeyName: inputData.categoryKeyName,
                         image: inputData.image,
+                        formId: inputData.formId,
                     }).then(result => insertedProductId = result.id);
 
                     await db.ProductMarkdown.create({
@@ -200,7 +201,13 @@ let handleGetProductByKeyName = (inputKeyName) => {
                             attributes: {
                                 exclude: ['createdAt', 'updatedAt']
                             },
-                        }
+                        },
+                        {
+                            model: db.AllCode,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        },
                     ],
                     nested: true,
                     raw: false
@@ -406,7 +413,14 @@ let handleGetAllProductByCategory = (inputCategory) => {
                                     include: [
                                         {
                                             model: db.Product,
-                                            attributes: ['name', 'keyName', 'price', 'discount', 'image']
+                                            attributes: ['name', 'keyName', 'price', 'discount', 'image'],
+                                            include: {
+                                                model: db.BookDescription,
+                                                as: 'bookDescriptionData',
+                                                attributes: {
+                                                    exclude: ['createdAt', 'updatedAt']
+                                                },
+                                            },
                                         }
                                     ],
                                 }
@@ -491,7 +505,14 @@ let handleGetAllProductBySubCategory = (inputCategory, inputSubCategory) => {
                             include: [
                                 {
                                     model: db.Product,
-                                    attributes: ['name', 'keyName', 'price', 'discount', 'image']
+                                    attributes: ['name', 'keyName', 'price', 'discount', 'image'],
+                                    include: {
+                                        model: db.BookDescription,
+                                        as: 'bookDescriptionData',
+                                        attributes: {
+                                            exclude: ['createdAt', 'updatedAt']
+                                        },
+                                    },
                                 }
                             ],
                         }
@@ -562,8 +583,14 @@ let handleGetAllProductByChildCategory = (inputSubCategory, inputChildCategory) 
                     include: [
                         {
                             model: db.Product,
-                            attributes: ['name', 'keyName', 'price', 'discount', 'image']
-
+                            attributes: ['name', 'keyName', 'price', 'discount', 'image'],
+                            include: {
+                                model: db.BookDescription,
+                                as: 'bookDescriptionData',
+                                attributes: {
+                                    exclude: ['createdAt', 'updatedAt']
+                                },
+                            },
                         }
                     ],
                     nested: true,
@@ -644,7 +671,7 @@ let handleGetProductByName = (inputName) => {
 
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price', 'discount', 'weight', 'length', 'width', 'height',
-        'image', 'keyName', 'categoryKeyName', 'productType', 'publishYear']
+        'image', 'keyName', 'categoryKeyName', 'productType']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {

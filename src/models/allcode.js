@@ -9,7 +9,12 @@ module.exports = (sequelize, DataTypes) => {
             AllCode.hasMany(models.SubCategory,
                 {
                     foreignKey: 'category',
-                    sourceKey: "keyMap",
+                    sourceKey: 'keyMap',
+                })
+            AllCode.hasMany(models.Product,
+                {
+                    foreignKey: 'formId',
+                    sourceKey: 'keyMap',
                 })
         }
     };

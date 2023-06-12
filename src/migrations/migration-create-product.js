@@ -40,7 +40,7 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             formId: {
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             categoryKeyName: {
                 type: Sequelize.STRING

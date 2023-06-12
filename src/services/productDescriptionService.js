@@ -22,6 +22,7 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
                         publisher: dataInput.publisher,
                         language: dataInput.language,
                         pages: dataInput.pages,
+                        chapter: dataInput.chapter,
                     }).then(result => resultId = result.id);
                 }
 
@@ -108,6 +109,7 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                         existed.publisher = dataInput.publisher
                         existed.language = dataInput.language
                         existed.pages = dataInput.pages
+                        existed.chapter = dataInput.chapter
                         await existed.save();
                     } else {
                         await db.BookDescription.create({
@@ -117,6 +119,7 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                             publisher: dataInput.publisher,
                             language: dataInput.language,
                             pages: dataInput.pages,
+                            chapter: dataInput.chapter,
                         }).then(result => resultId = result.id);
                     }
 
