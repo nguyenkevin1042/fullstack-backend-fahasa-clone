@@ -100,6 +100,47 @@ let handleDeleteProductInCart = (inputCartId, inputProductId) => {
     });
 }
 
+//3. UPDATE CART
+let handleUpdateCart = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkParams = checkRequiredCartProductParams(inputData);
+
+            if (checkParams.isValid === false) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing " + checkParams.element + " parameter!"
+                })
+            } else {
+                let data = await db.CartProduct.findOne({
+                    where: {
+                        cartId: inputData.cartId,
+                        productId: inputData.productId
+                    },
+                    raw: false,
+                    force: true
+                })
+
+                if (data) {
+                    data.quantity = inputData.quantity
+                    let calTotalPrice = inputData.productPrice * data.quantity
+                    data.totalPrice = Number(calTotalPrice.toFixed(2))
+
+                    await data.save();
+
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+
 let checkRequiredCartProductParams = (dataInput) => {
     let arr = ['cartId', 'productId', 'quantity']
     let isValid = true;
@@ -118,7 +159,10 @@ let checkRequiredCartProductParams = (dataInput) => {
     }
 }
 
+
+
 module.exports = {
     handleAddToCart: handleAddToCart,
-    handleDeleteProductInCart: handleDeleteProductInCart
+    handleDeleteProductInCart: handleDeleteProductInCart,
+    handleUpdateCart: handleUpdateCart
 }

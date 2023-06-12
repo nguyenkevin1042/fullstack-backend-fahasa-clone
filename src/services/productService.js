@@ -678,7 +678,7 @@ let handleGetProductByName = (inputName) => {
 
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price', 'discount', 'weight', 'length', 'width', 'height',
-        'image', 'keyName', 'categoryKeyName', 'productType']
+        'keyName', 'categoryKeyName', 'productType']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
