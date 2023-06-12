@@ -129,7 +129,13 @@ let handleGetAllProduct = () => {
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
                         },
-                    }
+                    },
+                    {
+                        model: db.AllCode,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
                 ],
                 nested: true,
                 raw: false
@@ -326,6 +332,7 @@ let handleUpdateProduct = (inputData) => {
                     existedProduct.publishYear = inputData.publishYear
                     existedProduct.categoryKeyName = inputData.categoryKeyName
                     existedProduct.image = inputData.image
+                    existedProduct.formId = inputData.formId
 
                     //Secondly, update Markdown
                     let existedMarkdown = await db.ProductMarkdown.findOne({
