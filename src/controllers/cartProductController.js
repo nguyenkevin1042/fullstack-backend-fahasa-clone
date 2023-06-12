@@ -9,6 +9,16 @@ let addToCart = async (req, res) => {
     }
 }
 
+let deleteProductInCart = async (req, res) => {
+    try {
+        let data = await cartProductService.handleDeleteProductInCart(req.query.cartId, req.query.productId);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
-    addToCart: addToCart
+    addToCart: addToCart,
+    deleteProductInCart: deleteProductInCart
 }

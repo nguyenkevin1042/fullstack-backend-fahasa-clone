@@ -48,24 +48,9 @@ let handleGetCartByUserId = (inputUserId) => {
     });
 }
 
-let checkRequiredCartProductParams = (dataInput) => {
-    let arr = ['cartId', 'productId', 'quantity']
-    let isValid = true;
-    let element = '';
-    for (let index = 0; index < arr.length; index++) {
-        if (!dataInput[arr[index]]) {
-            isValid = false;
-            element = arr[index]
-            break;
-        }
 
-    }
-    return {
-        isValid: isValid,
-        element: element
-    }
-}
 
 module.exports = {
-    handleGetCartByUserId: handleGetCartByUserId
+    handleGetCartByUserId: handleGetCartByUserId,
+
 }

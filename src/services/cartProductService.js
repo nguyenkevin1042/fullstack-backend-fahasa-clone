@@ -1,5 +1,6 @@
 import db from '../models/index';
 
+//1. ADD PRODUCT TO CART
 let handleAddToCart = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -57,6 +58,48 @@ let handleAddToCart = (inputData) => {
     });
 }
 
+//2. DELETE PRODUCT IN CART
+let handleDeleteProductInCart = (inputCartId, inputProductId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputCartId) {
+                resolve({
+                    errCode: 1,
+                    messageVI: 'Missing inputCartId',
+                    messageEN: 'Missing inputCartId'
+                })
+            } else {
+                let data = await db.CartProduct.findOne({
+                    where: {
+                        cartId: inputCartId,
+                        productId: inputProductId
+                    },
+                    raw: false,
+                    force: true
+                })
+
+                if (data) {
+                    await db.CartProduct.destroy(
+                        {
+                            where: {
+                                cartId: inputCartId,
+                                productId: inputProductId
+                            }
+                        }
+                    );
+                    resolve({
+                        errCode: 0,
+                        message: 'Delete successful!'
+                    })
+                }
+
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 let checkRequiredCartProductParams = (dataInput) => {
     let arr = ['cartId', 'productId', 'quantity']
     let isValid = true;
@@ -76,5 +119,6 @@ let checkRequiredCartProductParams = (dataInput) => {
 }
 
 module.exports = {
-    handleAddToCart: handleAddToCart
+    handleAddToCart: handleAddToCart,
+    handleDeleteProductInCart: handleDeleteProductInCart
 }

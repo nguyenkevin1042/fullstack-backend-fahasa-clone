@@ -60,6 +60,7 @@ let initWebRoutes = (app) => {
 
     //CART PRODUCT
     router.post('/api/add-to-cart', cartProductController.addToCart);
+    router.delete('/api/delete-product-in-cart', cartProductController.deleteProductInCart);
 
     return app.use("/", router);
 
