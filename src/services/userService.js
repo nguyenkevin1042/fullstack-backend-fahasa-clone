@@ -28,11 +28,17 @@ let handleGetAllUsers = () => {
 let handleCreateNewUser = (dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let checkParams = checkRequiredSignUpParams(dataInput);
-            if (checkParams.isValid === false) {
+            if (!dataInput.email) {
                 resolve({
                     errCode: 1,
-                    message: "Missing " + checkParams.element + " parameter!"
+                    messageVI: "Email không được để trống!",
+                    messageEN: "Email can not be left empty!"
+                })
+            } else if (!dataInput.password) {
+                resolve({
+                    errCode: 1,
+                    messageVI: "Mật khẩu không được để trống!",
+                    messageEN: "Password can not be left empty!"
                 })
             } else {
                 let isEmailExisted = await checkEmail(dataInput.email);
@@ -282,7 +288,7 @@ let handleUpdateUser = (dataInput) => {
                     await user.save();
 
                     resolve({
-                        errCode: 2,
+                        errCode: 0,
                         messageVI: "Lưu thay đổi thành công!",
                         messageEN: "Save changes successful!"
                     })
