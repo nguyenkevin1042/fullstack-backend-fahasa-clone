@@ -370,6 +370,7 @@ let handleUpdateProduct = (inputData) => {
 
                     if (result.errCode === 0) {
                         await existedProduct.save()
+
                         resolve({
                             errCode: 0,
                             message: 'Update successful'
