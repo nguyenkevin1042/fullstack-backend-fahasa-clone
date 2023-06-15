@@ -220,18 +220,28 @@ let handleCustomerLogin = (inputEmail, inputPassword) => {
 
                 let user = await db.User.findOne({
                     where: { email: inputEmail },
-                    include: [{
-                        model: db.Cart,
-                        attributes: {
-                            exclude: ['createdAt', 'updatedAt']
-                        },
-                        include: [{
-                            model: db.CartProduct,
+                    include: [
+                        {
+                            model: db.Cart,
                             attributes: {
                                 exclude: ['createdAt', 'updatedAt']
                             },
-                        }],
-                    }],
+                            include: [{
+                                model: db.CartProduct,
+                                attributes: {
+                                    exclude: ['createdAt', 'updatedAt']
+                                },
+                            },
+                            ],
+                        },
+                        {
+                            model: db.UserAddress,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+
+                    ],
                     nested: true,
                     raw: false
                 });

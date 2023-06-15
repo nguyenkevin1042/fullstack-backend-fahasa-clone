@@ -7,6 +7,7 @@ import subCategoryController from "../controllers/subCategoryController";
 import childCategoryController from "../controllers/childCategoryController";
 import cartProductController from "../controllers/cartProductController";
 import cartController from "../controllers/cartController";
+import userAddressController from "../controllers/userAddressController";
 
 let router = express.Router();
 
@@ -20,6 +21,9 @@ let initWebRoutes = (app) => {
     router.post('/api/update-user', userController.updateUser);
     router.post('/api/admin/login', userController.adminLogin);
     router.post('/api/customer/login', userController.customerLogin);
+
+    //USER ADDRESS
+    router.post('/api/create-new-address', userAddressController.createNewAddress);
 
     //ALL CODES
     router.get('/api/get-all-codes', allCodesController.getAllCodes);
