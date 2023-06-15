@@ -8,6 +8,7 @@ import childCategoryController from "../controllers/childCategoryController";
 import cartProductController from "../controllers/cartProductController";
 import cartController from "../controllers/cartController";
 import userAddressController from "../controllers/userAddressController";
+import billController from "../controllers/billController";
 
 let router = express.Router();
 
@@ -66,6 +67,10 @@ let initWebRoutes = (app) => {
     router.post('/api/add-to-cart', cartProductController.addToCart);
     router.post('/api/update-cart', cartProductController.updateCart);
     router.delete('/api/delete-product-in-cart', cartProductController.deleteProductInCart);
+
+    //BILL
+    router.post('/api/create-new-bill', billController.createNewBill);
+    router.get('/api/get-bill-by-user-id', billController.getBillByUserId);
 
     return app.use("/", router);
 
