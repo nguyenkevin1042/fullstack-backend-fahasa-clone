@@ -300,7 +300,7 @@ let handleUpdateUser = (dataInput) => {
                     resolve({
                         errCode: 0,
                         messageVI: "Lưu thay đổi thành công!",
-                        messageEN: "Save changes successful!"
+                        messageEN: "Save changes successful!",
                     })
                 }
             }

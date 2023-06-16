@@ -55,7 +55,19 @@ let handleGetBillByUserId = (inputUserId) => {
                 })
             } else {
                 let data = await db.Bill.findAll({
-                    where: { userId: inputUserId }
+                    where: { userId: inputUserId },
+                    include: [
+                        {
+                            model: db.AllCode,
+                            attributes: ['valueVI', 'valueEN']
+                        },
+                        {
+                            model: db.UserAddress,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            }
+                        }
+                    ]
                 })
 
                 if (data && data.length > 0) {
@@ -96,7 +108,50 @@ let checkRequiredBillParams = (dataInput) => {
     }
 }
 
+//3. GET ALL BILL
+let handleGetAllBill = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.Bill.findAll({
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt'],
+                },
+                include: [
+                    {
+                        model: db.AllCode,
+                        attributes: ['valueVI', 'valueEN']
+                    },
+                    {
+                        model: db.UserAddress,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        }
+                    }
+                ],
+                nested: true,
+                raw: false
+            })
+
+            if (data && data.length > 0) {
+                resolve({
+                    errCode: 0,
+                    data
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    data: []
+                })
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleCreateNewBill: handleCreateNewBill,
-    handleGetBillByUserId: handleGetBillByUserId
+    handleGetBillByUserId: handleGetBillByUserId,
+    handleGetAllBill: handleGetAllBill
 }

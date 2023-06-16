@@ -18,7 +18,17 @@ let getBillByUserId = async (req, res) => {
     }
 }
 
+let getAllBill = async (req, res) => {
+    try {
+        let data = await billService.handleGetAllBill();
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     createNewBill: createNewBill,
-    getBillByUserId: getBillByUserId
+    getBillByUserId: getBillByUserId,
+    getAllBill: getAllBill
 }

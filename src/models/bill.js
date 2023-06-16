@@ -6,6 +6,16 @@ module.exports = (sequelize, DataTypes) => {
     class Bill extends Model {
 
         static associate(models) {
+            Bill.belongsTo(models.AllCode,
+                {
+                    foreignKey: 'status',
+                    targetKey: 'keyMap',
+                })
+            Bill.belongsTo(models.UserAddress,
+                {
+                    foreignKey: 'userAddressId',
+                    targetKey: 'id',
+                })
         }
     };
 

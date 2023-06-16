@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
                     foreignKey: 'formId',
                     sourceKey: 'keyMap',
                 })
+            AllCode.hasMany(models.Bill,
+                {
+                    foreignKey: 'status',
+                    sourceKey: 'keyMap',
+                })
         }
     };
 

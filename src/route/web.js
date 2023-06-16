@@ -70,6 +70,7 @@ let initWebRoutes = (app) => {
 
     //BILL
     router.post('/api/create-new-bill', billController.createNewBill);
+    router.get('/api/get-all-bill', billController.getAllBill);
     router.get('/api/get-bill-by-user-id', billController.getBillByUserId);
 
     return app.use("/", router);
