@@ -119,7 +119,7 @@ let handleGetAllBill = () => {
                 include: [
                     {
                         model: db.AllCode,
-                        attributes: ['valueVI', 'valueEN']
+                        attributes: ['keyMap', 'valueVI', 'valueEN']
                     },
                     {
                         model: db.UserAddress,
@@ -150,8 +150,45 @@ let handleGetAllBill = () => {
     });
 }
 
+//4. UPDATE BILL STATUS
+let handleUpdateBillStatus = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputData.billId) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing billId parameter!"
+                })
+            } else if (!inputData.statusKeyMap) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing statusKeyMap parameter!"
+                })
+            } else {
+                let data = await db.Bill.findOne({
+                    where: { id: inputData.billId }
+                })
+                console.log(data)
+                if (data) {
+                    data.status = inputData.statusKeyMap
+                    await data.save()
+
+                    resolve({
+                        errCode: 0,
+                        message: "Success"
+                    })
+                }
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleCreateNewBill: handleCreateNewBill,
     handleGetBillByUserId: handleGetBillByUserId,
-    handleGetAllBill: handleGetAllBill
+    handleGetAllBill: handleGetAllBill,
+    handleUpdateBillStatus: handleUpdateBillStatus
 }
