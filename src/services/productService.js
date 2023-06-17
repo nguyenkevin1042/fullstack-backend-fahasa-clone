@@ -675,7 +675,51 @@ let handleGetProductByName = (inputName) => {
     });
 }
 
+//5. UPDATE PRODUCT
+let handleUpdateProductDiscount = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
 
+            if (!inputData.discountNumber) {
+                resolve({
+                    errCode: 1,
+                    messageVI: "Bạn chưa nhập discount!",
+                    messageEN: "You have not typed discount!"
+                })
+            } else if (inputData.listSelectedProductsId.length === 0) {
+                resolve({
+                    errCode: 1,
+                    messageVI: "Bạn chưa chọn bất kỳ sản phẩm nào!",
+                    messageEN: "You have not chose any product!"
+                })
+            } else {
+
+                for (let index = 0; index < inputData.listSelectedProductsId.length; index++) {
+                    let currentProduct = await db.Product.findOne({
+                        where: { id: inputData.listSelectedProductsId[index] }
+                    })
+
+                    if (currentProduct) {
+                        currentProduct.discount = inputData.discountNumber
+                        await currentProduct.save();
+                    }
+                }
+
+                resolve({
+                    errCode: 0,
+                    messageVI: "Cập nhật thành công!",
+                    messageEN: "Update success!"
+                })
+            }
+
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price',
@@ -705,5 +749,6 @@ module.exports = {
     handleUpdateProduct: handleUpdateProduct,
     handleGetAllProductByCategory: handleGetAllProductByCategory,
     handleGetAllProductBySubCategory: handleGetAllProductBySubCategory,
-    handleGetAllProductByChildCategory: handleGetAllProductByChildCategory
+    handleGetAllProductByChildCategory: handleGetAllProductByChildCategory,
+    handleUpdateProductDiscount: handleUpdateProductDiscount
 }

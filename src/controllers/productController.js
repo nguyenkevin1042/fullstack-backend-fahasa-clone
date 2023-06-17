@@ -18,12 +18,19 @@ let updateProduct = async (req, res) => {
     }
 }
 
+let updateProductDiscount = async (req, res) => {
+    try {
+        let data = await productService.handleUpdateProductDiscount(req.body);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 let getAllProduct = async (req, res) => {
     try {
-        // setTimeout(async () => {
         let data = await productService.handleGetAllProduct();
         return res.status(200).json(data);
-        // }, 5000)
     } catch (error) {
         console.log(error)
     }
@@ -99,5 +106,6 @@ module.exports = {
     updateProduct: updateProduct,
     getAllProductByCategory: getAllProductByCategory,
     getAllProductBySubCategory, getAllProductBySubCategory,
-    getAllProductByChildCategory: getAllProductByChildCategory
+    getAllProductByChildCategory: getAllProductByChildCategory,
+    updateProductDiscount: updateProductDiscount
 }
