@@ -24,12 +24,12 @@ let handleCreateNewBill = (inputData) => {
                 //2. Save product to bill product Table
 
                 //3. Delete product out of cartproduct
-                // let listProduct = inputData.listProduct;
-                // for (let index = 0; index < listProduct.length; index++) {
-                //     let cartId = listProduct[index].cartId
-                //     let productId = listProduct[index].productId
-                //     await cartProductService.handleDeleteProductInCart(cartId, productId)
-                // }
+                let listProduct = inputData.listProduct;
+                for (let index = 0; index < listProduct.length; index++) {
+                    let cartId = listProduct[index].cartId
+                    let productId = listProduct[index].productId
+                    await cartProductService.handleDeleteProductInCart(cartId, productId)
+                }
 
                 resolve({
                     errCode: 0,
