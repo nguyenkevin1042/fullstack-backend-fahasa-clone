@@ -9,6 +9,8 @@ import cartProductController from "../controllers/cartProductController";
 import cartController from "../controllers/cartController";
 import userAddressController from "../controllers/userAddressController";
 import billController from "../controllers/billController";
+import tagController from "../controllers/tagController";
+
 
 let router = express.Router();
 
@@ -74,6 +76,10 @@ let initWebRoutes = (app) => {
     router.get('/api/get-all-bill', billController.getAllBill);
     router.get('/api/get-bill-by-user-id', billController.getBillByUserId);
     router.post('/api/update-bill-status', billController.updateBillStatus);
+
+    //TAG
+    router.get('/api/get-product-by-tag-key-name', tagController.getProductsByTagKeyName);
+    router.get('/api/get-tag-by-type', tagController.getTagByType);
 
     return app.use("/", router);
 
