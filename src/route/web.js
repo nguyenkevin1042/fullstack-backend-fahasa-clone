@@ -10,7 +10,7 @@ import cartController from "../controllers/cartController";
 import userAddressController from "../controllers/userAddressController";
 import billController from "../controllers/billController";
 import tagController from "../controllers/tagController";
-
+import productTagController from "../controllers/productTagController";
 
 let router = express.Router();
 
@@ -81,6 +81,10 @@ let initWebRoutes = (app) => {
     router.get('/api/get-product-by-tag-key-name', tagController.getProductsByTagKeyName);
     router.get('/api/get-tag-by-type', tagController.getTagByType);
     router.get('/api/get-all-tag', tagController.getAllTag);
+    router.get('/api/get-all-tag-without-product', tagController.getAllTagWithoutProductData);
+
+    //PRODUCT TAG
+    router.post('/api/create-product-tag', productTagController.createProductTag);
 
     return app.use("/", router);
 

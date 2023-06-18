@@ -40,6 +40,7 @@ let handleGetTagByType = (inputType) => {
 let handleGetAllTag = () => {
     return new Promise(async (resolve, reject) => {
         try {
+
             let allTags = await db.Tag.findAll({
                 attributes: ['type'],
                 group: ['type']
@@ -144,8 +145,37 @@ let handleGetProductsByTagKeyName = (inputKeyName) => {
     });
 }
 
+//2. GET ALL TAG WITHOUT PRODUCT DATA
+let handleGetAllTagWithoutProductData = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let tags = await db.Tag.findAll({
+                attributes: ['id', 'keyName', 'valueVI', 'valueEN'],
+            })
+
+            if (tags && tags.length > 0) {
+                resolve({
+                    errCode: 0,
+                    tags
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "Tag with this keyName is not existed"
+                })
+            }
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleGetProductsByTagKeyName: handleGetProductsByTagKeyName,
     handleGetTagByType: handleGetTagByType,
-    handleGetAllTag: handleGetAllTag
+    handleGetAllTag: handleGetAllTag,
+    handleGetAllTagWithoutProductData: handleGetAllTagWithoutProductData
 }

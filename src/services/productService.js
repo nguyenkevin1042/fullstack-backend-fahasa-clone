@@ -136,6 +136,16 @@ let handleGetAllProduct = () => {
                             exclude: ['createdAt', 'updatedAt']
                         },
                     },
+                    {
+                        model: db.ProductTag,
+                        attributes: ['tagId'],
+                        include: [
+                            {
+                                model: db.Tag,
+                                attributes: ['valueVI', 'valueEN'],
+                            },
+                        ]
+                    },
                 ],
                 nested: true,
                 raw: false
@@ -675,7 +685,7 @@ let handleGetProductByName = (inputName) => {
     });
 }
 
-//5. UPDATE PRODUCT
+//10. UPDATE PRODUCT DISCOUNT
 let handleUpdateProductDiscount = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
