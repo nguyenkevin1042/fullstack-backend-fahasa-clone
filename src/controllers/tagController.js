@@ -18,7 +18,17 @@ let getProductsByTagKeyName = async (req, res) => {
     }
 }
 
+let getAllTag = async (req, res) => {
+    try {
+        let data = await tagService.handleGetAllTag();
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     getTagByType: getTagByType,
-    getProductsByTagKeyName: getProductsByTagKeyName
+    getProductsByTagKeyName: getProductsByTagKeyName,
+    getAllTag: getAllTag
 }

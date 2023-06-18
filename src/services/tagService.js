@@ -36,6 +36,59 @@ let handleGetTagByType = (inputType) => {
     });
 }
 
+//2. GET ALL TAG
+let handleGetAllTag = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let allTags = await db.Tag.findAll({
+                attributes: ['type'],
+                group: ['type']
+            })
+
+            let finalTagData = []
+
+            for (let index = 0; index < allTags.length; index++) {
+                let singleTag = await db.Tag.findAll({
+                    where: { type: allTags[index].type },
+                    attributes: ['keyName', 'valueVI', 'valueEN'],
+                    include: [
+                        {
+                            model: db.ProductTag,
+                            attributes: ['productId'],
+                            include: [
+                                {
+                                    model: db.Product,
+                                    attributes: ['name', 'keyName', 'price', 'discount', 'image'],
+                                },
+                            ],
+                        },
+                    ],
+                    nested: true,
+                    raw: false
+                })
+
+                finalTagData.push(singleTag)
+
+            }
+
+            if (finalTagData && finalTagData.length > 0) {
+                resolve({
+                    errCode: 0,
+                    finalTagData
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "Tag with this keyName is not existed"
+                })
+            }
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 //3. GET TAG BY KEYNAME
 let handleGetProductsByTagKeyName = (inputKeyName) => {
@@ -93,5 +146,6 @@ let handleGetProductsByTagKeyName = (inputKeyName) => {
 
 module.exports = {
     handleGetProductsByTagKeyName: handleGetProductsByTagKeyName,
-    handleGetTagByType: handleGetTagByType
+    handleGetTagByType: handleGetTagByType,
+    handleGetAllTag: handleGetAllTag
 }

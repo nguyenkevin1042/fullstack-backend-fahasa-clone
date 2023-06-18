@@ -80,6 +80,7 @@ let initWebRoutes = (app) => {
     //TAG
     router.get('/api/get-product-by-tag-key-name', tagController.getProductsByTagKeyName);
     router.get('/api/get-tag-by-type', tagController.getTagByType);
+    router.get('/api/get-all-tag', tagController.getAllTag);
 
     return app.use("/", router);
 
