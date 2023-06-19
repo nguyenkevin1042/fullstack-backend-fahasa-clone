@@ -6,6 +6,11 @@ module.exports = (sequelize, DataTypes) => {
     class User extends Model {
 
         static associate(models) {
+            User.belongsTo(models.AllCode,
+                {
+                    foreignKey: 'gender',
+                    targetKey: 'keyMap',
+                })
             User.hasOne(models.Cart,
                 {
                     foreignKey: 'userId',

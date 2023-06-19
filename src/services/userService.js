@@ -8,14 +8,21 @@ let handleGetAllUsers = () => {
         try {
             let data = await db.User.findAll({
                 attributes: {
-                    exclude: ['password'],
-                    raw: true
-                }
+                    exclude: ['password', 'createdAt', 'updatedAt'],
+                },
+                include: [
+                    {
+                        model: db.AllCode,
+                        attributes: ['valueVI', 'valueEN'],
+                    }
+                ],
+                nested: true,
+                raw: false
             });
 
             resolve({
                 errCode: 0,
-                data: data
+                data
             })
 
         } catch (error) {

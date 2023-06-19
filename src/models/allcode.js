@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
                     foreignKey: 'status',
                     sourceKey: 'keyMap',
                 })
+            AllCode.hasMany(models.User,
+                {
+                    foreignKey: 'gender',
+                    sourceKey: 'keyMap'
+                })
         }
     };
 
