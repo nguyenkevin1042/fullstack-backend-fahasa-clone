@@ -22,8 +22,40 @@ let handleCreateNewAddress = (dataInput) => {
                     addressType: dataInput.addressType,
                     userId: dataInput.userId
                 })
+
+                let user = await db.User.findOne({
+                    where: { id: dataInput.userId },
+                    attributes: {
+                        exclude: ['password', 'createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.Cart,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                            include: [{
+                                model: db.CartProduct,
+                                attributes: {
+                                    exclude: ['createdAt', 'updatedAt']
+                                },
+                            },
+                            ],
+                        },
+                        {
+                            model: db.UserAddress,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+                    ],
+                    nested: true,
+                    raw: false
+                })
+
                 resolve({
                     errCode: 0,
+                    user,
                     message: 'Create success'
                 })
             }

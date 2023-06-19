@@ -292,7 +292,34 @@ let handleUpdateUser = (dataInput) => {
                 })
             } else {
                 let user = await db.User.findOne({
-                    where: { email: dataInput.email }
+                    where: { email: dataInput.email },
+                    attributes: {
+                        exclude: ['password', 'createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.Cart,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                            include: [{
+                                model: db.CartProduct,
+                                attributes: {
+                                    exclude: ['createdAt', 'updatedAt']
+                                },
+                            },
+                            ],
+                        },
+                        {
+                            model: db.UserAddress,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+
+                    ],
+                    nested: true,
+                    raw: false
                 })
 
                 if (user) {
@@ -306,6 +333,7 @@ let handleUpdateUser = (dataInput) => {
 
                     resolve({
                         errCode: 0,
+                        user,
                         messageVI: "Lưu thay đổi thành công!",
                         messageEN: "Save changes successful!",
                     })
