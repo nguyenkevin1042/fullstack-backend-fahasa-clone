@@ -13,6 +13,8 @@ let handleCreateNewBill = (inputData) => {
                 })
             } else {
                 //1. Create bill
+                let listProduct = inputData.listProduct
+                let createdBillId;
                 await db.Bill.create({
                     orderedDate: inputData.orderedDate,
                     userId: inputData.userId,
@@ -20,11 +22,22 @@ let handleCreateNewBill = (inputData) => {
                     paymentType: inputData.paymentType,
                     totalPrice: inputData.totalPrice,
                     status: 'S1',
-                })
+                }).then(result => createdBillId = result.id)
+
+                console.log(createdBillId)
+
                 //2. Save product to bill product Table
 
+                for (let index = 0; index < listProduct.length; index++) {
+                    await db.BillProduct.create({
+                        billId: createdBillId,
+                        productId: listProduct[index].productId,
+                        quantity: listProduct[index].quantity,
+                        totalPrice: listProduct[index].totalPrice
+                    })
+                }
+
                 //3. Delete product out of cartproduct
-                let listProduct = inputData.listProduct;
                 for (let index = 0; index < listProduct.length; index++) {
                     let cartId = listProduct[index].cartId
                     let productId = listProduct[index].productId
