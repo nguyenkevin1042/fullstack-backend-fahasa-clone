@@ -79,6 +79,20 @@ let handleGetBillByUserId = (inputUserId) => {
                             attributes: {
                                 exclude: ['createdAt', 'updatedAt']
                             }
+                        },
+                        {
+                            model: db.BillProduct,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                            include: [
+                                {
+                                    model: db.Product,
+                                    attributes: {
+                                        exclude: ['createdAt', 'updatedAt']
+                                    }
+                                },
+                            ]
                         }
                     ]
                 })
