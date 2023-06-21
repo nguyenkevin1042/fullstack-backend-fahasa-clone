@@ -58,9 +58,8 @@ let handleCreateNewUser = (dataInput) => {
                     })
                 } else {
                     let hashedPassword = await hashPasswordFromInput(dataInput.password);
-
+                    let newUser
                     if (dataInput.isAdmin === true) {
-
                         await db.User.create({
                             firstName: '',
                             email: dataInput.email,
@@ -75,7 +74,10 @@ let handleCreateNewUser = (dataInput) => {
                             email: dataInput.email,
                             password: hashedPassword,
                             roleId: 'R3'
-                        }).then(result => newCustomerId = result.id);
+                        }).then(result => {
+                            newCustomerId = result.id
+                            newUser = result
+                        });
 
                         await db.Cart.create({
                             userId: newCustomerId
@@ -84,6 +86,7 @@ let handleCreateNewUser = (dataInput) => {
 
                     resolve({
                         errCode: 0,
+                        newUser,
                         messageVI: "Tạo tài khoản thành công!",
                         messageEN: "Create account successful!"
                     })

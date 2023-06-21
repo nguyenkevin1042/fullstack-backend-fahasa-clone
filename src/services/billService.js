@@ -24,8 +24,6 @@ let handleCreateNewBill = (inputData) => {
                     status: 'S1',
                 }).then(result => createdBillId = result.id)
 
-                console.log(createdBillId)
-
                 //2. Save product to bill product Table
 
                 for (let index = 0; index < listProduct.length; index++) {

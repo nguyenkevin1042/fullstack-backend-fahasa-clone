@@ -2,13 +2,8 @@ import db from '../models/index';
 
 let getHomePage = async (req, res) => {
     try {
-        let data = await db.User.findOne({
-            where: { id: 1 }
-        });
 
-        return res.render("homepage.ejs", {
-            data: data
-        });
+        return res.render("homepage.ejs");
     } catch (error) {
         console.log(error)
     }
