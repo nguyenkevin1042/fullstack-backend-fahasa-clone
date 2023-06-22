@@ -17,7 +17,7 @@ let handleAddNewProduct = (inputData) => {
                 })
             } else {
                 let existed = await db.Product.findOne({
-                    where: { keyName: inputData.keyName },
+                    where: { keyName: inputData.keyMap },
                     raw: false
                 })
 
