@@ -4,7 +4,9 @@ import db from '../models/index';
 let handleAddNewCode = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
+
             let checkParams = checkRequiredCodesParams(inputData);
+
 
             if (checkParams.isValid === false) {
                 resolve({

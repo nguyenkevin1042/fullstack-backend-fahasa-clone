@@ -16,6 +16,7 @@ let sequelize;
 // } else {
 //   sequelize = new Sequelize(config.database, config.username, config.password, config);
 // }
+
 const customizeConfig = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,

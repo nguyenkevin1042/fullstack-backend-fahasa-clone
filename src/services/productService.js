@@ -16,52 +16,65 @@ let handleAddNewProduct = (inputData) => {
                     message: "Missing " + checkParams.element + " parameter!"
                 })
             } else {
-                let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
-                let insertedProductId
+                let existed = await db.Product.findOne({
+                    where: { keyName: inputData.keyName },
+                    raw: false
+                })
 
-                if (result.errCode === 0) {
-                    await db.Product.create({
-                        name: inputData.name,
-                        keyName: inputData.keyName,
-                        price: inputData.price,
-                        discount: inputData.discount,
-                        weight: inputData.weight,
-                        height: inputData.height,
-                        width: inputData.width,
-                        length: inputData.length,
-                        publishYear: inputData.publishYear,
-                        categoryKeyName: inputData.categoryKeyName,
-                        image: inputData.image,
-                        formId: inputData.formId,
-                    }).then(result => insertedProductId = result.id);
+                if (!existed) {
+                    let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
+                    let insertedProductId
 
-                    await db.ProductMarkdown.create({
-                        productId: insertedProductId,
-                        contentHTML: inputData.contentHTML,
-                        contentMarkdown: inputData.contentMarkdown,
-                    })
+                    if (result.errCode === 0) {
+                        await db.Product.create({
+                            name: inputData.name,
+                            keyName: inputData.keyName,
+                            price: inputData.price,
+                            discount: inputData.discount,
+                            weight: inputData.weight,
+                            height: inputData.height,
+                            width: inputData.width,
+                            length: inputData.length,
+                            publishYear: inputData.publishYear,
+                            categoryKeyName: inputData.categoryKeyName,
+                            image: inputData.image,
+                            formId: inputData.formId,
+                        }).then(result => insertedProductId = result.id);
 
-                    let insertedProduct = await db.Product.findOne({
-                        where: { id: insertedProductId },
-                        raw: false
-                    })
+                        await db.ProductMarkdown.create({
+                            productId: insertedProductId,
+                            contentHTML: inputData.contentHTML,
+                            contentMarkdown: inputData.contentMarkdown,
+                        })
 
-                    if (insertedProduct && inputData.productType === 'book') {
-                        insertedProduct.bookDescriptionId = result.resultId;
-                    } else if (inputData.productType === 'toy') {
-                        insertedProduct.toyDescriptionId = result.resultId;
+                        let insertedProduct = await db.Product.findOne({
+                            where: { id: insertedProductId },
+                            raw: false
+                        })
+
+                        if (insertedProduct && inputData.productType === 'book') {
+                            insertedProduct.bookDescriptionId = result.resultId;
+                        } else if (insertedProduct && inputData.productType === 'toy') {
+                            insertedProduct.toyDescriptionId = result.resultId;
+                        } else {
+                            insertedProduct.stationaryDescriptionId = result.resultId;
+                        }
+
+                        await insertedProduct.save();
+
+                        resolve({
+                            errCode: 0,
+                            message: "Add New Product successful"
+                        })
                     } else {
-                        insertedProduct.stationaryDescriptionId = result.resultId;
+                        resolve(result)
                     }
-
-                    await insertedProduct.save();
-
-                    resolve({
-                        errCode: 0,
-                        message: "Add New Product successful"
-                    })
                 } else {
-                    resolve(result)
+                    resolve({
+                        errCode: 1,
+                        messageVI: "Sản phẩm này đã tồn tại trong hệ thống",
+                        messageEN: "This Product is already existed"
+                    })
                 }
             }
 
