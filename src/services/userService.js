@@ -174,7 +174,7 @@ let handleAdminLogin = (inputEmail, inputPassword) => {
 
                 //Check user existed or not
                 if (user) {
-                    let checkPassword = await bcrypt.compareSync(inputPassword, user.password);
+                    let checkPassword = bcrypt.compareSync(inputPassword, user.password);
 
                     //Check input password vs password form DB
                     if (checkPassword) {
@@ -199,8 +199,8 @@ let handleAdminLogin = (inputEmail, inputPassword) => {
                     }
                 } else {
                     userData.errCode = 3;
-                    userData.messageVI = "Email này không tồn tại trong hệ thống. Vui lòng đăng ký một tài khoản mới";
-                    userData.messageEN = "Email does not exist. Please sign up a new account";
+                    userData.messageVI = "Email này không tồn tại trong hệ thống.";
+                    userData.messageEN = "Email does not exist.";
                 }
                 resolve(userData)
             }
