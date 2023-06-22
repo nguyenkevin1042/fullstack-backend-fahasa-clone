@@ -36,6 +36,15 @@ let getAllProduct = async (req, res) => {
     }
 }
 
+let getProductById = async (req, res) => {
+    try {
+        let data = await productService.handleGetProductById(req.query.id);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 let getAllProductByCategory = async (req, res) => {
     try {
         // setTimeout(async () => {
@@ -107,5 +116,6 @@ module.exports = {
     getAllProductByCategory: getAllProductByCategory,
     getAllProductBySubCategory, getAllProductBySubCategory,
     getAllProductByChildCategory: getAllProductByChildCategory,
-    updateProductDiscount: updateProductDiscount
+    updateProductDiscount: updateProductDiscount,
+    getProductById: getProductById
 }

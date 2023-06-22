@@ -88,14 +88,86 @@ let handleAddNewProduct = (inputData) => {
 let handleGetAllProduct = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let allProducts = await db.Product.findAll({
-                attributes: ['name', 'keyName', 'price', 'discount', 'image'],
-            })
+            // let allProducts = await db.Product.findAll({
+            //     attributes: {
+            //         exclude: ['createdAt', 'updatedAt']
+            //     },
+            //     include: [
+            //         {
+            //             model: db.BookDescription,
+            //             as: 'bookDescriptionData',
+            //             attributes: {
+            //                 exclude: ['createdAt', 'updatedAt']
+            //             },
+            //         },
+            //         {
+            //             model: db.StationaryDescription,
+            //             as: 'stationaryDescriptionData',
+            //             attributes: {
+            //                 exclude: ['createdAt', 'updatedAt']
+            //             },
+            //         },
+            //         {
+            //             model: db.ToyDescription,
+            //             as: 'toyDescriptionData',
+            //             attributes: {
+            //                 exclude: ['createdAt', 'updatedAt']
+            //             },
+            //         },
+            //         {
+            //             model: db.ProductMarkdown,
+            //             as: 'markdownData',
+            //             attributes: {
+            //                 exclude: ['createdAt', 'updatedAt']
+            //             },
+            //         },
+            //         {
+            //             model: db.ChildCategory,
+            //             include: [
+            //                 {
+            //                     model: db.SubCategory,
+            //                     include: [
+            //                         {
+            //                             model: db.AllCode,
+            //                             attributes: {
+            //                                 exclude: ['createdAt', 'updatedAt']
+            //                             },
+            //                         }
+            //                     ],
+            //                     attributes: {
+            //                         exclude: ['createdAt', 'updatedAt']
+            //                     },
+            //                 }
+            //             ],
+            //             attributes: {
+            //                 exclude: ['createdAt', 'updatedAt']
+            //             },
+            //         },
+            //         {
+            //             model: db.AllCode,
+            //             attributes: {
+            //                 exclude: ['createdAt', 'updatedAt']
+            //             },
+            //         },
+            //         {
+            //             model: db.ProductTag,
+            //             attributes: ['tagId'],
+            //             include: [
+            //                 {
+            //                     model: db.Tag,
+            //                     attributes: ['valueVI', 'valueEN'],
+            //                 },
+            //             ]
+            //         },
+            //     ],
+            //     nested: true,
+            //     raw: false
+            // })
 
-            resolve({
-                errCode: 0,
-                allProducts
-            })
+            // resolve({
+            //     errCode: 0,
+            //     allProducts
+            // })
 
         } catch (error) {
             reject(error);
@@ -603,8 +675,6 @@ let handleGetProductByName = (inputName) => {
                             [Op.like]: `%${inputName}%`
                         },
                     },
-                    // attributes: ['id'],
-
                     attributes: ['name', 'keyName', 'price', 'discount', 'image'],
                 })
 
@@ -674,31 +744,6 @@ let handleUpdateProductDiscount = (inputData) => {
     });
 }
 
-//11.GET PRODUCT BY ID
-let handleGetProductById = (inputId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let product = await db.Product.findOne({
-                where: { id: inputId },
-                attributes: ['name', 'keyName', 'price', 'discount', 'image'],
-            })
-
-            if (product) {
-                resolve({
-                    errCode: 0,
-                    product
-                })
-            } else {
-                resolve({
-                    errCode: 1
-                })
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
-
 let checkRequiredProductParams = (dataInput) => {
     let arr = ['name', 'price',
         'keyName', 'categoryKeyName', 'productType']
@@ -728,6 +773,5 @@ module.exports = {
     handleGetAllProductByCategory: handleGetAllProductByCategory,
     handleGetAllProductBySubCategory: handleGetAllProductBySubCategory,
     handleGetAllProductByChildCategory: handleGetAllProductByChildCategory,
-    handleUpdateProductDiscount: handleUpdateProductDiscount,
-    handleGetProductById: handleGetProductById
+    handleUpdateProductDiscount: handleUpdateProductDiscount
 }

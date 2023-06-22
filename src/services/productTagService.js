@@ -17,7 +17,7 @@ let handleCreateProductTag = (inputData) => {
                     messageEN: "You have not chose any product!"
                 })
             } else {
-                console.log(inputData)
+
                 for (let index = 0; index < inputData.listSelectedProductsId.length; index++) {
                     await db.ProductTag.create({
                         tagId: inputData.selectedTag.id,
@@ -86,7 +86,7 @@ let handleDeleteProductTag = (inputData) => {
                     messageEN: "You have not product!"
                 })
             } else {
-                console.log(inputData)
+
                 // for (let index = 0; index < inputData.listSelectedProductsId.length; index++) {
                 //     await db.ProductTag.create({
                 //         tagId: inputData.selectedTag.id,

@@ -193,7 +193,7 @@ let handleUpdateBillStatus = (inputData) => {
                 let data = await db.Bill.findOne({
                     where: { id: inputData.billId }
                 })
-                console.log(data)
+
                 if (data) {
                     data.status = inputData.statusKeyMap
                     await data.save()

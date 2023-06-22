@@ -52,10 +52,12 @@ let initWebRoutes = (app) => {
     router.delete('/api/delete-child-category', childCategoryController.deleteChildCategory);
 
     //PRODUCT
+
     router.post('/api/add-new-product', productController.addNewProduct);
     router.post('/api/update-product', productController.updateProduct)
     router.post('/api/update-product-discount', productController.updateProductDiscount)
     router.get('/api/get-all-product', productController.getAllProduct);
+    router.get('/api/get-product-by-id', productController.getProductById);
     router.get('/api/get-all-product-by-category', productController.getAllProductByCategory);
     router.get('/api/get-all-product-by-sub-category', productController.getAllProductBySubCategory);
     router.get('/api/get-all-product-by-child-category', productController.getAllProductByChildCategory);
