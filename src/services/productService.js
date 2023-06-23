@@ -281,6 +281,20 @@ let handleUpdateProduct = (inputData) => {
                             },
                         },
                         {
+                            model: db.StationaryDescription,
+                            as: 'stationaryDescriptionData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        },
+                        {
+                            model: db.ToyDescription,
+                            as: 'toyDescriptionData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        },
+                        {
                             model: db.ProductMarkdown,
                             as: 'markdownData',
                             attributes: {
