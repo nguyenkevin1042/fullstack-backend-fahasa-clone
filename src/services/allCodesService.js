@@ -256,7 +256,7 @@ let handleGetCodeById = (inputId) => {
                     message: "Missing id parameter!"
                 })
             } else {
-                let data = await db.AllCode.findAll({
+                let data = await db.AllCode.findOne({
                     where: { id: inputId },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
@@ -264,7 +264,7 @@ let handleGetCodeById = (inputId) => {
 
                 })
 
-                if (data.length > 0) {
+                if (data) {
                     resolve({
                         errCode: 0,
                         data
@@ -296,7 +296,7 @@ let handleGetCodeByKeyMap = (inputKeymap) => {
                     message: "Missing keyMap parameter!"
                 })
             } else {
-                let data = await db.AllCode.findAll({
+                let data = await db.AllCode.findOne({
                     where: { keyMap: inputKeymap },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
