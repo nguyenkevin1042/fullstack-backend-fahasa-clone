@@ -229,6 +229,35 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
     });
 }
 
+let handleDeleteProductDescription = (bookDescriptionId, stationaryDescriptionId, toyDescriptionId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (bookDescriptionId) {
+                let data = await db.BookDescription.findOne({
+                    where: { id: bookDescriptionId }
+                })
+                if (data) {
+                    await db.BookDescription.destroy({
+                        where: { id: bookDescriptionId }
+                    })
+                }
+            }
+            if (stationaryDescriptionId) {
+                await db.StationaryDescription.destroy({
+                    where: { id: stationaryDescriptionId }
+                })
+            }
+            if (bookDescriptionId) {
+                await db.ToyDescription.destroy({
+                    where: { id: toyDescriptionId }
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 
 let checkRequiredBookDescriptionParams = (dataInput) => {
     let arr = ['supplier', 'author']
@@ -287,7 +316,7 @@ let checkRequiredStationaryDescriptionParams = (dataInput) => {
 }
 
 module.exports = {
-
+    handleDeleteProductDescription: handleDeleteProductDescription,
     handleAddProductDescription: handleAddProductDescription,
     handleUpdateProductDescription: handleUpdateProductDescription
 }

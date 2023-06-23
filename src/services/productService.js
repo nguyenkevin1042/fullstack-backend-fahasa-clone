@@ -89,7 +89,26 @@ let handleGetAllProduct = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let allProducts = await db.Product.findAll({
-                attributes: ['name', 'keyName', 'price', 'discount', 'image'],
+                // attributes: {
+                //     exclude: ['createdAt', 'updatedAt']
+                // },
+                attributes: ['id', 'name', 'keyName', 'price', 'discount', 'image', 'categoryKeyName'],
+                include: [
+                    {
+                        model: db.ChildCategory,
+                        attributes: ['keyName', 'valueVI', 'valueEN'],
+                        include: [{
+                            model: db.SubCategory,
+                            attributes: ['keyName', 'valueVI', 'valueEN'],
+                            include: [{
+                                model: db.AllCode,
+                                attributes: ['keyMap', 'valueVI', 'valueEN'],
+                            }]
+                        }]
+                    },
+                ],
+                nested: true,
+                raw: false
             })
 
             resolve({
@@ -199,21 +218,24 @@ let handleDeleteProduct = (inputId) => {
                     message: 'Missing id parameter!'
                 })
             } else {
+
                 let data = await db.Product.findOne({
                     where: { id: inputId }
                 })
 
+                console.log(data)
+
                 if (data) {
-                    await db.Product.destroy(
-                        {
-                            where: { id: inputId }
-                        }
-                    );
-                    await db.ProductMarkdown.destroy(
-                        {
-                            where: { productId: inputId }
-                        }
-                    );
+                    await productDescriptionService.handleDeleteProductDescription(data.bookDescriptionId,
+                        data.stationaryDescriptionId, data.toyDescriptionId)
+
+                    await db.ProductMarkdown.destroy({
+                        where: { productId: inputId }
+                    });
+                    await db.Product.destroy({
+                        where: { id: inputId }
+                    });
+
                     resolve({
                         errCode: 0,
                         message: 'Delete product successful!'
@@ -680,7 +702,59 @@ let handleGetProductById = (inputId) => {
         try {
             let product = await db.Product.findOne({
                 where: { id: inputId },
-                attributes: ['name', 'keyName', 'price', 'discount', 'image'],
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                },
+                include: [
+                    {
+                        model: db.ChildCategory,
+                        attributes: ['keyName', 'valueVI', 'valueEN'],
+                        include: [{
+                            model: db.SubCategory,
+                            attributes: ['keyName', 'valueVI', 'valueEN'],
+                            include: [{
+                                model: db.AllCode,
+                                attributes: ['keyMap', 'valueVI', 'valueEN'],
+                            }]
+                        }]
+                    },
+                    {
+                        model: db.BookDescription,
+                        as: 'bookDescriptionData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                    {
+                        model: db.StationaryDescription,
+                        as: 'stationaryDescriptionData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                    {
+                        model: db.ToyDescription,
+                        as: 'toyDescriptionData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                    {
+                        model: db.ProductMarkdown,
+                        as: 'markdownData',
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                    {
+                        model: db.AllCode,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    },
+                ],
+                nested: true,
+                raw: false
             })
 
             if (product) {
