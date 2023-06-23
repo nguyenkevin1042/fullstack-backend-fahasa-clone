@@ -87,6 +87,7 @@ let handleDeleteProductTag = (inputData) => {
                 })
             } else {
 
+
                 // for (let index = 0; index < inputData.listSelectedProductsId.length; index++) {
                 //     await db.ProductTag.create({
                 //         tagId: inputData.selectedTag.id,
@@ -94,10 +95,33 @@ let handleDeleteProductTag = (inputData) => {
                 //     })
                 // }
 
+
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+//4. GET PRODUCT TAG BY TAG ID
+let handleGetProductTagByTagId = (inputTagId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputTagId) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing tagId parameter!"
+                })
+            } else {
+
+                let productTags = await db.ProductTag.findAll({
+                    where: { tagId: inputTagId },
+                    attributes: ['productId']
+                })
                 resolve({
                     errCode: 0,
-                    messageVI: "Xóa tag thành công!",
-                    messageEN: "Update success!"
+                    productTags
                 })
             }
 
@@ -107,9 +131,9 @@ let handleDeleteProductTag = (inputData) => {
     });
 }
 
-
 module.exports = {
     handleCreateProductTag: handleCreateProductTag,
     handleUpdateProductTag: handleUpdateProductTag,
-    handleDeleteProductTag: handleDeleteProductTag
+    handleDeleteProductTag: handleDeleteProductTag,
+    handleGetProductTagByTagId: handleGetProductTagByTagId
 }

@@ -87,6 +87,7 @@ let initWebRoutes = (app) => {
 
     //PRODUCT TAG
     router.post('/api/create-product-tag', productTagController.createProductTag);
+    router.get('/api/get-product-tag-by-tag-id', productTagController.getProductTagByTagId);
     router.post('/api/update-product-tag', productTagController.updateProductTag);
     router.delete('/api/delete-product-tag', productTagController.deleteProductTag);
 

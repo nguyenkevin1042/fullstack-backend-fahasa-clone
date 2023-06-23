@@ -25,52 +25,52 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
                         chapter: dataInput.chapter,
                     }).then(result => resultId = result.id);
                 }
-
             }
-            if (inputProductType === 'toy') {
-                checkParams = checkRequiredToyDescriptionParams(dataInput)
-                if (checkParams.isValid === false) {
-                    resolve({
-                        errCode: 1,
-                        message: "Missing " + checkParams.element + " parameter!"
-                    })
-                } else {
-                    await db.ToyDescription.create({
-                        age: dataInput.age,
-                        supplier: dataInput.supplier,
-                        publishYear: dataInput.publishYear,
-                        brand: dataInput.brand,
-                        origin: dataInput.origin,
-                        madeBy: dataInput.madeBy,
-                        color: dataInput.color,
-                        material: dataInput.material,
-                        specification: dataInput.specification,
-                        warning: dataInput.warning,
-                        usage: dataInput.usage,
-                    }).then(result => resultId = result.id);
-                }
+            console.log(resultId)
+            // if (inputProductType === 'toy') {
+            //     checkParams = checkRequiredToyDescriptionParams(dataInput)
+            //     if (checkParams.isValid === false) {
+            //         resolve({
+            //             errCode: 1,
+            //             message: "Missing " + checkParams.element + " parameter!"
+            //         })
+            //     } else {
+            //         await db.ToyDescription.create({
+            //             age: dataInput.age,
+            //             supplier: dataInput.supplier,
+            //             publishYear: dataInput.publishYear,
+            //             brand: dataInput.brand,
+            //             origin: dataInput.origin,
+            //             madeBy: dataInput.madeBy,
+            //             color: dataInput.color,
+            //             material: dataInput.material,
+            //             specification: dataInput.specification,
+            //             warning: dataInput.warning,
+            //             usage: dataInput.usage,
+            //         }).then(result => resultId = result.id);
+            //     }
 
-            }
-            if (inputProductType === 'stationary') {
-                checkParams = checkRequiredStationaryDescriptionParams(dataInput)
-                if (checkParams.isValid === false) {
-                    resolve({
-                        errCode: 1,
-                        message: "Missing " + checkParams.element + " parameter!"
-                    })
-                } else {
-                    await db.StationaryDescription.create({
-                        supplier: dataInput.supplier,
-                        brand: dataInput.brand,
-                        origin: dataInput.origin,
-                        color: dataInput.color,
-                        material: dataInput.material,
-                        quantity: dataInput.quantity,
-                        madeBy: dataInput.madeBy,
-                    }).then(result => resultId = result.id);
-                }
+            // }
+            // if (inputProductType === 'stationary') {
+            //     checkParams = checkRequiredStationaryDescriptionParams(dataInput)
+            //     if (checkParams.isValid === false) {
+            //         resolve({
+            //             errCode: 1,
+            //             message: "Missing " + checkParams.element + " parameter!"
+            //         })
+            //     } else {
+            //         await db.StationaryDescription.create({
+            //             supplier: dataInput.supplier,
+            //             brand: dataInput.brand,
+            //             origin: dataInput.origin,
+            //             color: dataInput.color,
+            //             material: dataInput.material,
+            //             quantity: dataInput.quantity,
+            //             madeBy: dataInput.madeBy,
+            //         }).then(result => resultId = result.id);
+            //     }
 
-            }
+            // }
 
             resolve({
                 errCode: 0,

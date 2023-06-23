@@ -67,26 +67,34 @@ let checkRequiredSubCategoryParams = (dataInput) => {
 let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
     return new Promise(async (resolve, reject) => {
         try {
-
-            let data = await db.SubCategory.findAll({
-                where: { category: inputCategoryType },
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt']
-                },
-                include: {
-                    model: db.ChildCategory,
+            if (!inputCategoryType) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing category parameter!"
+                })
+            } else {
+                let data = await db.SubCategory.findAll({
+                    where: { category: inputCategoryType },
                     attributes: {
-                        exclude: ['subCategory', 'createdAt', 'updatedAt']
+                        exclude: ['createdAt', 'updatedAt']
                     },
-                    // limit: 4
-                },
-                nested: true,
-                raw: false
-            });
-            resolve({
-                errCode: 0,
-                subCategories: data
-            })
+                    include: {
+                        model: db.ChildCategory,
+                        attributes: {
+                            exclude: ['subCategory', 'createdAt', 'updatedAt']
+                        },
+                        // limit: 4
+                    },
+                    nested: true,
+                    raw: false
+                });
+                resolve({
+                    errCode: 0,
+                    subCategories: data
+                })
+            }
+
+
 
         } catch (error) {
             reject(error);

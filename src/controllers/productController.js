@@ -20,8 +20,10 @@ let updateProduct = async (req, res) => {
 
 let updateProductDiscount = async (req, res) => {
     try {
-        let data = await productService.handleUpdateProductDiscount(req.body);
-        return res.status(200).json(data);
+        setTimeout(async () => {
+            let data = await productService.handleUpdateProductDiscount(req.body);
+            return res.status(200).json(data);
+        }, 2000);
     } catch (error) {
         console.log(error)
     }

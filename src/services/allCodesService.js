@@ -301,32 +301,32 @@ let handleGetCodeByKeyMap = (inputKeymap) => {
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
-                    include: [
-                        {
-                            model: db.SubCategory,
-                            include: [
-                                {
-                                    model: db.ChildCategory,
-                                    attributes: {
-                                        exclude: ['createdAt', 'updatedAt']
-                                    },
-                                    include: [
-                                        {
-                                            model: db.Product,
-                                            attributes: {
-                                                exclude: ['image', 'createdAt', 'updatedAt']
-                                            },
-                                        }
-                                    ],
-                                }
-                            ],
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            },
-                        }
-                    ],
-                    nested: true,
-                    raw: false
+                    // include: [
+                    //     {
+                    //         model: db.SubCategory,
+                    //         include: [
+                    //             {
+                    //                 model: db.ChildCategory,
+                    //                 attributes: {
+                    //                     exclude: ['createdAt', 'updatedAt']
+                    //                 },
+                    //                 include: [
+                    //                     {
+                    //                         model: db.Product,
+                    //                         attributes: {
+                    //                             exclude: ['image', 'createdAt', 'updatedAt']
+                    //                         },
+                    //                     }
+                    //                 ],
+                    //             }
+                    //         ],
+                    //         attributes: {
+                    //             exclude: ['createdAt', 'updatedAt']
+                    //         },
+                    //     }
+                    // ],
+                    // nested: true,
+                    // raw: false
 
                 })
                 resolve({
