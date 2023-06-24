@@ -81,6 +81,18 @@ let handleGetBillByUserId = (inputUserId) => {
                         {
                             model: db.UserAddress,
                             attributes: ['fullName']
+                        },
+                        {
+                            model: db.BillProduct,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                            include: [
+                                {
+                                    model: db.Product,
+                                    attributes: ['price', 'discount']
+                                },
+                            ]
                         }
                     ]
                 })
