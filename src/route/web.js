@@ -77,6 +77,7 @@ let initWebRoutes = (app) => {
     router.post('/api/create-new-bill', billController.createNewBill);
     router.get('/api/get-all-bill', billController.getAllBill);
     router.get('/api/get-bill-by-user-id', billController.getBillByUserId);
+    router.get('/api/get-bill-by-id', billController.getBillById);
     router.post('/api/update-bill-status', billController.updateBillStatus);
 
     //TAG

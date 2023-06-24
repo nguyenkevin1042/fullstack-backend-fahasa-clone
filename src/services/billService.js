@@ -67,9 +67,11 @@ let handleGetBillByUserId = (inputUserId) => {
             } else {
                 let data = await db.Bill.findAll({
                     where: { userId: inputUserId },
+                    attributes: {
+                        exclude: ['paymentType', 'createdAt', 'updatedAt']
+                    },
                     order: [
-                        ['orderDate', 'ASC'],
-
+                        ['orderedDate', 'DESC'],
                     ],
                     include: [
                         {
@@ -78,23 +80,7 @@ let handleGetBillByUserId = (inputUserId) => {
                         },
                         {
                             model: db.UserAddress,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            }
-                        },
-                        {
-                            model: db.BillProduct,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            },
-                            include: [
-                                {
-                                    model: db.Product,
-                                    attributes: {
-                                        exclude: ['createdAt', 'updatedAt']
-                                    }
-                                },
-                            ]
+                            attributes: ['fullName']
                         }
                     ]
                 })
@@ -215,9 +201,69 @@ let handleUpdateBillStatus = (inputData) => {
     });
 }
 
+//5. GET BILL BY ID
+let handleGetBillById = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!inputId) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing id parameter!"
+                })
+            } else {
+                let data = await db.Bill.findOne({
+                    where: { id: inputId },
+                    attributes: {
+                        exclude: ['paymentType', 'createdAt', 'updatedAt']
+                    },
+                    include: [
+                        {
+                            model: db.AllCode,
+                            attributes: ['valueVI', 'valueEN']
+                        },
+                        {
+                            model: db.UserAddress,
+                            attributes: ['fullName']
+                        },
+                        {
+                            model: db.BillProduct,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                            include: [
+                                {
+                                    model: db.Product,
+                                    attributes: ['image', 'name', 'id', 'price']
+                                },
+                            ]
+                        }
+                    ]
+                })
+
+                if (data) {
+                    resolve({
+                        errCode: 0,
+                        data
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        messageVI: 'Bạn hiện tại chưa có đơn hàng nào',
+                        messageEN: 'You currently do not have any orders'
+                    })
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleCreateNewBill: handleCreateNewBill,
     handleGetBillByUserId: handleGetBillByUserId,
     handleGetAllBill: handleGetAllBill,
-    handleUpdateBillStatus: handleUpdateBillStatus
+    handleUpdateBillStatus: handleUpdateBillStatus,
+    handleGetBillById: handleGetBillById
 }

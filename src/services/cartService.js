@@ -1,5 +1,53 @@
 import db from '../models/index';
 
+// let handleGetCartByUserId = (inputUserId) => {
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             if (!inputUserId) {
+//                 resolve({
+//                     errCode: 1,
+//                     messageVI: 'Missing userId',
+//                     messageEN: 'Missing userId'
+//                 })
+//             } else {
+//                 let data = await db.Cart.findOne({
+//                     where: {
+//                         userId: inputUserId,
+//                     },
+//                     attributes: {
+//                         exclude: ['createdAt', 'updatedAt']
+//                     },
+//                     include: [
+//                         {
+//                             model: db.CartProduct,
+//                             attributes: {
+//                                 exclude: ['createdAt', 'updatedAt']
+//                             },
+//                             include: [
+//                                 {
+//                                     model: db.Product,
+//                                     attributes: {
+//                                         exclude: ['createdAt', 'updatedAt']
+//                                     }
+//                                 }
+//                             ]
+//                         },
+//                     ],
+//                     nested: true,
+//                     raw: false
+//                 })
+
+//                 resolve({
+//                     errCode: 0,
+//                     data
+//                 })
+//             }
+//         } catch (error) {
+//             reject(error);
+//         }
+//     });
+// }
+
 let handleGetCartByUserId = (inputUserId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -22,15 +70,7 @@ let handleGetCartByUserId = (inputUserId) => {
                             model: db.CartProduct,
                             attributes: {
                                 exclude: ['createdAt', 'updatedAt']
-                            },
-                            include: [
-                                {
-                                    model: db.Product,
-                                    attributes: {
-                                        exclude: ['createdAt', 'updatedAt']
-                                    }
-                                }
-                            ]
+                            }
                         },
                     ],
                     nested: true,
@@ -47,7 +87,6 @@ let handleGetCartByUserId = (inputUserId) => {
         }
     });
 }
-
 
 
 module.exports = {
