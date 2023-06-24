@@ -6,83 +6,6 @@ import { Sequelize } from 'sequelize';
 const Op = Sequelize.Op;
 
 //1. ADD NEW PRODUCT
-// let handleAddNewProduct = (inputData) => {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             let checkParams = checkRequiredProductParams(inputData);
-//             if (checkParams.isValid === false) {
-//                 resolve({
-//                     errCode: 1,
-//                     message: "Missing " + checkParams.element + " parameter!"
-//                 })
-//             } else {
-//                 let existed = await db.Product.findOne({
-//                     where: { keyName: inputData.keyName },
-//                 })
-
-//                 if (!existed) {
-// let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
-//                     let insertedProductId
-
-//                     if (result.errCode === 0) {
-// await db.Product.create({
-//     name: inputData.name,
-//     keyName: inputData.keyName,
-//     price: inputData.price,
-//     discount: inputData.discount,
-//     weight: inputData.weight,
-//     height: inputData.height,
-//     width: inputData.width,
-//     length: inputData.length,
-//     publishYear: inputData.publishYear,
-//     categoryKeyName: inputData.categoryKeyName,
-//     image: inputData.image,
-//     formId: inputData.formId,
-// }).then(result => insertedProductId = result.id);
-
-//                         await db.ProductMarkdown.create({
-//                             productId: insertedProductId,
-//                             contentHTML: inputData.contentHTML,
-//                             contentMarkdown: inputData.contentMarkdown,
-//                         })
-
-//                         let insertedProduct = await db.Product.findOne({
-//                             where: { id: insertedProductId },
-//                             raw: false
-//                         })
-
-//                         if (insertedProduct && inputData.productType === 'book') {
-//                             insertedProduct.bookDescriptionId = result.resultId;
-//                         } else if (insertedProduct && inputData.productType === 'toy') {
-//                             insertedProduct.toyDescriptionId = result.resultId;
-//                         } else {
-//                             insertedProduct.stationaryDescriptionId = result.resultId;
-//                         }
-
-//                         await insertedProduct.save();
-
-//                         resolve({
-//                             errCode: 0,
-//                             message: "Add New Product successful"
-//                         })
-//                     } else {
-//                         resolve(result)
-//                     }
-//                 } else {
-//                     resolve({
-//                         errCode: 1,
-//                         messageVI: "Sản phẩm này đã tồn tại trong hệ thống",
-//                         messageEN: "This Product is already existed"
-//                     })
-//                 }
-//             }
-
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }
-
 let handleAddNewProduct = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -97,39 +20,54 @@ let handleAddNewProduct = (inputData) => {
                     where: { keyName: inputData.keyName },
                 })
 
-
                 if (!existed) {
-                    //Firstly, add new row into productDesscription
-                    let descriptionResult = await handleAddProductDescription(inputData.productType, inputData.descriptionData);
-                    // let descriptionId = descriptionResult.id
-                    console.log(descriptionResult)
-
-                    //Secondly add new row in product table, 
-                    //then return product id has just added
+                    let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
                     let insertedProductId
-                    // await db.Product.create({
-                    //     name: inputData.name,
-                    //     keyName: inputData.keyName,
-                    //     price: inputData.price,
-                    //     discount: inputData.discount,
-                    //     weight: inputData.weight,
-                    //     height: inputData.height,
-                    //     width: inputData.width,
-                    //     length: inputData.length,
-                    //     publishYear: inputData.publishYear,
-                    //     categoryKeyName: inputData.categoryKeyName,
-                    //     image: inputData.image,
-                    //     formId: inputData.formId,
-                    // }).then(result => insertedProductId = result.id);
 
+                    if (result.errCode === 0) {
+                        await db.Product.create({
+                            name: inputData.name,
+                            keyName: inputData.keyName,
+                            price: inputData.price,
+                            discount: inputData.discount,
+                            weight: inputData.weight,
+                            height: inputData.height,
+                            width: inputData.width,
+                            length: inputData.length,
+                            publishYear: inputData.publishYear,
+                            categoryKeyName: inputData.categoryKeyName,
+                            image: inputData.image,
+                            formId: inputData.formId,
+                        }).then(result => insertedProductId = result.id);
 
+                        await db.ProductMarkdown.create({
+                            productId: insertedProductId,
+                            contentHTML: inputData.contentHTML,
+                            contentMarkdown: inputData.contentMarkdown,
+                        })
 
-                    // console.log(result.resultId)
-                    // console.log(inputData.productType, inputData.descriptionData)
-                    resolve({
-                        errCode: 0,
-                        insertedProductId
-                    })
+                        let insertedProduct = await db.Product.findOne({
+                            where: { id: insertedProductId },
+                            raw: false
+                        })
+
+                        if (insertedProduct && inputData.productType === 'book') {
+                            insertedProduct.bookDescriptionId = result.resultId;
+                        } else if (insertedProduct && inputData.productType === 'toy') {
+                            insertedProduct.toyDescriptionId = result.resultId;
+                        } else {
+                            insertedProduct.stationaryDescriptionId = result.resultId;
+                        }
+
+                        await insertedProduct.save();
+
+                        resolve({
+                            errCode: 0,
+                            message: "Add New Product successful"
+                        })
+                    } else {
+                        resolve(result)
+                    }
                 } else {
                     resolve({
                         errCode: 1,
@@ -138,111 +76,11 @@ let handleAddNewProduct = (inputData) => {
                     })
                 }
             }
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
-
-//1.1. ADD DESCRIPTION
-let handleAddProductDescription = (inputProductType, dataInput) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-
-            let checkParams;
-            let resultId;
-
-            if (inputProductType === 'book') {
-                checkParams = checkRequiredBookDescriptionParams(dataInput)
-                if (checkParams.isValid === false) {
-                    resolve({
-                        errCode: 1,
-                        message: "Missing " + checkParams.element + " parameter!"
-                    })
-                } else {
-                    await db.BookDescription.create({
-                        supplier: dataInput.supplier,
-                        author: dataInput.author,
-                        translator: dataInput.translator,
-                        publisher: dataInput.publisher,
-                        language: dataInput.language,
-                        pages: dataInput.pages,
-                        chapter: dataInput.chapter,
-                    }).then(result => resultId = result.id);
-                }
-            }
-
-            // if (inputProductType === 'toy') {
-            //     checkParams = checkRequiredToyDescriptionParams(dataInput)
-            //     if (checkParams.isValid === false) {
-            //         resolve({
-            //             errCode: 1,
-            //             message: "Missing " + checkParams.element + " parameter!"
-            //         })
-            //     } else {
-            //         await db.ToyDescription.create({
-            //             age: dataInput.age,
-            //             supplier: dataInput.supplier,
-            //             publishYear: dataInput.publishYear,
-            //             brand: dataInput.brand,
-            //             origin: dataInput.origin,
-            //             madeBy: dataInput.madeBy,
-            //             color: dataInput.color,
-            //             material: dataInput.material,
-            //             specification: dataInput.specification,
-            //             warning: dataInput.warning,
-            //             usage: dataInput.usage,
-            //         }).then(result => resultId = result.id);
-            //     }
-            // }
-
-            // if (inputProductType === 'stationary') {
-            //     checkParams = checkRequiredStationaryDescriptionParams(dataInput)
-            //     if (checkParams.isValid === false) {
-            //         resolve({
-            //             errCode: 1,
-            //             message: "Missing " + checkParams.element + " parameter!"
-            //         })
-            //     } else {
-            //         await db.StationaryDescription.create({
-            //             supplier: dataInput.supplier,
-            //             brand: dataInput.brand,
-            //             origin: dataInput.origin,
-            //             color: dataInput.color,
-            //             material: dataInput.material,
-            //             quantity: dataInput.quantity,
-            //             madeBy: dataInput.madeBy,
-            //         }).then(result => resultId = result.id);
-            //     }
-            // }
-
-            resolve({
-                errCode: 0,
-                resultId
-            })
 
         } catch (error) {
             reject(error);
         }
     });
-}
-
-let checkRequiredBookDescriptionParams = (dataInput) => {
-    let arr = ['supplier', 'author']
-    let isValid = true;
-    let element = '';
-    for (let index = 0; index < arr.length; index++) {
-        if (!dataInput[arr[index]]) {
-            isValid = false;
-            element = arr[index]
-            break;
-        }
-
-    }
-    return {
-        isValid: isValid,
-        element: element
-    }
 }
 
 //2. GET ALL PRODUCTS
@@ -377,6 +215,15 @@ let handleDeleteProduct = (inputId) => {
                 let existedProduct = await db.Product.findOne({
                     where: { id: inputId }
                 })
+                let bookDescriptionId = existedProduct.bookDescriptionId
+                let stationaryDescriptionId = existedProduct.stationaryDescriptionId
+                let toyDescriptionId = existedProduct.toyDescriptionId
+
+                if (bookDescriptionId) {
+                    await db.BookDescription.destroy({
+                        where: { id: bookDescriptionId }
+                    });
+                }
 
                 // let existedDescription = await db.Product.findOne({
                 //     where: { id: inputId }

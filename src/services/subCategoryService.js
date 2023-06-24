@@ -21,18 +21,17 @@ let handleAddNewSubCategory = (inputData) => {
                         errCode: 1,
                         message: "This sub category is already existed"
                     })
-
                 } else {
-                    // await db.SubCategory.create({
-                    //     category: inputData.category,
-                    //     keyName: inputData.keyName,
-                    //     valueVI: inputData.valueVI,
-                    //     valueEN: inputData.valueEN,
-                    // })
+                    await db.SubCategory.create({
+                        category: inputData.category,
+                        keyName: inputData.keyName,
+                        valueVI: inputData.valueVI,
+                        valueEN: inputData.valueEN,
+                    })
 
                     resolve({
                         errCode: 0,
-                        inputData,
+                        existed,
                         message: "Add New SubCategory successful"
                     })
                 }
