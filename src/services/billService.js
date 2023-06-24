@@ -67,6 +67,10 @@ let handleGetBillByUserId = (inputUserId) => {
             } else {
                 let data = await db.Bill.findAll({
                     where: { userId: inputUserId },
+                    order: [
+                        ['orderDate', 'ASC'],
+
+                    ],
                     include: [
                         {
                             model: db.AllCode,

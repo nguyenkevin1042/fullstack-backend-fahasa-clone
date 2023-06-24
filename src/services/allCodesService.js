@@ -135,40 +135,26 @@ let handleEditCode = (inputData) => {
                 })
             } else {
                 let existed = await db.AllCode.findOne({
-                    where: { keyMap: inputData.keyMap }
+                    where: { id: inputData.id }
                 })
+
                 if (existed) {
+                    existed.type = inputData.type;
+                    existed.keyMap = inputData.keyMap;
+                    existed.valueVI = inputData.valueVI;
+                    existed.valueEN = inputData.valueEN;
+                    await existed.save()
+
                     resolve({
-                        errCode: 1,
-                        message: "This code is already existed!"
+                        errCode: 0,
+                        message: "Updated successful!"
                     })
                 } else {
-                    let code = await db.AllCode.findOne({
-                        where: {
-                            id: inputData.id
-                        },
-                        raw: false
+                    resolve({
+                        errCode: 2,
+                        message: "This code is not existed. Updated fail!"
                     })
-
-                    if (code) {
-                        code.type = inputData.type;
-                        code.keyMap = inputData.keyMap;
-                        code.valueVI = inputData.valueVI;
-                        code.valueEN = inputData.valueEN;
-                        await code.save()
-
-                        resolve({
-                            errCode: 0,
-                            message: "Updated successful!"
-                        })
-                    } else {
-                        resolve({
-                            errCode: 2,
-                            message: "Updated fail!"
-                        })
-                    }
                 }
-
             }
         } catch (error) {
             reject(error);

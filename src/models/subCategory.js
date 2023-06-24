@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         valueEN: DataTypes.STRING,
     }, {
         sequelize,
+        timestamps: true,
         modelName: 'SubCategory',
     });
 
