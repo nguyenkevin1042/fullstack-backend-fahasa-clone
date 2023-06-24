@@ -105,7 +105,7 @@ let handleDeleteProductTag = (inputData) => {
 }
 
 //4. GET PRODUCT TAG BY TAG ID
-let handleGetProductTagByTagId = (inputTagId) => {
+let handleGetProductByTagId = (inputTagId) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!inputTagId) {
@@ -115,13 +115,13 @@ let handleGetProductTagByTagId = (inputTagId) => {
                 })
             } else {
 
-                let productTags = await db.ProductTag.findAll({
+                let products = await db.ProductTag.findAll({
                     where: { tagId: inputTagId },
-                    attributes: ['productId']
+                    attributes: ['productId'],
                 })
                 resolve({
                     errCode: 0,
-                    productTags
+                    products
                 })
             }
 
@@ -135,5 +135,5 @@ module.exports = {
     handleCreateProductTag: handleCreateProductTag,
     handleUpdateProductTag: handleUpdateProductTag,
     handleDeleteProductTag: handleDeleteProductTag,
-    handleGetProductTagByTagId: handleGetProductTagByTagId
+    handleGetProductByTagId: handleGetProductByTagId
 }

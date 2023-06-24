@@ -250,7 +250,21 @@ let handleGetAllProduct = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let allProducts = await db.Product.findAll({
-                attributes: ['id', 'name']
+                attributes: ['id', 'name'],
+                include: [
+                    {
+                        model: db.ProductTag,
+                        attributes: ['tagId'],
+                        include: [
+                            {
+                                model: db.Tag,
+                                attributes: ['valueVI', 'valueEN'],
+                            },
+                        ],
+                    },
+                ],
+                nested: true,
+                raw: false
             })
 
             resolve({
