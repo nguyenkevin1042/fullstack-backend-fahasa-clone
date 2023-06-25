@@ -275,118 +275,6 @@ let handleDeleteProduct = (inputId) => {
 }
 
 //5. UPDATE PRODUCT
-// let handleUpdateProduct = (inputData) => {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             let checkParams = checkRequiredProductParams(inputData);
-
-//             if (checkParams.isValid === false) {
-//                 resolve({
-//                     errCode: 1,
-//                     message: "Missing " + checkParams.element + " parameter!"
-//                 })
-//             } else {
-
-//                 let existedProduct = await db.Product.findOne({
-//                     where: { id: inputData.id },
-//                     attributes: {
-//                         exclude: ['createdAt', 'updatedAt']
-//                     },
-//                     include: [
-//                         {
-//                             model: db.BookDescription,
-//                             as: 'bookDescriptionData',
-//                             attributes: {
-//                                 exclude: ['createdAt', 'updatedAt']
-//                             },
-//                         },
-//                         {
-//                             model: db.ProductMarkdown,
-//                             as: 'markdownData',
-//                             attributes: {
-//                                 exclude: ['createdAt', 'updatedAt']
-//                             },
-//                         }
-//                     ],
-//                     nested: true,
-//                     raw: false
-//                 })
-
-//                 if (existedProduct) {
-//                     // Firstly, updated product table
-// existedProduct.name = inputData.name
-// existedProduct.keyName = inputData.keyName
-// existedProduct.price = inputData.price
-// existedProduct.discount = inputData.discount
-// existedProduct.weight = inputData.weight
-// existedProduct.height = inputData.height
-// existedProduct.width = inputData.width
-// existedProduct.length = inputData.length
-// existedProduct.publishYear = inputData.publishYear
-// existedProduct.categoryKeyName = inputData.categoryKeyName
-// existedProduct.image = inputData.image
-// existedProduct.formId = inputData.formId
-
-//                     //Secondly, update Markdown
-// let existedMarkdown = await db.ProductMarkdown.findOne({
-//     where: { productId: inputData.id },
-//     raw: false
-// })
-
-// if (existedMarkdown) {
-//     existedMarkdown.contentHTML = inputData.contentHTML
-//     existedMarkdown.contentMarkdown = inputData.contentMarkdown
-//     await existedMarkdown.save()
-// } else {
-//     await db.ProductMarkdown.create({
-//         productId: inputData.id,
-//         contentHTML: inputData.contentHTML,
-//         contentMarkdown: inputData.contentMarkdown,
-//     })
-// }
-
-//                     //finally, updated product description
-//                     let result = await productDescriptionService.handleUpdateProductDescription
-//                         (inputData.productType, inputData.descriptionData, inputData.bookDescriptionId,
-//                             inputData.stationaryDescriptionId, inputData.toyDescriptionId);
-
-//                     if (inputData.productType === 'book') {
-//                         existedProduct.bookDescriptionId = result.resultId;
-//                     }
-//                     if (inputData.productType === 'stationary') {
-//                         existedProduct.stationaryDescriptionId = result.resultId;
-//                     }
-//                     if (inputData.productType === 'toy') {
-//                         existedProduct.toyDescriptionId = result.resultId;
-//                     }
-
-
-//                     if (result.errCode === 0) {
-//                         await existedProduct.save()
-
-//                         resolve({
-//                             errCode: 0,
-//                             message: 'Update successful'
-//                         })
-//                     } else {
-//                         resolve({
-//                             errCode: 1,
-//                             message: 'Update Fail'
-//                         })
-//                     }
-//                 } else {
-//                     resolve({
-//                         errCode: 1,
-//                         message: "This product is not existed"
-//                     })
-//                 }
-//             }
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }
-
 let handleUpdateProduct = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -398,16 +286,34 @@ let handleUpdateProduct = (inputData) => {
                     message: "Missing " + checkParams.element + " parameter!"
                 })
             } else {
+
                 let existedProduct = await db.Product.findOne({
                     where: { id: inputData.id },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
+                    include: [
+                        {
+                            model: db.BookDescription,
+                            as: 'bookDescriptionData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        },
+                        {
+                            model: db.ProductMarkdown,
+                            as: 'markdownData',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
+                    ],
+                    nested: true,
+                    raw: false
                 })
 
-
                 if (existedProduct) {
-                    //Firstly, update product table
+                    // Firstly, updated product table
                     existedProduct.name = inputData.name
                     existedProduct.keyName = inputData.keyName
                     existedProduct.price = inputData.price
@@ -419,27 +325,59 @@ let handleUpdateProduct = (inputData) => {
                     existedProduct.publishYear = inputData.publishYear
                     existedProduct.categoryKeyName = inputData.categoryKeyName
                     existedProduct.image = inputData.image
-                    existedProduct.formId = inputData.formId ? inputData.formId : ''
+                    existedProduct.formId = inputData.formId
 
-                    //Secondly, update or create markdown
-                    // let existedMarkdown = await db.ProductMarkdown.findOne({
-                    //     where: { productId: inputData.id },
-                    // })
-                    // if (existedMarkdown) {
-                    //     existedMarkdown.contentHTML = inputData.contentHTML
-                    //     existedMarkdown.contentMarkdown = inputData.contentMarkdown
-                    //     await existedMarkdown.save().then(result => console.log(result))
-                    // } else {
-                    //     await db.ProductMarkdown.create({
-                    //         productId: inputData.id,
-                    //         contentHTML: inputData.contentHTML,
-                    //         contentMarkdown: inputData.contentMarkdown,
-                    //     }).then(result => console.log(result))
-                    // }
+                    //Secondly, update Markdown
+                    let existedMarkdown = await db.ProductMarkdown.findOne({
+                        where: { productId: inputData.id },
+                        raw: false
+                    })
 
+                    if (existedMarkdown) {
+                        existedMarkdown.contentHTML = inputData.contentHTML
+                        existedMarkdown.contentMarkdown = inputData.contentMarkdown
+                        await existedMarkdown.save()
+                    } else {
+                        await db.ProductMarkdown.create({
+                            productId: inputData.id,
+                            contentHTML: inputData.contentHTML,
+                            contentMarkdown: inputData.contentMarkdown,
+                        })
+                    }
+
+                    //finally, updated product description
+                    let descriptionResult = await productDescriptionService.handleUpdateProductDescription
+                        (inputData.productType, inputData.descriptionData, inputData.bookDescriptionId,
+                            inputData.stationaryDescriptionId, inputData.toyDescriptionId);
+
+                    if (inputData.productType === 'book') {
+                        existedProduct.bookDescriptionId = descriptionResult.resultId;
+                    }
+                    if (inputData.productType === 'stationary') {
+                        existedProduct.stationaryDescriptionId = descriptionResult.resultId;
+                    }
+                    if (inputData.productType === 'toy') {
+                        existedProduct.toyDescriptionId = descriptionResult.resultId;
+                    }
+
+
+                    if (descriptionResult.errCode === 0) {
+                        await existedProduct.save()
+
+                        resolve({
+                            errCode: 0,
+                            message: 'Update successful'
+                        })
+                    } else {
+                        resolve({
+                            errCode: 1,
+                            message: 'Update Fail'
+                        })
+                    }
+                } else {
                     resolve({
-                        errCode: 0,
-                        inputData
+                        errCode: 1,
+                        message: "This product is not existed"
                     })
                 }
             }

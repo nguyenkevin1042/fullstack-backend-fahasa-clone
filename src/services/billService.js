@@ -143,6 +143,9 @@ let handleGetAllBill = () => {
                 attributes: {
                     exclude: ['createdAt', 'updatedAt'],
                 },
+                order: [
+                    ['orderedDate', 'DESC'],
+                ],
                 include: [
                     {
                         model: db.AllCode,

@@ -119,12 +119,6 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                             chapter: dataInput.chapter,
                         }).then(result => resultId = result.id);
                     }
-
-                    resolve({
-                        errCode: 0,
-                        message: "Update Book Description Successful",
-                        resultId
-                    })
                 }
             }
 
@@ -169,12 +163,6 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                             usage: dataInput.usage,
                         }).then(result => resultId = result.id);
                     }
-
-                    resolve({
-                        errCode: 0,
-                        message: "Update Toy Description Successful",
-                        resultId
-                    })
                 }
             }
 
@@ -211,14 +199,13 @@ let handleUpdateProductDescription = (inputProductType, dataInput,
                             madeBy: dataInput.madeBy,
                         }).then(result => resultId = result.id);
                     }
-
-                    resolve({
-                        errCode: 0,
-                        message: "Update Stationary Description Successful",
-                        resultId
-                    })
                 }
             }
+
+            resolve({
+                errCode: 0,
+                resultId
+            })
 
         } catch (error) {
             reject(error);
