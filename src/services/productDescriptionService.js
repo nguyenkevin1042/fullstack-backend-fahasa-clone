@@ -25,8 +25,7 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
                         chapter: dataInput.chapter,
                     }).then(result => resultId = result.id);
                 }
-            }
-            if (inputProductType === 'toy') {
+            } else if (inputProductType === 'toy') {
                 checkParams = checkRequiredToyDescriptionParams(dataInput)
                 if (checkParams.isValid === false) {
                     resolve({
@@ -49,8 +48,7 @@ let handleAddProductDescription = (inputProductType, dataInput) => {
                     }).then(result => resultId = result.id);
                 }
 
-            }
-            if (inputProductType === 'stationary') {
+            } else if (inputProductType === 'stationary') {
                 checkParams = checkRequiredStationaryDescriptionParams(dataInput)
                 if (checkParams.isValid === false) {
                     resolve({

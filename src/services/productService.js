@@ -21,30 +21,34 @@ let handleAddNewProduct = (inputData) => {
                 })
 
                 if (!existed) {
-                    let result = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
                     let insertedProductId
+                    //Firstly, insert into product table and return id has just added
+                    await db.Product.create({
+                        name: inputData.name,
+                        keyName: inputData.keyName,
+                        price: inputData.price,
+                        discount: inputData.discount,
+                        weight: inputData.weight,
+                        height: inputData.height,
+                        width: inputData.width,
+                        length: inputData.length,
+                        publishYear: inputData.publishYear,
+                        categoryKeyName: inputData.categoryKeyName,
+                        image: inputData.image,
+                        formId: inputData.formId,
+                    }).then(result => insertedProductId = result.id);
 
-                    if (result.errCode === 0) {
-                        await db.Product.create({
-                            name: inputData.name,
-                            keyName: inputData.keyName,
-                            price: inputData.price,
-                            discount: inputData.discount,
-                            weight: inputData.weight,
-                            height: inputData.height,
-                            width: inputData.width,
-                            length: inputData.length,
-                            publishYear: inputData.publishYear,
-                            categoryKeyName: inputData.categoryKeyName,
-                            image: inputData.image,
-                            formId: inputData.formId,
-                        }).then(result => insertedProductId = result.id);
+                    //Secondly, add markdown of product
+                    await db.ProductMarkdown.create({
+                        productId: insertedProductId,
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                    })
 
-                        await db.ProductMarkdown.create({
-                            productId: insertedProductId,
-                            contentHTML: inputData.contentHTML,
-                            contentMarkdown: inputData.contentMarkdown,
-                        })
+                    // Finally, create new description of product
+                    let descriptionResult = await productDescriptionService.handleAddProductDescription(inputData.productType, inputData.descriptionData);
+
+                    if (descriptionResult.errCode === 0) {
 
                         let insertedProduct = await db.Product.findOne({
                             where: { id: insertedProductId },
@@ -52,22 +56,20 @@ let handleAddNewProduct = (inputData) => {
                         })
 
                         if (insertedProduct && inputData.productType === 'book') {
-                            insertedProduct.bookDescriptionId = result.resultId;
+                            insertedProduct.bookDescriptionId = descriptionResult.resultId;
                         } else if (insertedProduct && inputData.productType === 'toy') {
-                            insertedProduct.toyDescriptionId = result.resultId;
+                            insertedProduct.toyDescriptionId = descriptionResult.resultId;
                         } else {
-                            insertedProduct.stationaryDescriptionId = result.resultId;
+                            insertedProduct.stationaryDescriptionId = descriptionResult.resultId;
                         }
 
                         await insertedProduct.save();
-
-                        resolve({
-                            errCode: 0,
-                            message: "Add New Product successful"
-                        })
-                    } else {
-                        resolve(result)
                     }
+
+                    resolve({
+                        errCode: 0,
+                        message: "Add New Product successful"
+                    })
                 } else {
                     resolve({
                         errCode: 1,
@@ -215,6 +217,8 @@ let handleDeleteProduct = (inputId) => {
                 let existedProduct = await db.Product.findOne({
                     where: { id: inputId }
                 })
+
+                //Firsly, delete description
                 let bookDescriptionId = existedProduct.bookDescriptionId
                 let stationaryDescriptionId = existedProduct.stationaryDescriptionId
                 let toyDescriptionId = existedProduct.toyDescriptionId
@@ -224,12 +228,19 @@ let handleDeleteProduct = (inputId) => {
                         where: { id: bookDescriptionId }
                     });
                 }
-
-                // let existedDescription = await db.Product.findOne({
-                //     where: { id: inputId }
-                // })
+                if (stationaryDescriptionId) {
+                    await db.StationaryDescription.destroy({
+                        where: { id: stationaryDescriptionId }
+                    });
+                }
+                if (toyDescriptionId) {
+                    await db.ToyDescription.destroy({
+                        where: { id: toyDescriptionId }
+                    });
+                }
 
                 if (existedProduct) {
+                    //seconly, delete markdown
                     let existedProductMarkdown = await db.ProductMarkdown.findOne({
                         where: { productId: inputId }
                     })
@@ -240,6 +251,7 @@ let handleDeleteProduct = (inputId) => {
                         });
                     }
 
+                    //finally, delete product
                     await db.Product.destroy({
                         where: { id: inputId }
                     });
