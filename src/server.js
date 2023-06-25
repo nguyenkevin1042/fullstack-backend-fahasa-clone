@@ -10,6 +10,7 @@ require("dotenv").config();
 
 let app = express(); // instance of app express
 
+
 const corsOptions = {
     origin: process.env.URL_REACT,
     credentials: true,            //access-control-allow-credentials:true
