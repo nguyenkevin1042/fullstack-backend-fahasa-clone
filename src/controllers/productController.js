@@ -1,6 +1,5 @@
 import productService from '../services/productService'
 import redisService from '../redisService'
-import { JSON } from 'sequelize';
 
 let addNewProduct = async (req, res) => {
     try {
@@ -38,12 +37,12 @@ let getAllProduct = async (req, res) => {
         let data
         let dataFromRedis = await redisService.getData('allProducts')
         if (dataFromRedis) {
-            data = dataFromRedis
+            data = JSON.parse(dataFromRedis)
         } else {
             data = await productService.handleGetAllProduct();
-            redisService.setData('allProducts', JSON.stringify(data))
+            await redisService.setData('allProducts', JSON.stringify(data))
         }
-        // let data = await productService.handleGetAllProduct();
+
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -52,19 +51,19 @@ let getAllProduct = async (req, res) => {
 
 let getProductById = async (req, res) => {
     try {
-        redisService.redisConnect();
+        // redisService.redisConnect();
 
         // let data
         let productId = req.query.id
         // let dataFromRedis = await redisService.getData(`product-ID-${productId}`)
         // if (dataFromRedis) {
-        //     data = dataFromRedis
+        //     data = JSON.parse(dataFromRedis)
         // } else {
         //     data = await productService.handleGetProductById(productId);
-        // redisService.setData(`product-ID-${productId}`, JSON.stringify(data))
+        //     await redisService.setData(`product-ID-${productId}`, JSON.stringify(data))
         // }
-        let data = await productService.handleGetProductById(req.query.id);
-        redisService.setData(`product-ID-${productId}`, JSON.stringify(data))
+
+        let data = await productService.handleGetProductById(productId);
 
         return res.status(200).json(data);
     } catch (error) {
@@ -74,10 +73,8 @@ let getProductById = async (req, res) => {
 
 let getAllProductByCategory = async (req, res) => {
     try {
-        // setTimeout(async () => {
         let data = await productService.handleGetAllProductByCategory(req.query.category);
         return res.status(200).json(data);
-        // }, 5000)
     } catch (error) {
         console.log(error)
     }
@@ -85,10 +82,8 @@ let getAllProductByCategory = async (req, res) => {
 
 let getAllProductBySubCategory = async (req, res) => {
     try {
-        // setTimeout(async () => {
         let data = await productService.handleGetAllProductBySubCategory(req.query.category, req.query.subCategory);
         return res.status(200).json(data);
-        // }, 5000)
     } catch (error) {
         console.log(error)
     }
@@ -96,11 +91,9 @@ let getAllProductBySubCategory = async (req, res) => {
 
 let getAllProductByChildCategory = async (req, res) => {
     try {
-        // setTimeout(async () => {
         let data = await productService.handleGetAllProductByChildCategory(
             req.query.subCategory, req.query.childCategory);
         return res.status(200).json(data);
-        // }, 5000)
     } catch (error) {
         console.log(error)
     }

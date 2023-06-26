@@ -17,10 +17,10 @@ let getAllCodes = async (req, res) => {
         let data
         let dataFromRedis = await redisService.getData('allCodes')
         if (dataFromRedis) {
-            data = dataFromRedis
+            data = JSON.parse(dataFromRedis)
         } else {
             data = await allCodesService.handleGetAllCodes();
-            redisService.setData('allCodes', JSON.stringify(data))
+            await redisService.setData('allCodes', JSON.stringify(data))
         }
 
         return res.status(200).json(data);
@@ -49,8 +49,19 @@ let editCode = async (req, res) => {
 
 let getCodeByType = async (req, res) => {
     try {
-        let data = await allCodesService.handleGetCodeByType(req.query.type);
+        redisService.redisConnect();
+        let type = req.query.type
+        let data
+        let dataFromRedis = await redisService.getData(`allCodesByType${type}`)
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await allCodesService.handleGetCodeByType(type);
+            await redisService.setData(`allCodesByType${type}`, JSON.stringify(data))
+        }
+
         return res.status(200).json(data);
+
     } catch (error) {
         console.log(error)
     }
