@@ -100,6 +100,35 @@ let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
     });
 }
 
+// let handleGetAllSubCategoryByCategory = (inputCategoryType) => {
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             if (!inputCategoryType) {
+//                 resolve({
+//                     errCode: 1,
+//                     message: "Missing category parameter!"
+//                 })
+//             } else {
+//                 let data = await db.SubCategory.findAll({
+//                     where: { category: inputCategoryType },
+//                     attributes: {
+//                         exclude: ['category', 'createdAt', 'updatedAt']
+//                     }
+//                 });
+//                 resolve({
+//                     errCode: 0,
+//                     subCategories: data
+//                 })
+//             }
+
+
+
+//         } catch (error) {
+//             reject(error);
+//         }
+//     });
+// }
+
 //3. GET ALL SUB CATEGORY BY KEYNAME
 let handleGetAllSubCategoryByKeyName = (inputKeyName) => {
     return new Promise(async (resolve, reject) => {

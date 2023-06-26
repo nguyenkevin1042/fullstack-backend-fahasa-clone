@@ -1,4 +1,6 @@
 import productService from '../services/productService'
+import redisService from '../redisService'
+import { JSON } from 'sequelize';
 
 let addNewProduct = async (req, res) => {
     try {
@@ -31,7 +33,17 @@ let updateProductDiscount = async (req, res) => {
 
 let getAllProduct = async (req, res) => {
     try {
-        let data = await productService.handleGetAllProduct();
+        redisService.redisConnect();
+
+        let data
+        let dataFromRedis = await redisService.getData('allProducts')
+        if (dataFromRedis) {
+            data = dataFromRedis
+        } else {
+            data = await productService.handleGetAllProduct();
+            redisService.setData('allProducts', JSON.stringify(data))
+        }
+        // let data = await productService.handleGetAllProduct();
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -40,7 +52,20 @@ let getAllProduct = async (req, res) => {
 
 let getProductById = async (req, res) => {
     try {
+        redisService.redisConnect();
+
+        // let data
+        let productId = req.query.id
+        // let dataFromRedis = await redisService.getData(`product-ID-${productId}`)
+        // if (dataFromRedis) {
+        //     data = dataFromRedis
+        // } else {
+        //     data = await productService.handleGetProductById(productId);
+        // redisService.setData(`product-ID-${productId}`, JSON.stringify(data))
+        // }
         let data = await productService.handleGetProductById(req.query.id);
+        redisService.setData(`product-ID-${productId}`, JSON.stringify(data))
+
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)

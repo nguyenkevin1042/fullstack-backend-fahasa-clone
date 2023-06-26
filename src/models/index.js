@@ -59,9 +59,6 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-db.AllCode.associate(db)
-db.SubCategory.associate(db);
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

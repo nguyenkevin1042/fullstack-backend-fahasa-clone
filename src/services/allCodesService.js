@@ -163,6 +163,75 @@ let handleEditCode = (inputData) => {
 }
 
 //5. GET CODE BY TYPE
+// let handleGetCodeByType = (inputType) => {
+//     return new Promise(async (resolve, reject) => {
+//         try {
+
+//             if (!inputType) {
+//                 resolve({
+//                     errCode: 1,
+//                     message: "Missing type parameter!"
+//                 })
+//             } else {
+//                 let data = await db.AllCode.findAll({
+//                     where: { type: inputType },
+//                     attributes: {
+//                         exclude: ['createdAt', 'updatedAt']
+//                     },
+//                     include: [
+//                         {
+//                             model: db.SubCategory,
+//                             include: [
+//                                 {
+//                                     model: db.ChildCategory,
+//                                     attributes: {
+//                                         exclude: ['subCategory', 'createdAt', 'updatedAt']
+//                                     },
+//                                 }
+//                             ],
+//                             attributes: {
+//                                 exclude: ['category', 'createdAt', 'updatedAt']
+//                             },
+//                         }
+//                     ],
+//                     nested: true,
+//                     raw: false
+//                 })
+
+//                 if (data.length > 0) {
+//                     // switch (inputType) {
+//                     //     case 'category':
+//                     //         resolve({
+//                     //             errCode: 0,
+//                     //             categoriesData: data
+//                     //         })
+//                     //     case 'booklayout':
+//                     //         resolve({
+//                     //             errCode: 0,
+//                     //             bookLayoutData: data
+//                     //         })
+
+//                     //     default:
+//                     //         return null
+//                     // }
+//                     resolve({
+//                         errCode: 0,
+//                         data
+//                     })
+//                 } else {
+//                     resolve({
+//                         errCode: 2,
+//                         message: "This category type does not existed!"
+//                     })
+//                 }
+
+//             }
+//         } catch (error) {
+//             reject(error);
+//         }
+//     });
+// }
+
 let handleGetCodeByType = (inputType) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -174,46 +243,13 @@ let handleGetCodeByType = (inputType) => {
                 })
             } else {
                 let data = await db.AllCode.findAll({
-                    where: { type: inputType },
+                    where: { type: inputType.toUpperCase() },
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
-                    include: [
-                        {
-                            model: db.SubCategory,
-                            include: [
-                                {
-                                    model: db.ChildCategory,
-                                    attributes: {
-                                        exclude: ['subCategory', 'createdAt', 'updatedAt']
-                                    },
-                                }
-                            ],
-                            attributes: {
-                                exclude: ['category', 'createdAt', 'updatedAt']
-                            },
-                        }
-                    ],
-                    nested: true,
-                    raw: false
                 })
 
                 if (data.length > 0) {
-                    // switch (inputType) {
-                    //     case 'category':
-                    //         resolve({
-                    //             errCode: 0,
-                    //             categoriesData: data
-                    //         })
-                    //     case 'booklayout':
-                    //         resolve({
-                    //             errCode: 0,
-                    //             bookLayoutData: data
-                    //         })
-
-                    //     default:
-                    //         return null
-                    // }
                     resolve({
                         errCode: 0,
                         data
@@ -224,7 +260,6 @@ let handleGetCodeByType = (inputType) => {
                         message: "This category type does not existed!"
                     })
                 }
-
             }
         } catch (error) {
             reject(error);

@@ -14,6 +14,11 @@ module.exports = {
     "dialectOptions": { decimalNumbers: true },
     "timezone": "+07:00"
   },
+  "redis": {
+    "host": process.env.REDIS_DB_USER,
+    "port": process.env.REDIS_PORT,
+    "password": process.env.REDIS_DB_PASSWORD
+  },
   "test": {
     "username": "root",
     "password": null,
