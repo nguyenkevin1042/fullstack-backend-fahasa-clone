@@ -12,20 +12,19 @@ let addNewSubCategory = async (req, res) => {
 
 let getAllSubCategoryByCategory = async (req, res) => {
     try {
-        // redisService.redisConnect();
+        redisService.redisConnect();
         let category = req.query.category
         let data
-        // let dataFromRedis = await redisService.getData(`allSubCategoryByCategory-${category}`)
-        // if (dataFromRedis) {
-        //     data = JSON.parse(dataFromRedis)
-        // } else {
-        data = await subCategoryService.handleGetAllSubCategoryByCategory(category);
-        //     await redisService.setData(`allSubCategoryByCategory-${category}`, JSON.stringify(data))
-        // }
+        let dataFromRedis = await redisService.getData(`allSubCategoryByCategory-${category}`)
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await subCategoryService.handleGetAllSubCategoryByCategory(category);
+            await redisService.setData(`allSubCategoryByCategory-${category}`, JSON.stringify(data))
+        }
 
         return res.status(200).json(data);
-        // let data = await subCategoryService.handleGetAllSubCategoryByCategory(req.query.category);
-        // return res.status(200).json(data);
+
     } catch (error) {
         console.log(error)
     }
@@ -33,16 +32,15 @@ let getAllSubCategoryByCategory = async (req, res) => {
 
 let getAllSubCategoryByKeyName = async (req, res) => {
     try {
-        // redisService.redisConnect();
         let keyName = req.query.keyName
         let data
-        // let dataFromRedis = await redisService.getData(`allSubCategoryByKeyName-${keyName}`)
-        // if (dataFromRedis) {
-        //     data = JSON.parse(dataFromRedis)
-        // } else {
-        data = await subCategoryService.handleGetAllSubCategoryByKeyName(keyName);
-        //     await redisService.setData(`allSubCategoryByKeyName-${keyName}`, JSON.stringify(data))
-        // }
+        let dataFromRedis = await redisService.getData(`allSubCategoryByKeyName-${keyName}`)
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await subCategoryService.handleGetAllSubCategoryByKeyName(keyName);
+            await redisService.setData(`allSubCategoryByKeyName-${keyName}`, JSON.stringify(data))
+        }
 
         return res.status(200).json(data);
     } catch (error) {

@@ -3,7 +3,16 @@ import redisService from '../redisService'
 
 let getTagByType = async (req, res) => {
     try {
-        let data = await tagService.handleGetTagByType(req.query.type);
+        let tagType = req.query.type
+        let data
+        let dataFromRedis = await redisService.getData(`allTagsbyType${tagType}`)
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await tagService.handleGetTagByType(req.query.type);
+            await redisService.setData(`allTagsbyType${tagType}`, JSON.stringify(data))
+        }
+
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -21,16 +30,16 @@ let getProductsByTagKeyName = async (req, res) => {
 
 let getAllTag = async (req, res) => {
     try {
-        redisService.redisConnect();
+        // redisService.redisConnect();
 
         let data
-        let dataFromRedis = await redisService.getData('allTags')
-        if (dataFromRedis) {
-            data = JSON.parse(dataFromRedis)
-        } else {
-            data = await tagService.handleGetAllTag();
-            await redisService.setData('allTags', JSON.stringify(data))
-        }
+        // let dataFromRedis = await redisService.getData('allTags')
+        // if (dataFromRedis) {
+        //     data = JSON.parse(dataFromRedis)
+        // } else {
+        data = await tagService.handleGetAllTag();
+        //     await redisService.setData('allTags', JSON.stringify(data))
+        // }
 
         return res.status(200).json(data);
     } catch (error) {

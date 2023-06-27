@@ -30,16 +30,15 @@ let updateProductTag = async (req, res) => {
 
 let getProductByTagId = async (req, res) => {
     try {
-        // redisService.redisConnect();
         let tagId = req.query.tagId
         let data
-        // let dataFromRedis = await redisService.getData(`allProductsByTagId${tagId}`)
-        // if (dataFromRedis) {
-        //     data = JSON.parse(dataFromRedis)
-        // } else {
-        data = await productTagService.handleGetProductByTagId(tagId);
-        //     await redisService.setData(`allProductsByTagId${tagId}`, JSON.stringify(data))
-        // }
+        let dataFromRedis = await redisService.getData(`allProductsByTagId${tagId}`)
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await productTagService.handleGetProductByTagId(tagId);
+            await redisService.setData(`allProductsByTagId${tagId}`, JSON.stringify(data))
+        }
 
         return res.status(200).json(data);
     } catch (error) {

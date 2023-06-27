@@ -1,6 +1,5 @@
 import allCodesService from '../services/allCodesService'
 import redisService from '../redisService'
-
 let addNewCode = async (req, res) => {
     try {
         let data = await allCodesService.handleAddNewCode(req.body);
@@ -12,16 +11,14 @@ let addNewCode = async (req, res) => {
 
 let getAllCodes = async (req, res) => {
     try {
-        // redisService.redisConnect();
-
         let data
-        // let dataFromRedis = await redisService.getData('allCodes')
-        // if (dataFromRedis) {
-        //     data = JSON.parse(dataFromRedis)
-        // } else {
-        data = await allCodesService.handleGetAllCodes();
-        //     await redisService.setData('allCodes', JSON.stringify(data))
-        // }
+        let dataFromRedis = await redisService.getData('allCodes')
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await allCodesService.handleGetAllCodes();
+            await redisService.setData('allCodes', JSON.stringify(data))
+        }
 
         return res.status(200).json(data);
     } catch (error) {
@@ -49,7 +46,6 @@ let editCode = async (req, res) => {
 
 let getCodeByType = async (req, res) => {
     try {
-        redisService.redisConnect();
         let type = req.query.type
         let data
         let dataFromRedis = await redisService.getData(`allCodesByType${type}`)

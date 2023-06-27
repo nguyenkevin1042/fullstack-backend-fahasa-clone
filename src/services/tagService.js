@@ -171,15 +171,8 @@ let handleGetProductsByTagKeyName = (inputKeyName) => {
                     include: [
                         {
                             model: db.ProductTag,
-                            attributes: {
-                                exclude: ['productId']
-                            },
-                            include: [
-                                {
-                                    model: db.Product,
-                                    attributes: ['id'],
-                                },
-                            ],
+                            attributes: ['productId'],
+
                         },
                     ],
                     nested: true,
@@ -187,7 +180,8 @@ let handleGetProductsByTagKeyName = (inputKeyName) => {
                 })
 
                 if (tags) {
-                    let products = tags.ProductTags.map(item => item.Product)
+                    // let products = tags.ProductTags.map(item => item.Product)
+                    let products = tags.ProductTags
 
                     resolve({
                         errCode: 0,
