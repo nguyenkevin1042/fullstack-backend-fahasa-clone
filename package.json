@@ -6,8 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node src/server.js",
-    "start-prod": "set NODE_ENV=production&& nodemon --exec babel-node src/server.js",
-    "dev": "node --exec babel-node src/server.js",
     "db-migrate": "npx sequelize-cli db:migrate"
   },
   "author": "",
