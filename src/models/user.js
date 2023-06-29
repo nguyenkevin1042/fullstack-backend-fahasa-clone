@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
                 {
                     foreignKey: 'gender',
                     targetKey: 'keyMap',
+                    as: 'genderData'
                 })
             User.hasOne(models.Cart,
                 {

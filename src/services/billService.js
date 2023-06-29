@@ -65,6 +65,7 @@ let handleGetBillByUserId = (inputUserId) => {
                     message: "Missing userId parameter!"
                 })
             } else {
+
                 let data = await db.Bill.findAll({
                     where: { userId: inputUserId },
                     attributes: {
@@ -82,19 +83,21 @@ let handleGetBillByUserId = (inputUserId) => {
                             model: db.UserAddress,
                             attributes: ['fullName']
                         },
-                        {
-                            model: db.BillProduct,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            },
-                            include: [
-                                {
-                                    model: db.Product,
-                                    attributes: ['price', 'discount']
-                                },
-                            ]
-                        }
-                    ]
+                        //     {
+                        //         model: db.BillProduct,
+                        //         attributes: {
+                        //             exclude: ['createdAt', 'updatedAt']
+                        //         },
+                        // include: [
+                        //     {
+                        //         model: db.Product,
+                        //         attributes: ['price', 'discount']
+                        //     },
+                        // ]
+                        //     }
+                    ],
+                    nested: true,
+                    raw: false
                 })
 
                 if (data && data.length > 0) {
@@ -253,7 +256,9 @@ let handleGetBillById = (inputId) => {
                                 },
                             ]
                         }
-                    ]
+                    ],
+                    nested: true,
+                    raw: false
                 })
 
                 if (data) {

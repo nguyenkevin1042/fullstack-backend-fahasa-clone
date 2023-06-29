@@ -1,15 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
-import dotenv from "dotenv"; //help us use process.env.
+// import dotenv from "dotenv"; //help us use process.env.
 import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
 import connectDB from "./config/connectDB";
 import cors from 'cors';
 import compression from 'compression';
 
-
-dotenv.config()
-// require("dotenv").config();
+require("dotenv").config();
 
 let app = express(); // instance of app express
 

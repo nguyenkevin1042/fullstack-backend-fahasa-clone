@@ -14,13 +14,13 @@ let getAllSubCategoryByCategory = async (req, res) => {
     try {
         let category = req.query.category
         let data
-        let dataFromRedis = await redisService.getData(`allSubCategoryByCategory-${category}`)
-        if (dataFromRedis) {
-            data = JSON.parse(dataFromRedis)
-        } else {
-            data = await subCategoryService.handleGetAllSubCategoryByCategory(category);
-            await redisService.setData(`allSubCategoryByCategory-${category}`, JSON.stringify(data))
-        }
+        // let dataFromRedis = await redisService.getData(`allSubCategoryByCategory-${category}`)
+        // if (dataFromRedis) {
+        //     data = JSON.parse(dataFromRedis)
+        // } else {
+        data = await subCategoryService.handleGetAllSubCategoryByCategory(category);
+        //     await redisService.setData(`allSubCategoryByCategory-${category}`, JSON.stringify(data))
+        // }
 
         return res.status(200).json(data);
 
