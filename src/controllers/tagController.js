@@ -30,16 +30,14 @@ let getProductsByTagKeyName = async (req, res) => {
 
 let getAllTag = async (req, res) => {
     try {
-        // redisService.redisConnect();
-
         let data
-        // let dataFromRedis = await redisService.getData('allTags')
-        // if (dataFromRedis) {
-        //     data = JSON.parse(dataFromRedis)
-        // } else {
-        data = await tagService.handleGetAllTag();
-        //     await redisService.setData('allTags', JSON.stringify(data))
-        // }
+        let dataFromRedis = await redisService.getData('allTags')
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await tagService.handleGetAllTag();
+            await redisService.setData('allTags', JSON.stringify(data))
+        }
 
         return res.status(200).json(data);
     } catch (error) {

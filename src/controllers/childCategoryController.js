@@ -12,16 +12,14 @@ let addNewChildCategory = async (req, res) => {
 
 let getAllChildCategory = async (req, res) => {
     try {
-        // redisService.redisConnect();
-
         let data
-        // let dataFromRedis = await redisService.getData('allChildCategory')
-        // if (dataFromRedis) {
-        //     data = JSON.parse(dataFromRedis)
-        // } else {
-        data = await childCategoryService.handleGetAllChildCategory();
-        //     await redisService.setData('allChildCategory', JSON.stringify(data))
-        // }
+        let dataFromRedis = await redisService.getData('allChildCategory')
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await childCategoryService.handleGetAllChildCategory();
+            await redisService.setData('allChildCategory', JSON.stringify(data))
+        }
 
         return res.status(200).json(data);
     } catch (error) {

@@ -49,19 +49,16 @@ let getAllProduct = async (req, res) => {
 
 let getProductById = async (req, res) => {
     try {
-        // redisService.redisConnect();
-
-        // let data
+        let data
         let productId = req.query.id
         // let dataFromRedis = await redisService.getData(`product-ID-${productId}`)
         // if (dataFromRedis) {
         //     data = JSON.parse(dataFromRedis)
         // } else {
-        //     data = await productService.handleGetProductById(productId);
+        data = await productService.handleGetProductById(productId);
         //     await redisService.setData(`product-ID-${productId}`, JSON.stringify(data))
         // }
 
-        let data = await productService.handleGetProductById(productId);
 
         return res.status(200).json(data);
     } catch (error) {
