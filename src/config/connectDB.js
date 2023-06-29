@@ -12,7 +12,13 @@ const sequelize = new Sequelize(
         query: {
             raw: false
         },
-        dialectOptions: { decimalNumbers: true, },
+        dialectOptions: {
+            decimalNumbers: true,
+            ssl: process.env.DB_SSL === 'true' ? {
+                require: true,
+                rejectUnauthorized: false
+            } : {}
+        },
         timezone: "+07:00"
     });
 

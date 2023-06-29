@@ -1,4 +1,3 @@
-import db from './models/index';
 import { createClient } from 'redis';
 
 let redisConnect = async () => {

@@ -11,7 +11,17 @@ module.exports = {
     "query": {
       "raw": false
     },
-    "dialectOptions": { decimalNumbers: true },
+    // "withCredentials": true,
+    // "headers": {
+    //   'Accept-Encoding': 'gzip',
+    // },
+    "dialectOptions": {
+      "decimalNumbers": true,
+      "ssl": process.env.DB_SSL === 'true' ? {
+        require: true,
+        rejectUnauthorized: false
+      } : {}
+    },
     "timezone": "+07:00",
 
     "Compression": {

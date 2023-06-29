@@ -22,15 +22,13 @@ const customizeConfig = {
   port: process.env.DB_PORT,
   dialect: process.env.DB_DIALECT,
   logging: false,
-  dialectOptions:
-    process.env.DB_SSL === 'true' ?
-      {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false
-        }
-      } : {}
-  ,
+  dialectOptions: {
+    decimalNumbers: true,
+    ssl: process.env.DB_SSL === 'true' ? {
+      require: true,
+      rejectUnauthorized: false
+    } : {}
+  },
   query: {
     "raw": true
   },
