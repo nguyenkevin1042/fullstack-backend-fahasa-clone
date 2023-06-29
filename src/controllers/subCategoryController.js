@@ -12,7 +12,6 @@ let addNewSubCategory = async (req, res) => {
 
 let getAllSubCategoryByCategory = async (req, res) => {
     try {
-        redisService.redisConnect();
         let category = req.query.category
         let data
         let dataFromRedis = await redisService.getData(`allSubCategoryByCategory-${category}`)
@@ -50,8 +49,6 @@ let getAllSubCategoryByKeyName = async (req, res) => {
 
 let getAllSubCategory = async (req, res) => {
     try {
-        redisService.redisConnect();
-
         let data
         let dataFromRedis = await redisService.getData('allSubCategory')
         if (dataFromRedis) {

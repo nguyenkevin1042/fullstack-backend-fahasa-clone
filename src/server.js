@@ -5,11 +5,11 @@ import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
 import connectDB from "./config/connectDB";
 import cors from 'cors';
+import compression from 'compression';
 
 require("dotenv").config();
 
 let app = express(); // instance of app express
-
 
 const corsOptions = {
     origin: process.env.URL_REACT,
@@ -20,6 +20,7 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(compression());
 
 
 viewEngine(app);

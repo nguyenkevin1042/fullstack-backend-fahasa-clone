@@ -12,7 +12,27 @@ module.exports = {
       "raw": false
     },
     "dialectOptions": { decimalNumbers: true },
-    "timezone": "+07:00"
+    "timezone": "+07:00",
+
+    "Compression": {
+      "Enabled": true,
+      "ResponseCompressionOptions": {
+        "EnableForHttps": true,
+        "MimeTypes": [
+          "text/plain",
+          "text/css",
+          "application/javascript",
+          "text/html",
+          "application/xml",
+          "text/xml",
+          "application/json",
+          "text/json",
+          "application/wasm"]
+      },
+      "GzipCompressionProviderOptions": {
+        "Level": "Fastest"
+      }
+    }
   },
   "redis": {
     "host": process.env.REDIS_DB_USER,

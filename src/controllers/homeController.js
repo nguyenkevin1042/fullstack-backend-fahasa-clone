@@ -4,8 +4,7 @@ import redisService from '../redisService'
 
 let getHomePage = async (req, res) => {
     try {
-        redisService.redisConnect();
-        redisService.setData('helloworld', 'Hello World Redis!')
+        redisService.setData('helloworld', 'Hello World from Redis!')
         let data = await redisService.getData('helloworld')
 
         return res.render("homepage.ejs",
