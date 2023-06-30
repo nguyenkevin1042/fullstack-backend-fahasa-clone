@@ -83,18 +83,18 @@ let handleGetBillByUserId = (inputUserId) => {
                             model: db.UserAddress,
                             attributes: ['fullName']
                         },
-                        //     {
-                        //         model: db.BillProduct,
-                        //         attributes: {
-                        //             exclude: ['createdAt', 'updatedAt']
-                        //         },
-                        // include: [
-                        //     {
-                        //         model: db.Product,
-                        //         attributes: ['price', 'discount']
-                        //     },
-                        // ]
-                        //     }
+                        {
+                            model: db.BillProduct,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                            include: [
+                                {
+                                    model: db.Product,
+                                    attributes: ['price', 'discount']
+                                },
+                            ]
+                        }
                     ],
                     nested: true,
                     raw: false
@@ -199,7 +199,8 @@ let handleUpdateBillStatus = (inputData) => {
                 })
             } else {
                 let data = await db.Bill.findOne({
-                    where: { id: inputData.billId }
+                    where: { id: inputData.billId },
+                    raw: false
                 })
 
                 if (data) {
