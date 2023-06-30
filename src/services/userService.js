@@ -57,55 +57,55 @@ let handleCreateNewUser = (dataInput) => {
                     messageEN: "Password can not be left empty!"
                 })
             } else {
-                let token = uuidv4();
-                //upsert patient
-                await emailService.sendSignupEmail({
-                    receiverEmail: dataInput.email,
-                    redirectLink: buildUrlEmail(token)
-                });
-                // let isEmailExisted = await checkEmail(dataInput.email);
+                // let token = uuidv4();
+                // //upsert patient
+                // await emailService.sendSignupEmail({
+                //     receiverEmail: dataInput.email,
+                //     redirectLink: buildUrlEmail(token)
+                // });
+                let isEmailExisted = await checkEmail(dataInput.email);
 
-                // if (isEmailExisted) {
-                //     resolve({
-                //         errCode: 2,
-                //         messageVI: "Email đã tồn tại",
-                //         messageEN: "Email is already existed!"
-                //     })
-                // } else {
-                //     let hashedPassword = await hashPasswordFromInput(dataInput.password);
-                //     let newUser
-                //     if (dataInput.isAdmin === true) {
-                //         await db.User.create({
-                //             firstName: '',
-                //             email: dataInput.email,
-                //             password: hashedPassword,
-                //             roleId: 'R1'
-                //         })
-                //     } else {
-                //         let newCustomerId
-                //         let randomName = "Customer_" + (Math.random() + 1).toString(36).substring(2)
-                //         await db.User.create({
-                //             firstName: randomName,
-                //             email: dataInput.email,
-                //             password: hashedPassword,
-                //             roleId: 'R3'
-                //         }).then(result => {
-                //             newCustomerId = result.id
-                //             newUser = result
-                //         });
+                if (isEmailExisted) {
+                    resolve({
+                        errCode: 2,
+                        messageVI: "Email đã tồn tại",
+                        messageEN: "Email is already existed!"
+                    })
+                } else {
+                    let hashedPassword = await hashPasswordFromInput(dataInput.password);
+                    let newUser
+                    if (dataInput.isAdmin === true) {
+                        await db.User.create({
+                            firstName: '',
+                            email: dataInput.email,
+                            password: hashedPassword,
+                            roleId: 'R1'
+                        })
+                    } else {
+                        let newCustomerId
+                        let randomName = "Customer_" + (Math.random() + 1).toString(36).substring(2)
+                        await db.User.create({
+                            firstName: randomName,
+                            email: dataInput.email,
+                            password: hashedPassword,
+                            roleId: 'R3'
+                        }).then(result => {
+                            newCustomerId = result.id
+                            newUser = result
+                        });
 
-                //         await db.Cart.create({
-                //             userId: newCustomerId
-                //         })
-                //     }
+                        await db.Cart.create({
+                            userId: newCustomerId
+                        })
+                    }
 
-                //     resolve({
-                //         errCode: 0,
-                //         newUser,
-                //         messageVI: "Tạo tài khoản thành công!",
-                //         messageEN: "Create account successful!"
-                //     })
-                // }
+                    resolve({
+                        errCode: 0,
+                        newUser,
+                        messageVI: "Tạo tài khoản thành công!",
+                        messageEN: "Create account successful!"
+                    })
+                }
             }
         } catch (error) {
             reject(error);
