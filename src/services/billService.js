@@ -1,5 +1,8 @@
 import db from '../models/index';
 import cartProductService from '../services/cartProductService'
+import emailService from './emailService';
+import moment from 'moment';
+
 
 //1. CREATE NEW BILL
 let handleCreateNewBill = (inputData) => {
@@ -14,7 +17,7 @@ let handleCreateNewBill = (inputData) => {
             } else {
                 //1. Create bill
                 let listProduct = inputData.listProduct
-                let createdBillId;
+                let createdBill;
                 await db.Bill.create({
                     orderedDate: inputData.orderedDate,
                     userId: inputData.userId,
@@ -22,25 +25,39 @@ let handleCreateNewBill = (inputData) => {
                     paymentType: inputData.paymentType,
                     totalPrice: inputData.totalPrice,
                     status: 'S1',
-                }).then(result => createdBillId = result.id)
+                }).then(result => createdBill = result)
 
                 //2. Save product to bill product Table
-
                 for (let index = 0; index < listProduct.length; index++) {
                     await db.BillProduct.create({
-                        billId: createdBillId,
+                        billId: createdBill.id,
                         productId: listProduct[index].productId,
                         quantity: listProduct[index].quantity,
                         totalPrice: listProduct[index].totalPrice
                     })
                 }
 
-                //3. Delete product out of cartproduct
+                //3. Delete product out of cart product
                 for (let index = 0; index < listProduct.length; index++) {
                     let cartId = listProduct[index].cartId
                     let productId = listProduct[index].productId
                     await cartProductService.handleDeleteProductInCart(cartId, productId)
                 }
+
+                //4. send email
+                let user = await db.User.findOne({
+                    where: { id: inputData.userId },
+                    attributes: ['email']
+                })
+                let orderedDate = moment(createdBill.orderedDate).format('DD/MM/YYYY')
+
+                await emailService.sendOrderingSuccessEmail({
+                    orderId: createdBill.id,
+                    receiverEmail: user.email,
+                    orderedDate: orderedDate,
+                    totalPrice: parseFloat(createdBill.totalPrice),
+                    orderedProductLength: listProduct.length
+                })
 
                 resolve({
                     errCode: 0,
@@ -200,12 +217,28 @@ let handleUpdateBillStatus = (inputData) => {
             } else {
                 let data = await db.Bill.findOne({
                     where: { id: inputData.billId },
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt'],
+                    },
                     raw: false
                 })
 
                 if (data) {
+                    //1. Update bill status
                     data.status = inputData.statusKeyMap
                     await data.save()
+
+                    //2. Send email to customer
+                    let user = await db.User.findOne({
+                        where: { id: data.userId },
+                        attributes: ['email']
+                    })
+
+                    await emailService.sendEmailWhenOrderStatusChange({
+                        orderId: data.id,
+                        receiverEmail: user.email,
+                        billStatus: data.status
+                    })
 
                     resolve({
                         errCode: 0,
