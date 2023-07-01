@@ -2,6 +2,7 @@ import db from '../models/index';
 import bcrypt from 'bcryptjs';
 var salt = bcrypt.genSaltSync(10);
 import emailService from './emailService';
+import redisService from '../redisService'
 import { v4 as uuidv4 } from 'uuid';
 require("dotenv").config();
 
@@ -39,6 +40,35 @@ let buildUrlEmail = (token) => {
     let result = process.env.URL_REACT +
         "/verify-sign-up?token=" + token;
     return result;
+}
+
+let handleGetValidationKey = (inputEmail) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputEmail) {
+                resolve({
+                    errCode: 1,
+                    messageVI: "Email không được để trống!",
+                    messageEN: "Email can not be left empty!"
+                })
+            } else {
+                let key = Math.ceil(Math.random() * 1000000)
+                let data = {
+                    email: inputEmail,
+                    validationKey: key
+                }
+                // await redisService.setData(`validationKeyFor-${inputEmail}`,
+                //     JSON.stringify(data))
+                await redisService.setTimeoutData(`validationKeyFor-${inputEmail}`, 60, JSON.stringify(data))
+                resolve({
+                    errCode: 0,
+                    data
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
 let handleCreateNewUser = (dataInput) => {
@@ -368,6 +398,8 @@ let handleUpdateUser = (dataInput) => {
     });
 }
 
+
+
 let checkRequiredUpdateParams = (dataInput) => {
     let arr = ['firstName', 'lastName', 'email', 'phoneNumber']
     let isValid = true;
@@ -391,5 +423,6 @@ module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     handleAdminLogin: handleAdminLogin,
     handleCustomerLogin: handleCustomerLogin,
-    handleUpdateUser: handleUpdateUser
+    handleUpdateUser: handleUpdateUser,
+    handleGetValidationKey: handleGetValidationKey
 }

@@ -21,6 +21,13 @@ let setData = async (key, data) => {
     return redisClient
 }
 
+let setTimeoutData = async (key, time, data) => {
+    let redisClient = await redisConnect();
+    await redisClient.setEx(key, time, data);
+    await redisClient.quit()
+    return redisClient
+}
+
 let getData = async (key) => {
     let redisClient = await redisConnect();
     let dataFromRedis = await redisClient.get(key);
@@ -37,5 +44,6 @@ let deleteData = async (key) => {
 module.exports = {
     setData: setData,
     getData: getData,
-    deleteData: deleteData
+    deleteData: deleteData,
+    setTimeoutData: setTimeoutData
 }

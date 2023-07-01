@@ -47,11 +47,21 @@ let customerLogin = async (req, res) => {
     }
 }
 
+let getValidationKey = async (req, res) => {
+    try {
+        let data = await userService.handleGetValidationKey(req.query.email);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     getAllUsers: getAllUsers,
     createNewUser: createNewUser,
     adminLogin: adminLogin,
     customerLogin: customerLogin,
-    updateUser: updateUser
+    updateUser: updateUser,
+    getValidationKey: getValidationKey
 }

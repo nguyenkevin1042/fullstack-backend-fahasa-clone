@@ -27,6 +27,35 @@ let sendSignupEmail = async (dataSend) => {
     });
 }
 
+let sendValidationKeyEmail = async (dataSend) => {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.EMAIL_APP,
+            pass: process.env.EMAIL_APP_PASSWORD,
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    await transporter.sendMail({
+        from: '"Tien Nguyen 👻" <nguyenkevin1042@gmail.com>',
+        to: dataSend.receiverEmail,
+        subject: "MÃ xác nhận",
+        text: "Hello world?",
+        html: getBodyHtmlForValidationKeyEmail
+    });
+}
+
+let getBodyHtmlForValidationKeyEmail = (dataSend) => {
+    let result = "<p>Mã xac nhận của quý khách là:" + "</p>"
+
+    return result;
+}
+
 
 //2. ORDERING SUCCESS
 let sendOrderingSuccessEmail = async (dataSend) => {
