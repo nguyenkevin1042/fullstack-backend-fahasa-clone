@@ -58,7 +58,11 @@ let handleGetValidationKey = (inputEmail) => {
                     validationKey: key
                 }
 
-                await redisService.setTimeoutData(`validationKeyFor-${inputEmail}`, 60, JSON.stringify(data))
+                await redisService.setTimeoutData(`validationKeyFor-${inputEmail}`, 180, JSON.stringify(data))
+                await emailService.sendValidationKeyEmail({
+                    receiverEmail: inputEmail,
+                    key: key
+                })
 
                 resolve({
                     errCode: 0,
@@ -88,12 +92,6 @@ let handleCreateNewUser = (dataInput) => {
                     messageEN: "Password can not be left empty!"
                 })
             } else {
-                // let token = uuidv4();
-                // //upsert patient
-                // await emailService.sendSignupEmail({
-                //     receiverEmail: dataInput.email,
-                //     redirectLink: buildUrlEmail(token)
-                // });
                 let isEmailExisted = await checkEmail(dataInput.email);
 
                 if (isEmailExisted) {
@@ -399,10 +397,79 @@ let handleUpdateUser = (dataInput) => {
     });
 }
 
+//5. CHANGE PASSWORD
+let handleChangePassword = (dataInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let dataFromRedis = await redisService.getData(`validationKeyFor-${dataInput.email}`)
+            if (dataFromRedis) {
+                let data = JSON.parse(dataFromRedis)
+                let keyFromRedis = data.validationKey.toString();
 
+                if (dataInput.key === keyFromRedis) {
+                    let user = await db.User.findOne({
+                        where: { email: dataInput.email },
+                        raw: false
+                    })
 
+                    if (user) {
+                        let hashedPassword = await hashPasswordFromInput(dataInput.password);
+
+                        user.password = hashedPassword
+                        await user.save()
+
+                        resolve({
+                            errCode: 0
+                        })
+                    } else {
+                        resolve({
+                            errCode: 1,
+                            messageVI: "Không tìm thấy email của quý khách!",
+                            messageEN: "Can not find your email!"
+                        })
+                    }
+
+                } else {
+                    resolve({
+                        errCode: 1,
+                        messageVI: "Mã xác nhận này sai. Vui lòng kiểm tra lại!",
+                        messageEN: "This code is wrong. Please check again!"
+                    })
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    messageVI: "Mã xác nhận này đã hết hạn. Vui lòng lấy mã mới!",
+                    messageEN: "This code is expired. Please get a new code!"
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+//check input
 let checkRequiredUpdateParams = (dataInput) => {
     let arr = ['firstName', 'lastName', 'email', 'phoneNumber']
+    let isValid = true;
+    let element = '';
+    for (let index = 0; index < arr.length; index++) {
+        if (!dataInput[arr[index]]) {
+            isValid = false;
+            element = arr[index]
+            break;
+        }
+
+    }
+    return {
+        isValid: isValid,
+        element: element
+    }
+}
+
+let checkRequiredChangePasswordParams = (dataInput) => {
+    let arr = ['email', 'key.', 'key']
     let isValid = true;
     let element = '';
     for (let index = 0; index < arr.length; index++) {
@@ -425,5 +492,6 @@ module.exports = {
     handleAdminLogin: handleAdminLogin,
     handleCustomerLogin: handleCustomerLogin,
     handleUpdateUser: handleUpdateUser,
-    handleGetValidationKey: handleGetValidationKey
+    handleGetValidationKey: handleGetValidationKey,
+    handleChangePassword: handleChangePassword
 }

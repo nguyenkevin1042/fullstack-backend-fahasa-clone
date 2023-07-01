@@ -44,14 +44,14 @@ let sendValidationKeyEmail = async (dataSend) => {
     await transporter.sendMail({
         from: '"Tien Nguyen 👻" <nguyenkevin1042@gmail.com>',
         to: dataSend.receiverEmail,
-        subject: "MÃ xác nhận",
+        subject: "Mã xác nhận khôi phục mật khẩu",
         text: "Hello world?",
-        html: getBodyHtmlForValidationKeyEmail
+        html: getBodyHtmlForValidationKeyEmail(dataSend)
     });
 }
 
 let getBodyHtmlForValidationKeyEmail = (dataSend) => {
-    let result = "<p>Mã xac nhận của quý khách là:" + "</p>"
+    let result = "<p>Mã xác nhận của quý khách là: <b>" + dataSend.key + "</b>. Hiệu lực 1 phút</p>"
 
     return result;
 }
@@ -222,5 +222,6 @@ module.exports = {
     sendSignupEmail: sendSignupEmail,
     sendOrderingSuccessEmail: sendOrderingSuccessEmail,
     sendOrderingCancelledByCustomerEmail: sendOrderingCancelledByCustomerEmail,
-    sendEmailWhenOrderStatusChange: sendEmailWhenOrderStatusChange
+    sendEmailWhenOrderStatusChange: sendEmailWhenOrderStatusChange,
+    sendValidationKeyEmail: sendValidationKeyEmail
 }

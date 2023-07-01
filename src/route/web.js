@@ -24,7 +24,8 @@ let initWebRoutes = (app) => {
     router.post('/api/update-user', userController.updateUser);
     router.post('/api/admin/login', userController.adminLogin);
     router.post('/api/customer/login', userController.customerLogin);
-    router.get('/api/get-validation-key', userController.getValidationKey);
+    router.post('/api/get-validation-key', userController.getValidationKey);
+    router.post('/api/change-password', userController.changePassword);
 
     //USER ADDRESS
     router.post('/api/create-new-address', userAddressController.createNewAddress);

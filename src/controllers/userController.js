@@ -49,7 +49,16 @@ let customerLogin = async (req, res) => {
 
 let getValidationKey = async (req, res) => {
     try {
-        let data = await userService.handleGetValidationKey(req.query.email);
+        let data = await userService.handleGetValidationKey(req.body.email);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+let changePassword = async (req, res) => {
+    try {
+        let data = await userService.handleChangePassword(req.body);
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -62,5 +71,6 @@ module.exports = {
     adminLogin: adminLogin,
     customerLogin: customerLogin,
     updateUser: updateUser,
-    getValidationKey: getValidationKey
+    getValidationKey: getValidationKey,
+    changePassword: changePassword
 }
