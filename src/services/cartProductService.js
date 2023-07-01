@@ -65,8 +65,7 @@ let handleDeleteProductInCart = (inputCartId, inputProductId) => {
             if (!inputCartId) {
                 resolve({
                     errCode: 1,
-                    messageVI: 'Missing inputCartId',
-                    messageEN: 'Missing inputCartId'
+                    messageVI: 'Missing inputCartId'
                 })
             } else {
                 let data = await db.CartProduct.findOne({
@@ -74,6 +73,7 @@ let handleDeleteProductInCart = (inputCartId, inputProductId) => {
                         cartId: inputCartId,
                         productId: inputProductId
                     },
+                    attributes: ['id'],
                     raw: false,
                     force: true
                 })
@@ -82,8 +82,7 @@ let handleDeleteProductInCart = (inputCartId, inputProductId) => {
                     await db.CartProduct.destroy(
                         {
                             where: {
-                                cartId: inputCartId,
-                                productId: inputProductId
+                                id: data.id
                             }
                         }
                     );
@@ -92,7 +91,6 @@ let handleDeleteProductInCart = (inputCartId, inputProductId) => {
                         message: 'Delete successful!'
                     })
                 }
-
             }
         } catch (error) {
             reject(error);
@@ -139,7 +137,6 @@ let handleUpdateCart = (inputData) => {
         }
     });
 }
-
 
 let checkRequiredCartProductParams = (dataInput) => {
     let arr = ['cartId', 'productId', 'quantity']

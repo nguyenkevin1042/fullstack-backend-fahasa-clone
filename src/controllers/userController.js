@@ -56,7 +56,6 @@ let getValidationKey = async (req, res) => {
     }
 }
 
-
 module.exports = {
     getAllUsers: getAllUsers,
     createNewUser: createNewUser,

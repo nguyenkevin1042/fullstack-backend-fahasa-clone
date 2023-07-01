@@ -6,8 +6,7 @@ let handleGetCartByUserId = (inputUserId) => {
             if (!inputUserId) {
                 resolve({
                     errCode: 1,
-                    messageVI: 'Missing userId',
-                    messageEN: 'Missing userId'
+                    message: 'Missing userId'
                 })
             } else {
                 let data = await db.Cart.findOne({

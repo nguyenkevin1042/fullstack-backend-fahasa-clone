@@ -94,7 +94,44 @@ let getBodyHtmlForOrderingSuccessEmail = (dataSend) => {
     return result;
 }
 
-//2. ORDER STATUS CHANGE
+//3. CUSTOMER CANCEL ORDERING
+let sendOrderingCancelledByCustomerEmail = async (dataSend) => {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.EMAIL_APP,
+            pass: process.env.EMAIL_APP_PASSWORD,
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    await transporter.sendMail({
+        from: '"Tien Nguyen 👻" <nguyenkevin1042@gmail.com>', // sender address
+        to: dataSend.receiverEmail,
+        subject: "New order #" + dataSend.orderId,
+        text: "Ordering cancelled!",
+        html: getBodyHtmlForOrderingCancelledByCustomerEmail(dataSend)
+    });
+}
+
+let getBodyHtmlForOrderingCancelledByCustomerEmail = (dataSend) => {
+    let result = "<div><h2>Kính gửi</h2></div>" +
+        "<h4>Cảm ơn quý khách đã mua hàng!</h4>" +
+        "<h4>Dưới đây là thông tin đơn hàng của quý khách</h4></div>" +
+        "<p><b>Mã đơn hàng: </b>" + dataSend.orderId + "</p>" +
+        "<p><b>Ngày đặt: </b>" + dataSend.orderedDate + "</p>" +
+        "<p><b>Tổng đơn hàng: </b>" + dataSend.totalPrice + "</p>" +
+        "<p><b>Số lượng sản phẩm: </b>" + dataSend.orderedProductLength + "</p><br/>" +
+        "<p>Quý khách vui lòng kiểm tra email thường xuyên để cập nhật về tình trạng đơn hàng</p>"
+
+    return result;
+}
+
+//4. ORDER STATUS CHANGE
 let sendEmailWhenOrderStatusChange = async (dataSend) => {
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
@@ -137,6 +174,9 @@ let getStatusString = (status) => {
             break;
         case 'S4':
             result = "đã được đối tác vận chuyển xác nhận giao thành công."
+            break;
+        case 'S5':
+            result = "đã bị hủy vì có sự cố trong quá trình vận chuyển. Mong quý khách thông cảm"
             break;
 
         default:
@@ -181,5 +221,6 @@ let getStatusString = (status) => {
 module.exports = {
     sendSignupEmail: sendSignupEmail,
     sendOrderingSuccessEmail: sendOrderingSuccessEmail,
+    sendOrderingCancelledByCustomerEmail: sendOrderingCancelledByCustomerEmail,
     sendEmailWhenOrderStatusChange: sendEmailWhenOrderStatusChange
 }

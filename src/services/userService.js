@@ -57,12 +57,13 @@ let handleGetValidationKey = (inputEmail) => {
                     email: inputEmail,
                     validationKey: key
                 }
-                // await redisService.setData(`validationKeyFor-${inputEmail}`,
-                //     JSON.stringify(data))
+
                 await redisService.setTimeoutData(`validationKeyFor-${inputEmail}`, 60, JSON.stringify(data))
+
                 resolve({
                     errCode: 0,
-                    data
+                    messageVI: "Mã xác nhận đã được gửi qua email của quý khách. Vui lòng kiểm tra email!",
+                    messageEN: "A code has been sent to your email. Please check your email!"
                 })
             }
         } catch (error) {
