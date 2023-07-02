@@ -51,7 +51,7 @@ let sendValidationKeyEmail = async (dataSend) => {
 }
 
 let getBodyHtmlForValidationKeyEmail = (dataSend) => {
-    let result = "<p>Mã xác nhận của quý khách là: <b>" + dataSend.key + "</b>. Hiệu lực 1 phút</p>"
+    let result = "<p>Mã xác nhận của quý khách là: <b>" + dataSend.key + "</b>. Hiệu lực 2 phút</p>"
 
     return result;
 }

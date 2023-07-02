@@ -36,46 +36,6 @@ let handleGetAllUsers = () => {
 }
 
 //2.CREATE NEW USER
-let buildUrlEmail = (token) => {
-    let result = process.env.URL_REACT +
-        "/verify-sign-up?token=" + token;
-    return result;
-}
-
-let handleGetValidationKey = (inputEmail) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if (!inputEmail) {
-                resolve({
-                    errCode: 1,
-                    messageVI: "Email không được để trống!",
-                    messageEN: "Email can not be left empty!"
-                })
-            } else {
-                let key = Math.ceil(Math.random() * 1000000)
-                let data = {
-                    email: inputEmail,
-                    validationKey: key
-                }
-
-                await redisService.setTimeoutData(`validationKeyFor-${inputEmail}`, 180, JSON.stringify(data))
-                await emailService.sendValidationKeyEmail({
-                    receiverEmail: inputEmail,
-                    key: key
-                })
-
-                resolve({
-                    errCode: 0,
-                    messageVI: "Mã xác nhận đã được gửi qua email của quý khách. Vui lòng kiểm tra email!",
-                    messageEN: "A code has been sent to your email. Please check your email!"
-                })
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
-
 let handleCreateNewUser = (dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -398,6 +358,34 @@ let handleUpdateUser = (dataInput) => {
 }
 
 //5. CHANGE PASSWORD
+//5.1. GET VALIDATION KEY
+let handleGetValidationKey = (inputEmail) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let key = Math.ceil(Math.random() * 1000000)
+            let data = {
+                email: inputEmail,
+                validationKey: key
+            }
+
+            await redisService.setTimeoutData(`validationKeyFor-${inputEmail}`, 120, JSON.stringify(data))
+            await emailService.sendValidationKeyEmail({
+                receiverEmail: inputEmail,
+                key: key
+            })
+
+            resolve({
+                errCode: 0,
+                messageVI: "Mã xác nhận đã được gửi qua email của quý khách. Vui lòng kiểm tra email!",
+                messageEN: "A code has been sent to your email. Please check your email!"
+            })
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+//5.2. CONFIRM TO CHANGE PASSWORD
 let handleChangePassword = (dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -439,8 +427,8 @@ let handleChangePassword = (dataInput) => {
             } else {
                 resolve({
                     errCode: 1,
-                    messageVI: "Mã xác nhận này đã hết hạn. Vui lòng lấy mã mới!",
-                    messageEN: "This code is expired. Please get a new code!"
+                    messageVI: "Mã xác nhận sai hoặc đã hết hạn. Vui lòng kiểm tra lại hoặc lấy mã mới!",
+                    messageEN: "This code is wrong or expired. Please check again or get a new code!"
                 })
             }
         } catch (error) {
