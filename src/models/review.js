@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     Review.init({
-        type: DataTypes.STRING,
-        keyName: DataTypes.STRING,
-        valueVI: DataTypes.STRING,
-        valueEN: DataTypes.STRING,
+        productId: DataTypes.INTEGER,
+        reviewer: DataTypes.STRING,
+        isAnonymous: DataTypes.BOOLEAN,
+        reviewText: DataTypes.TEXT("long"),
+        rating: DataTypes.STRING,
+        reviewedDate: DataTypes.DATE,
     }, {
         sequelize,
         modelName: 'Review',

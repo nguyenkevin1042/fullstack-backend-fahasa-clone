@@ -11,6 +11,8 @@ import userAddressController from "../controllers/userAddressController";
 import billController from "../controllers/billController";
 import tagController from "../controllers/tagController";
 import productTagController from "../controllers/productTagController";
+import reviewController from "../controllers/reviewController";
+
 
 let router = express.Router();
 
@@ -93,6 +95,10 @@ let initWebRoutes = (app) => {
     router.get('/api/get-product-by-tag-id', productTagController.getProductByTagId);
     router.post('/api/update-product-tag', productTagController.updateProductTag);
     router.delete('/api/delete-product-tag', productTagController.deleteProductTag);
+
+    //REVIEW
+    router.post('/api/create-new-review', reviewController.createNewReview);
+    router.get('/api/get-review-by-product-id', reviewController.getReviewByProductId);
 
     return app.use("/", router);
 
