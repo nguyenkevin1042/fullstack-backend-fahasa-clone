@@ -38,6 +38,9 @@ let handleGetReviewByProductId = (inputProductId) => {
                     attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
+                    order: [
+                        ['reviewedDate', 'DESC'],
+                    ],
                 })
                 if (reviewData && reviewData.length > 0) {
                     resolve({
