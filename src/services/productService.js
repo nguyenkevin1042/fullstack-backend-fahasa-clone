@@ -2,6 +2,8 @@ import { forEach, result } from 'lodash';
 import db from '../models/index';
 import productDescriptionService from './productDescriptionService'
 import { Sequelize } from 'sequelize';
+const sharp = require("sharp");
+import Sharp from 'sharp';
 
 const Op = Sequelize.Op;
 
@@ -184,6 +186,8 @@ let handleGetProductByKeyName = (inputKeyName) => {
                     nested: true,
                     raw: false
                 })
+
+
 
                 if (product) {
                     resolve({
@@ -692,6 +696,7 @@ let handleUpdateProductDiscount = (inputData) => {
     });
 }
 
+//11. GET PRODUCT BY ID
 let handleGetProductById = (inputId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -758,6 +763,14 @@ let handleGetProductById = (inputId) => {
                     nested: true,
                     raw: false
                 })
+
+                // let imageBuffered = new Buffer(product.image, 'base64').toString('binary');
+
+                // console.log(imageBuffered)
+                // // product.image = sharp(imageBuffered).resize({
+                // //     width: 300,
+                // //     height: 300
+                // // })
                 resolve({
                     errCode: 0,
                     product
