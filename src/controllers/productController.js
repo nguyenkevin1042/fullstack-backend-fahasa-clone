@@ -33,13 +33,13 @@ let updateProductDiscount = async (req, res) => {
 let getAllProduct = async (req, res) => {
     try {
         let data
-        let dataFromRedis = await redisService.getData('allProducts')
-        if (dataFromRedis) {
-            data = JSON.parse(dataFromRedis)
-        } else {
-            data = await productService.handleGetAllProduct();
-            await redisService.setData('allProducts', JSON.stringify(data))
-        }
+        // let dataFromRedis = await redisService.getData('allProducts')
+        // if (dataFromRedis) {
+        //     data = JSON.parse(dataFromRedis)
+        // } else {
+        data = await productService.handleGetAllProduct();
+        //     await redisService.setData('allProducts', JSON.stringify(data))
+        // }
 
         return res.status(200).json(data);
     } catch (error) {
