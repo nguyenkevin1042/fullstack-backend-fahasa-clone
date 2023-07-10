@@ -92,7 +92,7 @@ let handleGetAllProduct = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let allProducts = await db.Product.findAll({
-                attributes: ['id', 'name'],
+                attributes: ['id'],
                 include: [
                     {
                         model: db.ProductTag,

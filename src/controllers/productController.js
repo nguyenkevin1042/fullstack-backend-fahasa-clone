@@ -33,13 +33,13 @@ let updateProductDiscount = async (req, res) => {
 let getAllProduct = async (req, res) => {
     try {
         let data
-        // let dataFromRedis = await redisService.getData('allProducts')
-        // if (dataFromRedis) {
-        //     data = JSON.parse(dataFromRedis)
-        // } else {
-        data = await productService.handleGetAllProduct();
-        //     await redisService.setData('allProducts', JSON.stringify(data))
-        // }
+        let dataFromRedis = await redisService.getData('allProducts')
+        if (dataFromRedis) {
+            data = JSON.parse(dataFromRedis)
+        } else {
+            data = await productService.handleGetAllProduct();
+            await redisService.setData('allProducts', JSON.stringify(data))
+        }
 
         return res.status(200).json(data);
     } catch (error) {
@@ -68,7 +68,15 @@ let getProductById = async (req, res) => {
 
 let getAllProductByCategory = async (req, res) => {
     try {
-        let data = await productService.handleGetAllProductByCategory(req.query.category);
+        let category = req.query.category
+        let data
+        // let dataFromRedis = await redisService.getData(`allProductsByCategory-${category}`)
+        // if (dataFromRedis) {
+        //     data = JSON.parse(dataFromRedis)
+        // } else {
+        data = await productService.handleGetAllProductByCategory(category);
+        //     await redisService.setData(`allProductsByCategory-${category}`, JSON.stringify(data))
+        // }
         return res.status(200).json(data);
     } catch (error) {
         console.log(error)
