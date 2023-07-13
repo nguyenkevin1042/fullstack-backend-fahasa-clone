@@ -135,8 +135,10 @@ let handleEditCode = (inputData) => {
                 })
             } else {
                 let existed = await db.AllCode.findOne({
-                    where: { id: inputData.id }
+                    where: { id: inputData.id },
+                    raw: false
                 })
+
 
                 if (existed) {
                     existed.type = inputData.type;
