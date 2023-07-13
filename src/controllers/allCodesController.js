@@ -51,13 +51,13 @@ let getCodeByType = async (req, res) => {
     try {
         let type = req.query.type
         let data
-        let dataFromRedis = await redisService.getData(`allCodesByType${type}`)
-        if (dataFromRedis) {
-            data = JSON.parse(dataFromRedis)
-        } else {
-            data = await allCodesService.handleGetCodeByType(type);
-            await redisService.setData(`allCodesByType${type}`, JSON.stringify(data))
-        }
+        // let dataFromRedis = await redisService.getData(`allCodesByType${type}`)
+        // if (dataFromRedis) {
+        //     data = JSON.parse(dataFromRedis)
+        // } else {
+        data = await allCodesService.handleGetCodeByType(type);
+        //     await redisService.setData(`allCodesByType${type}`, JSON.stringify(data))
+        // }
 
         return res.status(200).json(data);
 
