@@ -93,6 +93,9 @@ let handleGetAllProduct = () => {
         try {
             let allProducts = await db.Product.findAll({
                 attributes: ['id'],
+                order: [
+                    ['id', 'ASC'],
+                ],
                 include: [
                     {
                         model: db.ProductTag,
