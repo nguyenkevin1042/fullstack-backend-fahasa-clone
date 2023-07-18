@@ -3,6 +3,8 @@ import redisService from '../redisService'
 
 let createNewReview = async (req, res) => {
     try {
+        let productId = req.body.productId
+        await redisService.deleteData(`reviewsByProductId-${productId}`)
         let data = await reviewService.handleCreateNewReview(req.body);
         return res.status(200).json(data);
     } catch (error) {
