@@ -15,13 +15,13 @@ let addNewCode = async (req, res) => {
 let getAllCodes = async (req, res) => {
     try {
         let data
-        let dataFromRedis = await redisService.getData('allCodes')
-        if (dataFromRedis) {
-            data = JSON.parse(dataFromRedis)
-        } else {
-            data = await allCodesService.handleGetAllCodes();
-            await redisService.setData('allCodes', JSON.stringify(data))
-        }
+        // let dataFromRedis = await redisService.getData('allCodes')
+        // if (dataFromRedis) {
+        //     data = JSON.parse(dataFromRedis)
+        // } else {
+        data = await allCodesService.handleGetAllCodes();
+        //     await redisService.setData('allCodes', JSON.stringify(data))
+        // }
 
         return res.status(200).json(data);
     } catch (error) {
